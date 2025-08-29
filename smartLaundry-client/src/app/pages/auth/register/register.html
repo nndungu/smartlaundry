@@ -1,0 +1,221 @@
+<div class="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+    <!-- Logo Section -->
+    <div class="text-center mb-8">
+      <div class="flex items-center justify-center gap-2 mb-2">
+        <lucide-angular name="droplet" class="h-8 w-8 text-white"></lucide-angular>
+        <span class="text-2xl font-bold text-white">Laundry Smart</span>
+      </div>
+    </div>
+
+    <!-- Registration Card -->
+    <div class="bg-gradient-card rounded-lg shadow-card p-6">
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-foreground">Create your account</h1>
+        <p class="text-muted-foreground mt-2">Enter your details to get started</p>
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <!-- Role Selection -->
+        <div class="space-y-2">
+          <label class="text-sm font-medium text-foreground">Select Your Role</label>
+          <select 
+            formControlName="role"
+            class="flex h-10 w-full rounded-md border border-input bg-input px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            [class.border-destructive]="registerForm.get('role')?.invalid && registerForm.get('role')?.touched">
+            <option value="">Choose your role...</option>
+            <option value="customer">Customer</option>
+            <option value="vendor">Laundry Service Provider</option>
+            <option value="admin">Administrator</option>
+          </select>
+          <div *ngIf="registerForm.get('role')?.invalid && registerForm.get('role')?.touched" 
+               class="text-sm text-destructive">
+            {{ getFieldError('role') }}
+          </div>
+        </div>
+
+        <!-- Admin Passcode (Conditional) -->
+        <div *ngIf="registerForm.get('role')?.value === 'admin'" class="space-y-2">
+          <label class="text-sm font-medium text-foreground">Administrator Passcode</label>
+          <input
+            type="password"
+            formControlName="adminPasscode"
+            placeholder="Enter admin passcode"
+            class="flex h-10 w-full rounded-md border px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-destructive/50 focus-visible:ring-destructive/50 bg-red-50"
+            [class.border-destructive]="registerForm.get('adminPasscode')?.invalid && registerForm.get('adminPasscode')?.touched">
+          <p class="text-xs text-muted-foreground">Special passcode required for administrator access</p>
+          <div *ngIf="registerForm.get('adminPasscode')?.invalid && registerForm.get('adminPasscode')?.touched" 
+               class="text-sm text-destructive">
+            {{ getFieldError('adminPasscode') }}
+          </div>
+        </div>
+
+        <!-- Name Fields Grid -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-foreground">First Name</label>
+            <input
+              type="text"
+              formControlName="firstName"
+              placeholder="John"
+              class="flex h-10 w-full rounded-md border border-input bg-input px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              [class.border-destructive]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+            <div *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched" 
+                 class="text-sm text-destructive">
+              {{ getFieldError('firstName') }}
+            </div>
+          </div>
+          
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-foreground">Last Name</label>
+            <input
+              type="text"
+              formControlName="lastName"
+              placeholder="Doe"
+              class="flex h-10 w-full rounded-md border border-input bg-input px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              [class.border-destructive]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+            <div *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched" 
+                 class="text-sm text-destructive">
+              {{ getFieldError('lastName') }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="space-y-2">
+          <label class="text-sm font-medium text-foreground">Email</label>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="john@example.com"
+            class="flex h-10 w-full rounded-md border border-input bg-input px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            [class.border-destructive]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" 
+               class="text-sm text-destructive">
+            {{ getFieldError('email') }}
+          </div>
+        </div>
+
+        <!-- Phone Field -->
+        <div class="space-y-2">
+          <label class="text-sm font-medium text-foreground">Phone Number</label>
+          <input
+            type="tel"
+            formControlName="phone"
+            placeholder="+1 (555) 123-4567"
+            class="flex h-10 w-full rounded-md border border-input bg-input px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            [class.border-destructive]="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched">
+          <div *ngIf="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched" 
+               class="text-sm text-destructive">
+            {{ getFieldError('phone') }}
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="space-y-2">
+          <label class="text-sm font-medium text-foreground">Password</label>
+          <div class="relative">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Enter your password"
+              class="flex h-10 w-full rounded-md border border-input bg-input px-3 py-2 pr-10 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              [class.border-destructive]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+            <button
+              type="button"
+              (click)="togglePasswordVisibility()"
+              class="absolute inset-y-0 right-0 flex items-center pr-3">
+              <lucide-angular [name]="showPassword ? 'eye-off' : 'eye'" class="h-4 w-4 text-muted-foreground hover:text-foreground"></lucide-angular>
+            </button>
+          </div>
+          <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" 
+               class="text-sm text-destructive">
+            {{ getFieldError('password') }}
+          </div>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="space-y-2">
+          <label class="text-sm font-medium text-foreground">Confirm Password</label>
+          <div class="relative">
+            <input
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              formControlName="confirmPassword"
+              placeholder="Confirm your password"
+              class="flex h-10 w-full rounded-md border border-input bg-input px-3 py-2 pr-10 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              [class.border-destructive]="(registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) || (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched)">
+            <button
+              type="button"
+              (click)="toggleConfirmPasswordVisibility()"
+              class="absolute inset-y-0 right-0 flex items-center pr-3">
+              <lucide-angular [name]="showConfirmPassword ? 'eye-off' : 'eye'" class="h-4 w-4 text-muted-foreground hover:text-foreground"></lucide-angular>
+            </button>
+          </div>
+          <div *ngIf="(registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) || (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched)" 
+               class="text-sm text-destructive">
+            {{ getFieldError('confirmPassword') }}
+          </div>
+        </div>
+
+        <!-- Terms Checkbox -->
+        <div class="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            formControlName="agreeToTerms"
+            id="agreeToTerms"
+            class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-ring">
+          <label for="agreeToTerms" class="text-sm font-medium text-foreground">
+            I agree to the 
+            <a routerLink="/terms" class="text-primary hover:underline">Terms of Service</a> 
+            and 
+            <a routerLink="/privacy" class="text-primary hover:underline">Privacy Policy</a>
+          </label>
+        </div>
+        <div *ngIf="registerForm.get('agreeToTerms')?.invalid && registerForm.get('agreeToTerms')?.touched" 
+             class="text-sm text-destructive">
+          You must agree to the terms and conditions
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          [disabled]="!isFormValid || isSubmitting"
+          class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gradient-primary text-primary-foreground hover:opacity-90 h-10 px-4 py-2 w-full">
+          <span *ngIf="!isSubmitting">Create Account</span>
+          <span *ngIf="isSubmitting">Creating Account...</span>
+        </button>
+
+        <!-- Divider -->
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <span class="w-full border-t border-border"></span>
+          </div>
+          <div class="relative flex justify-center text-xs uppercase">
+            <span class="bg-card px-2 text-muted-foreground">Or</span>
+          </div>
+        </div>
+
+        <!-- Google OAuth Button -->
+        <button
+          type="button"
+          (click)="onGoogleSignUp()"
+          class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full">
+          Continue with Google
+        </button>
+
+        <!-- Login Link -->
+        <div class="text-center">
+          <p class="text-sm text-muted-foreground">
+            Already have an account? 
+            <button
+              type="button"
+              (click)="goToLogin()"
+              class="font-medium text-primary hover:underline">
+              Sign in
+            </button>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

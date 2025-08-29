@@ -1,0 +1,37 @@
+/* Component-specific styles */
+.ng-invalid.ng-touched {
+  @apply border-destructive;
+}
+
+.ng-valid.ng-touched {
+  @apply border-accent;
+}
+
+/* Loading states */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Custom scrollbar for select */
+select::-webkit-scrollbar {
+  width: 8px;
+}
+
+select::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+select::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 4px;
+}
+
+select::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
