@@ -1,0 +1,75 @@
+// login.component.scss
+:host {
+  // Custom styles that Tailwind doesn't cover
+  
+  // Ensure proper z-index for dropdowns and modals
+  .relative {
+    z-index: 10;
+  }
+
+  // Custom focus styles for better accessibility
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+
+  // Smooth transitions for all interactive elements
+  button,
+  input,
+  a {
+    transition: all 0.15s ease-in-out;
+  }
+
+  // Custom styling for loading spinner
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  // Custom hover effects for links
+  a {
+    &:hover {
+      transform: translateY(-1px);
+    }
+  }
+
+  // Custom button hover effects
+  button:not(:disabled) {
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // Error input styling
+  input.border-red-500 {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+  }
+
+  // Success and error message animations
+  .bg-green-50,
+  .bg-red-50 {
+    animation: slideIn 0.3s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

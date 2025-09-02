@@ -1,12 +1,15 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from './shared/components/navbar/navbar';
+import { FooterComponent } from './shared/components/footer/footer';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent],
   templateUrl: './app.html',
-  styleUrls: ['./app.scss']
+  styleUrls: ['./app.scss'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class AppComponent {  // ← Change from "App" to "AppComponent"
+export class AppComponent {
   protected readonly title = signal('smartLaundry-client');
 }

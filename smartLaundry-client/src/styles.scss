@@ -22,6 +22,12 @@
   --input: 210 20% 92%;
   --ring: 210 85% 55%;
   --radius: 0.5rem;
+
+  /* Additional properties for navbar and footer */
+  --primary-light: 210 85% 65%;
+  --primary-dark: 210 85% 45%;
+  --gradient-primary: linear-gradient(135deg, hsl(210 85% 55%), hsl(210 85% 65%));
+  --shadow-card: 0 4px 12px -2px hsl(210 15% 15% / 0.1);
 }
 
 .bg-gradient-hero {
@@ -38,4 +44,15 @@
 
 .shadow-card {
   box-shadow: 0 10px 30px -10px hsl(210, 85%, 55%, 0.3);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: 215 30% 8%;
+    --foreground: 210 15% 95%;
+    --muted-foreground: 215 15% 65%;
+    --border: 215 20% 20%;
+    --secondary: 215 20% 15%;
+  }
 }

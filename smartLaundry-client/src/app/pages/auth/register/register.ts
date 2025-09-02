@@ -1,205 +1,189 @@
-import { Component, OnInit } from '@angular/core';
+// register.component.ts
+import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { LucideAngularModule, Droplet, Eye, EyeOff, Shield, Users, Store } from 'lucide-angular';
-
-import { UserRole } from '../../../core/constants/user-roles';
-import { VALIDATION_PATTERNS, VALIDATION_MESSAGES } from '../../../core/constants/validation-patterns';
-import { APP_CONSTANTS } from '../../../core/constants/app-constants';
-import { RegisterRequest } from '../../../models/auth/register-request.model';
-import { AuthService } from '../../../services/auth/auth';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterModule,
-    LucideAngularModule
-  ],
   templateUrl: './register.html',
-  styleUrls: ['./register.scss']
+  styleUrls: ['./register.scss'],
+  imports: [CommonModule, FormsModule]
 })
-export class RegisterComponent implements OnInit {
-  registerForm!: FormGroup;
+export class RegisterComponent {
+  selectedRole = '';
+  showRoleDropdown = false;
   showPassword = false;
   showConfirmPassword = false;
-  isSubmitting = false;
+  termsAgreed = false;
 
-  readonly Droplet = Droplet;
-  readonly Eye = Eye;
-  readonly EyeOff = EyeOff;
-  readonly Shield = Shield;
-  readonly Users = Users;
-  readonly Store = Store;
+  formData = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    password: '',
+    confirmPassword: '',
+    adminPasscode: ''
+  };
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private authService: AuthService
-  ) {}
-
-  ngOnInit(): void {
-    this.initializeForm();
-  }
-
-  private initializeForm(): void {
-    this.registerForm = this.fb.group({
-      role: ['', [Validators.required]],
-      adminPasscode: [''],
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(VALIDATION_PATTERNS.PHONE)]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', [Validators.required]],
-      agreeToTerms: [false, [Validators.requiredTrue]]
-    }, { 
-      validators: [this.passwordMatchValidator, this.adminPasscodeValidator]
-    });
-
-    this.registerForm.get('role')?.valueChanges.subscribe(role => {
-      const adminPasscodeControl = this.registerForm.get('adminPasscode');
-      
-      if (role === UserRole.ADMIN) {
-        adminPasscodeControl?.setValidators([Validators.required, Validators.minLength(6)]);
-      } else {
-        adminPasscodeControl?.clearValidators();
-        adminPasscodeControl?.setValue('');
-      }
-      adminPasscodeControl?.updateValueAndValidity();
-    });
-  }
-
-  private passwordMatchValidator(control: AbstractControl): {[key: string]: any} | null {
-    const password = control.get('password');
-    const confirmPassword = control.get('confirmPassword');
-    
-    if (!password || !confirmPassword) {
-      return null;
+  roles = [
+    { 
+      value: 'customer', 
+      label: 'Customer', 
+      icon: '👥'
+    },
+    { 
+      value: 'provider', 
+      label: 'Laundry Service Provider', 
+      icon: '🏪'
+    },
+    { 
+      value: 'admin', 
+      label: 'Administrator', 
+      icon: '🛡️'
     }
-    
-    return password.value === confirmPassword.value ? null : { passwordMismatch: true };
-  }
+  ];
 
-  private adminPasscodeValidator(control: AbstractControl): {[key: string]: any} | null {
-    const role = control.get('role');
-    const adminPasscode = control.get('adminPasscode');
-    
-    if (!role || role.value !== UserRole.ADMIN) {
-      return null;
-    }
-    
-    if (!adminPasscode || !adminPasscode.value) {
-      return { adminPasscodeRequired: true };
-    }
-    
-    return adminPasscode.value === APP_CONSTANTS.ADMIN_PASSCODE ? null : { invalidAdminPasscode: true };
-  }
+  constructor(private router: Router) {}
 
-  togglePasswordVisibility(): void {
-    this.showPassword = !this.showPassword;
-  }
-
-  toggleConfirmPasswordVisibility(): void {
-    this.showConfirmPassword = !this.showConfirmPassword;
-  }
-
+  // Computed properties
   get isFormValid(): boolean {
-    const form = this.registerForm;
-    const role = form.get('role')?.value;
-    const agreeToTerms = form.get('agreeToTerms')?.value;
-    const adminPasscode = form.get('adminPasscode')?.value;
+    return !!(this.selectedRole && this.termsAgreed);
+  }
 
-    const basicValid = agreeToTerms && role;
-    const adminValid = role !== UserRole.ADMIN || (role === UserRole.ADMIN && adminPasscode);
-    
-    return basicValid && adminValid && form.valid;
+  // Methods
+  toggleRoleDropdown(): void {
+    this.showRoleDropdown = !this.showRoleDropdown;
+  }
+
+  selectRole(role: any): void {
+    this.selectedRole = role.value;
+    this.showRoleDropdown = false;
+  }
+
+  getRoleLabel(value: string): string {
+    const role = this.roles.find(r => r.value === value);
+    return role ? role.label : '';
+  }
+
+  getRoleIcon(value: string): string {
+    const role = this.roles.find(r => r.value === value);
+    return role ? role.icon : '';
+  }
+
+  togglePasswordVisibility(field: string): void {
+    if (field === 'password') {
+      this.showPassword = !this.showPassword;
+    } else if (field === 'confirmPassword') {
+      this.showConfirmPassword = !this.showConfirmPassword;
+    }
   }
 
   onSubmit(): void {
     if (!this.isFormValid) {
-      this.markFormGroupTouched();
       return;
     }
 
-    this.isSubmitting = true;
-    const registerData: RegisterRequest = this.registerForm.value;
+    // Validate required fields
+    if (!this.formData.firstName.trim()) {
+      alert('First name is required');
+      return;
+    }
 
-    this.authService.register(registerData).subscribe({
-      next: (response) => {
-        this.isSubmitting = false;
-        alert('Registration successful! Welcome to WashWise.');
-        this.router.navigate(['/login']);
-      },
-      error: (error) => {
-        this.isSubmitting = false;
-        const errorMessage = error.error?.message || 'Registration failed. Please try again.';
-        alert(errorMessage);
-      }
-    });
-  }
+    if (!this.formData.lastName.trim()) {
+      alert('Last name is required');
+      return;
+    }
 
-  onGoogleSignUp(): void {
-    alert('Google OAuth integration would be implemented here');
-  }
+    if (!this.formData.email.trim()) {
+      alert('Email is required');
+      return;
+    }
 
-  goToLogin(): void {
+    if (!this.isEmailValid()) {
+      alert('Please enter a valid email address');
+      return;
+    }
+
+    if (!this.formData.phone.trim()) {
+      alert('Phone number is required');
+      return;
+    }
+
+    if (!this.formData.password.trim()) {
+      alert('Password is required');
+      return;
+    }
+
+    if (this.formData.password.length < 8) {
+      alert('Password must be at least 8 characters long');
+      return;
+    }
+
+    if (this.formData.password !== this.formData.confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+
+    if (this.selectedRole === 'admin' && !this.formData.adminPasscode.trim()) {
+      alert('Admin passcode is required for administrator role');
+      return;
+    }
+
+    // Prepare form data
+    const registrationData = {
+      firstName: this.formData.firstName.trim(),
+      lastName: this.formData.lastName.trim(),
+      email: this.formData.email.trim().toLowerCase(),
+      phone: this.formData.phone.trim(),
+      password: this.formData.password,
+      role: this.selectedRole,
+      ...(this.selectedRole === 'admin' && { adminPasscode: this.formData.adminPasscode })
+    };
+
+    console.log('Registration data:', registrationData);
+
+    // Here you would typically call your authentication service
+    // Example: this.authService.register(registrationData).subscribe(...)
+    
+    alert('Registration successful! Please check your email for verification.');
+    
+    // Redirect to login page
     this.router.navigate(['/login']);
   }
 
-  private markFormGroupTouched(): void {
-    Object.keys(this.registerForm.controls).forEach(key => {
-      const control = this.registerForm.get(key);
-      control?.markAsTouched();
-    });
+  signInWithGoogle(): void {
+    console.log('Google sign-in initiated');
+    // Here you would typically integrate with Google OAuth
+    // Example: this.authService.signInWithGoogle()
+    alert('Google sign-in functionality would be implemented here');
   }
 
-  getFieldError(fieldName: string): string {
-    const field = this.registerForm.get(fieldName);
-    
-    if (field?.hasError('required')) {
-      return `${this.getFieldLabel(fieldName)} is required`;
-    }
-    
-    if (field?.hasError('email')) {
-      return 'Please enter a valid email address';
-    }
-    
-    if (field?.hasError('minlength')) {
-      const minLength = field.getError('minlength').requiredLength;
-      return `${this.getFieldLabel(fieldName)} must be at least ${minLength} characters`;
-    }
-    
-    if (field?.hasError('pattern')) {
-      return `Please enter a valid ${fieldName}`;
-    }
-    
-    if (fieldName === 'confirmPassword' && this.registerForm.hasError('passwordMismatch')) {
-      return 'Passwords do not match';
-    }
-    
-    if (fieldName === 'adminPasscode' && this.registerForm.hasError('invalidAdminPasscode')) {
-      return 'Invalid administrator passcode';
-    }
-    
-    return '';
+  // Validation methods
+  private isEmailValid(): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(this.formData.email);
   }
 
-  private getFieldLabel(fieldName: string): string {
-    const labels: {[key: string]: string} = {
-      firstName: 'First name',
-      lastName: 'Last name',
-      email: 'Email',
-      phone: 'Phone number',
-      password: 'Password',
-      confirmPassword: 'Confirm password',
-      role: 'Role',
-      adminPasscode: 'Admin passcode'
-    };
-    
-    return labels[fieldName] || fieldName;
+  private isPasswordStrong(): boolean {
+    const password = this.formData.password;
+    // At least 8 characters, 1 uppercase, 1 lowercase, 1 number
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
+    return strongPasswordRegex.test(password);
+  }
+
+  private isPhoneValid(): boolean {
+    const phoneRegex = /^\+?[\d\s\(\)-]{10,}$/;
+    return phoneRegex.test(this.formData.phone);
+  }
+
+  // Close dropdown when clicking outside
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.relative')) {
+      this.showRoleDropdown = false;
+    }
   }
 }

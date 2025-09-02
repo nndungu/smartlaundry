@@ -1,37 +1,48 @@
-/* Component-specific styles */
-.ng-invalid.ng-touched {
-  @apply border-destructive;
-}
+// register.component.scss
+// This component uses Tailwind CSS classes in the template
+// If you're not using Tailwind, uncomment the CSS below and remove Tailwind classes from HTML
 
-.ng-valid.ng-touched {
-  @apply border-accent;
-}
-
-/* Loading states */
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+:host {
+  // Custom styles that Tailwind doesn't cover
+  
+  // Ensure dropdowns appear above other elements
+  .relative {
+    z-index: 10;
+    
+    > div[class*="absolute"] {
+      z-index: 50;
+    }
   }
-}
 
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
+  // Custom focus styles for better accessibility
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
 
-/* Custom scrollbar for select */
-select::-webkit-scrollbar {
-  width: 8px;
-}
+  // Smooth transitions for interactive elements
+  button,
+  input,
+  a {
+    transition: all 0.15s ease-in-out;
+  }
 
-select::-webkit-scrollbar-track {
-  background: hsl(var(--muted));
-}
+  // Custom scrollbar for dropdown if needed
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 4px;
+  }
 
-select::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground));
-  border-radius: 4px;
-}
+  .overflow-y-auto::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
 
-select::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary));
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 2px;
+  }
+
+  .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+  }
 }
