@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/pages/auth/register/register.scss"],
-  "sourcesContent": ["/* Component-specific styles */\n.ng-invalid.ng-touched {\n  @apply border-destructive;\n}\n\n.ng-valid.ng-touched {\n  @apply border-accent;\n}\n\n/* Loading states */\n@keyframes spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n\n.animate-spin {\n  animation: spin 1s linear infinite;\n}\n\n/* Custom scrollbar for select */\nselect::-webkit-scrollbar {\n  width: 8px;\n}\n\nselect::-webkit-scrollbar-track {\n  background: hsl(var(--muted));\n}\n\nselect::-webkit-scrollbar-thumb {\n  background: hsl(var(--muted-foreground));\n  border-radius: 4px;\n}\n\nselect::-webkit-scrollbar-thumb:hover {\n  background: hsl(var(--primary));\n}"],
-  "mappings": ";AACA,CAAA,UAAA,CAAA;AACE,SAAA;;AAGF,CAAA,QAAA,CAJA;AAKE,SAAA;;AAIF,WAAA;AACE;AACE,eAAA,OAAA;;;AAIJ,CAAA;AACE,aAAA,KAAA,GAAA,OAAA;;AAIF,MAAA;AACE,SAAA;;AAGF,MAAA;AACE,cAAA,IAAA,IAAA;;AAGF,MAAA;AACE,cAAA,IAAA,IAAA;AACA,iBAAA;;AAGF,MAAA,yBAAA;AACE,cAAA,IAAA,IAAA;;",
-  "names": []
-}
