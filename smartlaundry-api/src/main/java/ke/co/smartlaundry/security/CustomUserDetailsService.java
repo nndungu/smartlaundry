@@ -1,4 +1,4 @@
-package ke.co.smartlaundry.service;
+package ke.co.smartlaundry.security;
 
 import ke.co.smartlaundry.model.User;
 import ke.co.smartlaundry.repository.UserRepository;

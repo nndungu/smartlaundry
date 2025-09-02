@@ -4,6 +4,7 @@ import ke.co.smartlaundry.model.*;
 import ke.co.smartlaundry.repository.*;
 import ke.co.smartlaundry.dto.UserDTO;
 import ke.co.smartlaundry.dto.RegisterRequestDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class UserService {
     private final PasswordResetTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder; // <-- interface
 
+    @Autowired
     public UserService(UserRepository userRepository,
                        RoleRepository roleRepository,
                        PasswordResetTokenRepository tokenRepository,

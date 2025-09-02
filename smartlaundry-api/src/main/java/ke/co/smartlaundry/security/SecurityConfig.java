@@ -1,7 +1,7 @@
 package ke.co.smartlaundry.security;
 
 import ke.co.smartlaundry.security.JwtAuthenticationFilter;
-import ke.co.smartlaundry.service.CustomUserDetailsService;
+import ke.co.smartlaundry.security.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
