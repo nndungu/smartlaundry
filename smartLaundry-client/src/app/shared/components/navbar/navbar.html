@@ -1,0 +1,91 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-content">
+      <!-- Logo Section -->
+      <div class="navbar-logo">
+        <a routerLink="/home" class="logo-link">
+          <lucide-icon [img]="DropletIcon" class="logo-icon"></lucide-icon>
+          <span class="logo-text">Laundry Smart</span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="navbar-nav">
+        <ng-container *ngFor="let item of navigationItems">
+          <a
+            *ngIf="!item.isButton"
+            [routerLink]="item.route"
+            (click)="handleNavClick(item)"
+            class="nav-link"
+            [class.active]="activeItem === item.name"
+          >
+            {{ item.name }}
+          </a>
+          <a
+            *ngIf="item.isButton && item.name === 'Sign In'"
+            [routerLink]="item.route"
+            (click)="handleNavClick(item)"
+            class="nav-button signin-btn"
+          >
+            {{ item.name }}
+          </a>
+          <a
+            *ngIf="item.isButton && item.name === 'Get Started'"
+            [routerLink]="item.route"
+            (click)="handleNavClick(item)"
+            class="nav-button getstarted-btn"
+          >
+            {{ item.name }}
+          </a>
+        </ng-container>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="mobile-menu-btn">
+        <button
+          (click)="toggleMobileMenu()"
+          type="button"
+          class="menu-toggle"
+          aria-controls="mobile-menu"
+          [attr.aria-expanded]="isMobileMenuOpen"
+        >
+          <span class="sr-only">Open main menu</span>
+          <lucide-icon
+            [img]="isMobileMenuOpen ? XIcon : MenuIcon"
+            class="menu-icon"
+          ></lucide-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation Menu -->
+  <div
+    *ngIf="isMobileMenuOpen"
+    class="mobile-menu"
+    id="mobile-menu"
+  >
+    <div class="mobile-menu-content">
+      <ng-container *ngFor="let item of navigationItems">
+        <a
+          *ngIf="!item.isButton"
+          [routerLink]="item.route"
+          (click)="handleNavClick(item)"
+          class="mobile-nav-link"
+          [class.active]="activeItem === item.name"
+        >
+          {{ item.name }}
+        </a>
+        <a
+          *ngIf="item.isButton"
+          [routerLink]="item.route"
+          (click)="handleNavClick(item)"
+          class="mobile-nav-button"
+          [class.getstarted-btn]="item.name === 'Get Started'"
+        >
+          {{ item.name }}
+        </a>
+      </ng-container>
+    </div>
+  </div>
+</nav>
