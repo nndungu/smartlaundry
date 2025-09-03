@@ -1,5 +1,6 @@
-package ke.co.smartlaundry.security;
+package ke.co.smartlaundry.service;
 
+import ke.co.smartlaundry.dto.UserDTO;
 import ke.co.smartlaundry.model.User;
 import ke.co.smartlaundry.repository.UserRepository;
 import org.springframework.security.core.userdetails.*;
@@ -16,13 +17,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
+        UserDTO userDTO = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
-                .password(user.getPasswordHash())
-                .roles(user.getRole().getName())
-                .disabled(!user.getIsActive())
+                .username(userDTO.getEmail())
+                .password(userDTO.getPasswordHash())
+                .roles(userDTO.getRole().getName())
+                .disabled(!userDTO.getIsActive())
                 .build();
     }
 }

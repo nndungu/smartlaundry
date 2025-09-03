@@ -1,52 +1,54 @@
-package ke.co.smartlaundry.security;
+package ke.co.smartlaundry.configuration;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    private final String jwtSecret;
-    private final long jwtExpirationMs;
+    @Value("{$jwt.jwtSecret}")
+    private String jwtSecret;
+    @Value("{$jwt.jwtExpiration}")
+    private Long jwtExpirationMs;
+    private SecretKey key;
 
-    public JwtUtil(@Value("${jwt.secret}") String jwtSecret,
-                   @Value("${jwt.expiration}") long jwtExpirationMs) {
-        this.jwtSecret = jwtSecret;
-        this.jwtExpirationMs = jwtExpirationMs;
+    @PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
-    }
-
+    //Generate JWT token
     public String generateToken(String email) {
         return Jwts.builder()
                 .subject(email)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
-                .signWith(getSigningKey())
+                .expiration(new Date((new Date().getTime() + jwtExpirationMs)))
                 .compact();
     }
 
+    // Get email from JWT token
     public String getEmailFromToken(String token) {
         return Jwts.parser()
-                .verifyWith((SecretKey) getSigningKey())
+                .verifyWith(key)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
     }
 
+    // Validate token
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
-                    .verifyWith((SecretKey)  getSigningKey())
+                    .verifyWith(key)
                     .build()
                     .parseSignedClaims(token);
             return true;

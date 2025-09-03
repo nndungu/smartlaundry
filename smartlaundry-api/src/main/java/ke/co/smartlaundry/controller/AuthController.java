@@ -8,7 +8,7 @@ import ke.co.smartlaundry.dto.ResetPasswordDTO;
 import ke.co.smartlaundry.model.Role;
 import ke.co.smartlaundry.model.User;
 import ke.co.smartlaundry.repository.RoleRepository;
-import ke.co.smartlaundry.security.JwtUtil;
+import ke.co.smartlaundry.configuration.JwtUtil;
 import ke.co.smartlaundry.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -5,9 +5,9 @@ import ke.co.smartlaundry.repository.*;
 import ke.co.smartlaundry.dto.UserDTO;
 import ke.co.smartlaundry.dto.RegisterRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -43,7 +43,7 @@ public class UserService {
         dto.setEmail(user.getEmail());
         dto.setPhone(user.getPhone());
         dto.setIsActive(user.getIsActive());
-        dto.setRoleName(user.getRole() != null ? user.getRole().getName() : null);
+        dto.setRole(user.getRole() != null ? user.getRole() : null);
         return dto;
     }
 
@@ -59,15 +59,21 @@ public class UserService {
     }
 
     // --- CRUD ---
-    public List<UserDTO> getAllUsers() {
-        return userRepository.findAll().stream().map(this::toDTO).toList();
+    public Iterable<User> getAllUsers() {
+
+        return userRepository
+                .findAll()
+                .stream()
+                .map(this::toDTO)
+                .toList();
     }
 
     public UserDTO getUserById(Long id) {
         return toDTO(userRepository.findById(id).orElseThrow());
     }
 
-    public User createUser(User user) { return userRepository.save(user); }
+    public User createUser(User user) {
+        return userRepository.save(user); }
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow();
@@ -88,6 +94,11 @@ public class UserService {
 
         tokenRepository.save(resetToken);
         return token;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     public boolean resetPassword(String token, String newPassword) {

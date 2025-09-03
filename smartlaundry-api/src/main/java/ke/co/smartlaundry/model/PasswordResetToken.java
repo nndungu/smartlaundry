@@ -1,6 +1,8 @@
 package ke.co.smartlaundry.model;
 
 import jakarta.persistence.*;
+import ke.co.smartlaundry.dto.UserDTO;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,7 +30,7 @@ public class PasswordResetToken {
     public void setToken(String token) { this.token = token; }
 
     public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public void setUser(UserDTO user) { this.user = user; }
 
     public LocalDateTime getExpiryDate() { return expiryDate; }
     public void setExpiryDate(LocalDateTime expiryDate) { this.expiryDate = expiryDate; }
