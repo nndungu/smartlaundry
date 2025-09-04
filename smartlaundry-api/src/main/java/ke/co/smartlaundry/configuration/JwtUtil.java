@@ -14,10 +14,12 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    @Value("{$jwt.jwtSecret}")
+    @Value("${jwt.jwtSecret}")
     private String jwtSecret;
-    @Value("{$jwt.jwtExpiration}")
+
+    @Value("${jwt.jwtExpiration}")
     private Long jwtExpirationMs;
+
     private SecretKey key;
 
     @PostConstruct
@@ -25,16 +27,17 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-    //Generate JWT token
+    // Generate JWT token
     public String generateToken(String email) {
         return Jwts.builder()
                 .subject(email)
                 .issuedAt(new Date())
-                .expiration(new Date((new Date().getTime() + jwtExpirationMs)))
+                .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
+                .signWith(key)  //  must sign the token
                 .compact();
     }
 
-    // Get email from JWT token
+    // Extract email from JWT token
     public String getEmailFromToken(String token) {
         return Jwts.parser()
                 .verifyWith(key)
@@ -44,7 +47,7 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    // Validate token
+    // Validate JWT token
     public boolean validateToken(String token) {
         try {
             Jwts.parser()

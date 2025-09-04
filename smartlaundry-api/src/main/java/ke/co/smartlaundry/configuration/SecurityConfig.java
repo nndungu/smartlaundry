@@ -15,8 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -52,16 +50,20 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/api/auth/**",          // login, register
+                                "/api/password-reset/**", // forgot/reset password
                                 "/public/**",
-                                "/api/auth/**",
-                                "/api/password-reset/**",
-                                "/h2-console/**" // allow H2 console
+                                "/h2-console/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
+                // Disable sessions, use JWT instead
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .httpBasic(withDefaults());
+                // Add JWT filter before Spring’s UsernamePasswordAuthenticationFilter
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // Needed for H2 console access
+        http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
     }
