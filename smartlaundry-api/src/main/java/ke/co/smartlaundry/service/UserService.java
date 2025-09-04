@@ -1,19 +1,24 @@
 package ke.co.smartlaundry.service;
 
-import ke.co.smartlaundry.model.*;
-import ke.co.smartlaundry.repository.*;
-import ke.co.smartlaundry.dto.UserDTO;
 import ke.co.smartlaundry.dto.RegisterRequestDTO;
+import ke.co.smartlaundry.dto.UserDTO;
+import ke.co.smartlaundry.model.Role;
+import ke.co.smartlaundry.model.User;
+import ke.co.smartlaundry.repository.RoleRepository;
+import ke.co.smartlaundry.repository.UserRepository;
+import ke.co.smartlaundry.repository.PasswordResetTokenRepository;
+import ke.co.smartlaundry.model.PasswordResetToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserService {
@@ -21,13 +26,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordResetTokenRepository tokenRepository;
-    private final PasswordEncoder passwordEncoder; // <-- interface
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository,
                        RoleRepository roleRepository,
                        PasswordResetTokenRepository tokenRepository,
-                       PasswordEncoder passwordEncoder) { // <-- interface
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.tokenRepository = tokenRepository;
@@ -59,13 +64,8 @@ public class UserService {
     }
 
     // --- CRUD ---
-    public Iterable<User> getAllUsers() {
-
-        return userRepository
-                .findAll()
-                .stream()
-                .map(this::toDTO)
-                .toList();
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream().map(this::toDTO).toList();
     }
 
     public UserDTO getUserById(Long id) {
@@ -73,15 +73,56 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        return userRepository.save(user); }
+        return userRepository.save(user);
+    }
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow();
     }
 
-    // --- Password Reset ---
+    public User updateUser(Long id, User updatedUser, String roleName) {
+        User existing = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        existing.setFullName(updatedUser.getFullName());
+        existing.setPhone(updatedUser.getPhone());
+        existing.setEmail(updatedUser.getEmail());
+
+        if (updatedUser.getPasswordHash() != null) {
+            existing.setPasswordHash(updatedUser.getPasswordHash());
+        }
+
+        if (roleName != null) {
+            Role role = roleRepository.findByName(roleName)
+                    .orElseThrow(() -> new NoSuchElementException("Role not found"));
+            existing.setRole(role);
+        }
+
+        return userRepository.save(existing);
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    // --- Passwords ---
+    public boolean checkPassword(String raw, String encoded) {
+        return passwordEncoder.matches(raw, encoded);
+    }
+
+    public String encodePassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
+    }
+
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+
+    // --- Reset password ---
     public String createPasswordResetToken(String email) {
         User user = getUserByEmail(email);
+
         tokenRepository.findAll().stream()
                 .filter(t -> t.getUser().getId().equals(user.getId()))
                 .forEach(tokenRepository::delete);
@@ -96,11 +137,6 @@ public class UserService {
         return token;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     public boolean resetPassword(String token, String newPassword) {
         Optional<PasswordResetToken> tokenOpt = tokenRepository.findByToken(token);
         if (tokenOpt.isPresent()) {
@@ -113,33 +149,5 @@ public class UserService {
             return true;
         }
         return false;
-    }
-
-    public boolean checkPassword(String raw, String encoded) {
-        return passwordEncoder.matches(raw, encoded);
-    }
-
-    public User updateUser(Long id, User user, String roleName) {
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
-
-        // Update basic fields
-        existingUser.setFullName(user.getFullName());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPhone(user.getPhone());
-
-        // Update role if provided
-        if (roleName != null) {
-            Role role = roleRepository.findByName(roleName)
-                    .orElseThrow(() -> new NoSuchElementException("Role not found"));
-            existingUser.setRole(role);
-        }
-
-        return userRepository.save(existingUser);
-    }
-
-    public void deleteUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
-        userRepository.delete(user);
     }
 }

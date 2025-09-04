@@ -39,23 +39,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
             try {
-                email = jwtUtil.generateToken(token);
+                if (jwtUtil.validateToken(token)) {  // ✅ validate before parsing
+                    email = jwtUtil.getEmailFromToken(token);  // ✅ extract email
+                }
             } catch (Exception e) {
                 request.setAttribute("jwt_error", e.getMessage());
             }
         }
 
-        // Authenticate user if token is valid
+        // Authenticate user if token is valid and no authentication set
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
-            // Only proceed if user is enabled
-            if (userDetails.isEnabled() && jwtUtil.validateToken(token)) {
+            if (userDetails.isEnabled()) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
                                 null,
-                                userDetails.getAuthorities() // roles and authorities
+                                userDetails.getAuthorities()
                         );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
