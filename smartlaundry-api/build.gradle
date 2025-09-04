@@ -18,6 +18,10 @@ repositories {
     mavenCentral()
 }
 
+//configurations {
+//    mockitoAgent
+//}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -45,9 +49,23 @@ dependencies {
     implementation 'com.h2database:h2:2.1.210'
     runtimeOnly 'com.h2database:h2:2.1.210'
 
+    //Mockito
+//    testImplementation(libs.mockito)
+//    mockitoAgent(libs.mockito) {
+//        transactive = false
+//    }
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.mockito:mockito-core:2.1.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+
+//tasks {
+//    test {
+//        jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
+//    }
+//}
 
 tasks.named('test') {
     useJUnitPlatform()
