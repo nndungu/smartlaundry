@@ -1,0 +1,77 @@
+Index: smartlaundry-api/src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>spring.application.name=smartlaundry-api\r\n
+===================================================================
+diff --git a/smartlaundry-api/src/main/resources/application.properties b/smartlaundry-api/src/main/resources/application.properties
+--- a/smartlaundry-api/src/main/resources/application.properties	(revision 352c71c10b88465d11d273a1fe72f4e1cda9e771)
++++ b/smartlaundry-api/src/main/resources/application.properties	(date 1756798360162)
+@@ -1,1 +1,23 @@
+ spring.application.name=smartlaundry-api
++server.port=8080
++
++# --- MySQL (default profile) ---
++spring.datasource.url=jdbc:mysql://localhost:3306/laundromart?useSSL=false&serverTimezone=Africa/Nairobi
++spring.datasource.username=root
++spring.datasource.password=@Aw35omes
++spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
++
++# --- JPA / Hibernate ---
++spring.jpa.hibernate.ddl-auto=validate
++spring.jpa.show-sql=true
++spring.jpa.properties.hibernate.format_sql=true
++spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
++
++# --- Flyway ---
++spring.flyway.enabled=true
++spring.flyway.baseline-on-migrate=true
++spring.flyway.locations=classpath:db/migration/mysql
++v;
++# --- JWT ---
++jwt.secret=MySuperSecretKeyForJWTsMySuperSecretKeyForJWTs123456
++jwt.expiration=3600000   # 1 hour in ms
+Index: smartlaundry-api/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    id 'java'\r\n    id 'org.springframework.boot' version '3.5.5'\r\n    id 'io.spring.dependency-management' version '1.1.7'\r\n}\r\n\r\ngroup = 'ke.co'\r\nversion = '0.0.1-SNAPSHOT'\r\ndescription = 'smartlaundry-api'\r\n\r\njava {\r\n    toolchain {\r\n        languageVersion = JavaLanguageVersion.of(21)\r\n    }\r\n}\r\n\r\nrepositories {\r\n    mavenCentral()\r\n}\r\n\r\ndependencies {\r\n    implementation 'org.springframework.boot:spring-boot-starter'\r\n    testImplementation 'org.springframework.boot:spring-boot-starter-test'\r\n    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'\r\n}\r\n\r\ntasks.named('test') {\r\n    useJUnitPlatform()\r\n}\r\n
+===================================================================
+diff --git a/smartlaundry-api/build.gradle b/smartlaundry-api/build.gradle
+--- a/smartlaundry-api/build.gradle	(revision 352c71c10b88465d11d273a1fe72f4e1cda9e771)
++++ b/smartlaundry-api/build.gradle	(date 1756776412883)
+@@ -19,8 +19,36 @@
+ }
+ 
+ dependencies {
++    // Spring Boot Starters
+     implementation 'org.springframework.boot:spring-boot-starter'
++    implementation 'org.springframework.boot:spring-boot-starter-web'
++    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
++    implementation 'org.springframework.boot:spring-boot-starter-validation'
++    implementation 'org.springframework.boot:spring-boot-starter-security'
++
++    // JWT
++    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
++    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
++    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
++
++    // OpenAPI / Swagger
++    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.11'
++
++    // For ORM functionality
++    //implementation "org.hibernate.orm:hibernate-core:7.1.0.Final"
++
++
++    // Flyway DB migrations
++    implementation 'org.flywaydb:flyway-core'
++    implementation 'org.flywaydb:flyway-mysql:10.8.1'
++
++    // Databases
++    runtimeOnly 'com.mysql:mysql-connector-j:8.2.0'
++    runtimeOnly 'com.h2database:h2'
++
++    // Testing
+     testImplementation 'org.springframework.boot:spring-boot-starter-test'
++    testImplementation 'org.springframework.security:spring-security-test'
+     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+ }
+ 
