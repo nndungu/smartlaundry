@@ -1,52 +1,127 @@
+<!-- footer.html -->
 <footer class="footer">
   <div class="footer-container">
+    <!-- Main Footer Content -->
     <div class="footer-content">
-      <!-- Logo Section -->
-      <div class="footer-logo">
-        <lucide-icon [img]="DropletIcon" class="footer-logo-icon"></lucide-icon>
-        <span class="footer-logo-text">Laundry Smart</span>
+      <!-- Company Section -->
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="logo-wrapper">
+            <lucide-icon [img]="DropletIcon" class="footer-logo-icon"></lucide-icon>
+            <span class="footer-logo-text">Laundry Smart</span>
+          </div>
+        </div>
+        <p class="footer-description">
+          Professional laundry services with convenient pickup and delivery. 
+          Clean clothes, fresh scent, perfect care.
+        </p>
+        <div class="social-links">
+          <a href="#" class="social-link facebook" aria-label="Facebook">
+            <lucide-icon [img]="FacebookIcon" class="social-icon"></lucide-icon>
+          </a>
+          <a href="#" class="social-link instagram" aria-label="Instagram">
+            <lucide-icon [img]="InstagramIcon" class="social-icon"></lucide-icon>
+          </a>
+          <a href="#" class="social-link twitter" aria-label="Twitter">
+            <lucide-icon [img]="TwitterIcon" class="social-icon"></lucide-icon>
+          
+          <!--<a href="#" class="social-link linkedin" aria-label="LinkedIn">
+            <lucide-icon [img]="LinkedinIcon" class="social-icon"></lucide-icon>-->
+          
+          </a>
       </div>
 
       <!-- Navigation Links -->
       <div class="footer-nav">
         <div class="footer-section">
-          <h3 class="footer-heading">Services</h3>
+          <h3 class="footer-heading">
+            <lucide-icon [img]="SparklesIcon" class="heading-icon"></lucide-icon>
+            Services
+          </h3>
           <ul class="footer-links">
-            <li><a routerLink="/services">Wash & Fold</a></li>
-            <li><a routerLink="/services">Dry Cleaning</a></li>
-            <li><a routerLink="/services">Ironing</a></li>
-            <li><a routerLink="/services">Pickup & Delivery</a></li>
+            <li><a routerLink="/services" class="footer-link">Wash & Fold</a></li>
+            <li><a routerLink="/services" class="footer-link">Dry Cleaning</a></li>
+            <li><a routerLink="/services" class="footer-link">Ironing</a></li>
+            <li><a routerLink="/services" class="footer-link">Pickup & Delivery</a></li>
+            <li><a routerLink="/services" class="footer-link">Commercial Services</a></li>
           </ul>
         </div>
 
         <div class="footer-section">
-          <h3 class="footer-heading">Company</h3>
+          <h3 class="footer-heading">
+            <lucide-icon [img]="BuildingIcon" class="heading-icon"></lucide-icon>
+            Company
+          </h3>
           <ul class="footer-links">
-            <li><a routerLink="/about">About Us</a></li>
-            <li><a routerLink="/contact">Contact</a></li>
-            <li><a routerLink="/careers">Careers</a></li>
-            <li><a routerLink="/blog">Blog</a></li>
+            <li><a routerLink="/about" class="footer-link">About Us</a></li>
+            <li><a routerLink="/contact" class="footer-link">Contact</a></li>
+            <li><a routerLink="/careers" class="footer-link">Careers</a></li>
+            <li><a routerLink="/blog" class="footer-link">Blog</a></li>
+            <li><a routerLink="/locations" class="footer-link">Locations</a></li>
           </ul>
         </div>
 
         <div class="footer-section">
-          <h3 class="footer-heading">Support</h3>
+          <h3 class="footer-heading">
+            <lucide-icon [img]="HelpCircleIcon" class="heading-icon"></lucide-icon>
+            Support
+          </h3>
           <ul class="footer-links">
-            <li><a routerLink="/help">Help Center</a></li>
-            <li><a routerLink="/pricing">Pricing</a></li>
-            <li><a routerLink="/terms">Terms of Service</a></li>
-            <li><a routerLink="/privacy">Privacy Policy</a></li>
+            <li><a routerLink="/help" class="footer-link">Help Center</a></li>
+            <li><a routerLink="/pricing" class="footer-link">Pricing</a></li>
+            <li><a routerLink="/faq" class="footer-link">FAQ</a></li>
+            <li><a routerLink="/terms" class="footer-link">Terms of Service</a></li>
+            <li><a routerLink="/privacy" class="footer-link">Privacy Policy</a></li>
           </ul>
         </div>
       </div>
 
-      <!-- Contact Info -->
+      <!-- Contact Section -->
       <div class="footer-contact">
-        <h3 class="footer-heading">Get in Touch</h3>
+        <h3 class="footer-heading">
+          <lucide-icon [img]="MessageCircleIcon" class="heading-icon"></lucide-icon>
+          Get in Touch
+        </h3>
         <div class="contact-info">
-          <p>📞 +254750972619 SMART-LAUNDRY</p>
-          <p>📧 hello@laundrysmart.com</p>
-          <p>📍 123 Clean Street, Wash City, WC 12345</p>
+          <div class="contact-item">
+            <lucide-icon [img]="PhoneIcon" class="contact-icon"></lucide-icon>
+            <div class="contact-details">
+              <span class="contact-label">Phone</span>
+              <a href="tel:+254750972619" class="contact-value">+254 750 972 619</a>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <lucide-icon [img]="MailIcon" class="contact-icon"></lucide-icon>
+            <div class="contact-details">
+              <span class="contact-label">Email</span>
+              <a href="mailto:hello@laundrysmart.com" class="contact-value">hello@laundrysmart.com</a>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <lucide-icon [img]="MapPinIcon" class="contact-icon"></lucide-icon>
+            <div class="contact-details">
+              <span class="contact-label">Address</span>
+              <span class="contact-value">123 Clean Street<br>Nairobi, Kenya</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Newsletter Signup -->
+        <div class="newsletter">
+          <h4 class="newsletter-title">Stay Updated</h4>
+          <div class="newsletter-form">
+            <input 
+              type="email" 
+              placeholder="Enter your email" 
+              class="newsletter-input"
+              aria-label="Email address"
+            >
+            <button type="submit" class="newsletter-btn">
+              <lucide-icon [img]="SendIcon" class="btn-icon"></lucide-icon>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -54,13 +129,32 @@
     <!-- Bottom Section -->
     <div class="footer-bottom">
       <div class="footer-bottom-content">
-        <p>&copy; 2024 Laundry Smart. All rights reserved.</p>
-        <div class="social-links">
-          <a href="#" class="social-link">Facebook</a>
-          <a href="#" class="social-link">Tiktok</a>
-          <a href="#" class="social-link">Instagram</a>
+        <div class="copyright">
+          <p>&copy; 2024 Laundry Smart. All rights reserved.</p>
+          <p class="made-with">Made with <lucide-icon [img]="HeartIcon" class="heart-icon"></lucide-icon> in Kenya</p>
+        </div>
+        
+        <div class="footer-badges">
+          <div class="badge">
+            <lucide-icon [img]="ShieldCheckIcon" class="badge-icon"></lucide-icon>
+            <span>Secure Payment</span>
+          </div>
+          <div class="badge">
+            <lucide-icon [img]="TruckIcon" class="badge-icon"></lucide-icon>
+            <span>Fast Delivery</span>
+          </div>
+          <div class="badge">
+            <lucide-icon [img]="ClockIcon" class="badge-icon"></lucide-icon>
+            <span>24/7 Support</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</footer>
+
+  <!-- Background Elements -->
+  <div class="footer-bg-elements">
+    <div class="bg-bubble bg-bubble-1"></div>
+    <div class="bg-bubble bg-bubble-2"></div>
+    <div class="bg-bubble bg-bubble-3"></div>
+  </div>

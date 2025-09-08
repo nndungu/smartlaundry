@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-pricing',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `
     <div class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 flex items-center justify-center p-4">
       <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
@@ -16,6 +17,9 @@ import { CommonModule } from '@angular/common';
             <div class="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-2"></div>
             <div class="h-4 bg-gray-200 rounded w-2/3 mx-auto"></div>
           </div>
+          <a routerLink="/home" class="mt-6 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Return to Home
+          </a>
         </div>
       </div>
     </div>

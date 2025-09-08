@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/register', pathMatch: 'full' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   { 
     path: 'register', 
     loadComponent: () => import('./pages/auth/register/register').then(m => m.RegisterComponent)
@@ -14,8 +14,9 @@ export const routes: Routes = [
   {path: 'home',
      loadComponent: () => import('./pages/home/home').then(m => m.HomeComponent)},
 
-  {path: 'about',
-     loadComponent: () => import('./pages/about/about').then(m => m.AboutComponent)},
+  // Removed about page route as per user request
+  // {path: 'about',
+  //    loadComponent: () => import('./pages/about/about').then(m => m.AboutComponent)},
 
   {path: 'services',
      loadComponent: () => import('./pages/services/services').then(m => m.ServicesComponent)},
@@ -25,4 +26,9 @@ export const routes: Routes = [
 
   {path: 'contact',
      loadComponent: () => import('./pages/contact/contact').then(m => m.ContactComponent)},
+
+  {
+    path: 'forgot-password',
+    loadComponent: () => import('./pages/auth/forgot-password/forgot-password').then(m => m.ForgotPasswordComponent)
+  }
 ];

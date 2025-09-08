@@ -22,7 +22,7 @@ export class NavbarComponent implements OnInit {
   navigationItems = [
     { name: 'Home', route: '/home' },
     { name: 'Services', route: '/services' },
-    { name: 'About', route: '/about' },
+    { name: 'Pricing', route: '/pricing' },
     { name: 'Contact Us', route: '/contact' },
     { name: 'Sign In', route: '/login' },
     { name: 'Get Started', route: '/register', isButton: true }

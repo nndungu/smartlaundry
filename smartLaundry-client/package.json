@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "极速赛车开奖直播历史记录ng serve",
+    "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -30,6 +30,7 @@
     "@angular/material": "~20.2.0",
     "@angular/platform-browser": "^20.2.0",
     "@angular/router": "^20.2.0",
+    "@fortawesome/fontawesome-free": "^7.0.1",
     "lucide-angular": "^0.542.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -37,7 +38,7 @@
   },
   "devDependencies": {
     "@angular/build": "^20.2.0",
-    "@angular/cli": "^20.2.0",
+    "@angular/cli": "^20.2.1",
     "@angular/compiler-cli": "^20.2.0",
     "@types/jasmine": "~5.1.0",
     "autoprefixer": "^10.4.21",

@@ -1,1 +1,75 @@
-<p>about works!</p>
+<!-- about.component.html -->
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <h1>About Laundry Smart</h1>
+    <p>
+      Founded in 2020, we've been revolutionizing laundry care with our commitment to quality, 
+      convenience, and environmental responsibility. Discover our story and mission.
+    </p>
+  </div>
+</section>
+
+<!-- Story Section -->
+<section class="story-section">
+  <div class="container">
+    <div class="story-content">
+      <div class="story-text fade-in">
+        <h2>Our Story</h2>
+        <p>
+          Laundry Smart was born from a simple idea: everyone deserves fresh, clean clothes without 
+          the hassle. Our founders, busy professionals themselves, understood the challenge of 
+          balancing work, family, and household chores.
+        </p>
+        <p>
+          What started as a small local service has grown into the city's most trusted laundry 
+          provider, serving thousands of satisfied customers who value quality and convenience.
+        </p>
+        <p>
+          Today, we combine cutting-edge technology with traditional craftsmanship to deliver 
+          an unparalleled laundry experience that saves you time while caring for your clothes.
+        </p>
+      </div>
+      <div class="stats-card fade-in">
+        <div class="stats-grid">
+          <div class="stat-item" *ngFor="let stat of stats">
+            <span class="stat-number">{{ stat.number }}</span>
+            <span class="stat-label">{{ stat.label }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Values Section -->
+<section class="values-section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <h2>Our Values</h2>
+      <p>These core values guide everything we do and shape our commitment to excellence.</p>
+    </div>
+
+    <div class="values-grid">
+      <div class="value-card fade-in" *ngFor="let value of values">
+        <div class="value-icon">
+          <i [class]="value.icon"></i>
+        </div>
+        <h3>{{ value.title }}</h3>
+        <p>{{ value.description }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission Section -->
+<section class="mission-section">
+  <div class="container">
+    <h2>Our Mission</h2>
+    <p>
+      To revolutionize the laundry industry by combining exceptional service with smart technology, 
+      creating a seamless experience that gives our customers more time to focus on what matters most to them. 
+      We're committed to quality, convenience, and environmental responsibility in everything we do.
+    </p>
+  </div>
+</section>
