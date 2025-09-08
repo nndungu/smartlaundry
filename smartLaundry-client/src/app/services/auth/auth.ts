@@ -43,4 +43,9 @@ export class AuthService {
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
   }
+
+  logout(): void {
+    this.currentUserSubject.next(null);
+    // Additional logout logic can be added here, e.g., clearing tokens
+  }
 }

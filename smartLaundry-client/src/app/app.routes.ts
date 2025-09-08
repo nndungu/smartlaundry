@@ -14,7 +14,7 @@ export const routes: Routes = [
   {path: 'home',
      loadComponent: () => import('./pages/home/home').then(m => m.HomeComponent)},
 
-  // Removed about page route as per user request
+  // Removed about page route 
   // {path: 'about',
   //    loadComponent: () => import('./pages/about/about').then(m => m.AboutComponent)},
 
@@ -30,5 +30,10 @@ export const routes: Routes = [
   {
     path: 'forgot-password',
     loadComponent: () => import('./pages/auth/forgot-password/forgot-password').then(m => m.ForgotPasswordComponent)
+  },
+
+  {
+    path: 'vendor',
+    loadComponent: () => import('./pages/dashboard/vendor/vendor-dashboard').then(m => m.VendorDashboardComponent)
   }
 ];
