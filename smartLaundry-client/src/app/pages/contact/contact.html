@@ -28,8 +28,8 @@
               <p class="highlight" *ngIf="info.title === 'Phone' || info.title === 'Email'">{{ info.primary }}</p>
               <p *ngIf="info.title !== 'Phone' && info.title !== 'Email'">{{ info.primary }}</p>
               <p>{{ info.secondary }}</p>
-              <p [innerHTML]="info.tertiary" 
-                 [class.highlight]="info.title === 'Business Hours' && info.tertiary?.includes('24/7')"></p>
+              <p [innerHTML]="info.tertiary"
+                 [class.highlight]="info.title === 'Business Hours' && info.tertiary.includes('24/7')"></p>
             </div>
           </div>
         </div>

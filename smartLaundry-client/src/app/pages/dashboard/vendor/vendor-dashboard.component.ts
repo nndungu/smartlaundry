@@ -1,4 +1,5 @@
-// TypeScript for Vendor Orders Management
+import { Component, OnInit } from '@angular/core';
+
 interface VendorOrder {
   id: string;
   customerId: string;
@@ -21,13 +22,18 @@ interface VendorOrder {
   }>;
 }
 
-class VendorOrdersManager {
+@Component({
+  selector: 'app-vendor-dashboard',
+  templateUrl: './vendor-dashboard.html',
+  styleUrls: ['./vendor-dashboard.scss']
+})
+export class VendorDashboardComponent implements OnInit {
   private orders: VendorOrder[] = [];
   private filteredOrders: VendorOrder[] = [];
   private currentFilter: string = 'all';
   private currentOrderId: string | null = null;
 
-  constructor() {
+  ngOnInit(): void {
     this.initializeEventListeners();
     this.loadOrders();
     this.setupRealTimeUpdates();
@@ -54,6 +60,17 @@ class VendorOrdersManager {
         }
       });
     });
+  }
+
+  private navigateToPage(page: string): void {
+    console.log(`Navigating to ${page}`);
+    // In a real SPA, this would handle routing
+    if (page === 'dashboard') {
+      // Stay on the same page or implement dashboard logic here
+      console.log('Already on dashboard page');
+    } else if (page === 'profile') {
+      window.location.href = 'profile.html';
+    }
   }
 
   // Setup search events
@@ -101,7 +118,7 @@ class VendorOrdersManager {
       acceptOrderBtn.addEventListener('click', () => this.acceptOrder());
     }
     if (rejectOrderBtn) {
-      rejectOrderBtn.addEventListener('click', () => this.showRejectionModal());
+      rejectOrderBtn.addEventListener('click', () => this.openRejectionModal());
     }
 
     // Status update modal
@@ -146,22 +163,22 @@ class VendorOrdersManager {
     // Event delegation for dynamically created buttons
     document.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
-      
+
       if (target.classList.contains('view-btn')) {
         const orderId = target.getAttribute('data-order-id');
         if (orderId) this.showOrderDetails(orderId);
       }
-      
+
       if (target.classList.contains('status-btn')) {
         const orderId = target.getAttribute('data-order-id');
-        if (orderId) this.showStatusUpdateModal(orderId);
+        if (orderId) this.openStatusUpdateModal(orderId);
       }
-      
+
       if (target.classList.contains('reject-btn')) {
         const orderId = target.getAttribute('data-order-id');
         if (orderId) {
           this.currentOrderId = orderId;
-          this.showRejectionModal();
+          this.openRejectionModal();
         }
       }
     });
@@ -171,12 +188,12 @@ class VendorOrdersManager {
   private async loadOrders(): Promise<void> {
     try {
       this.showLoading();
-      
+
       // Mock data - replace with actual API call
       const mockOrders = await this.fetchMockOrders();
       this.orders = mockOrders;
       this.filteredOrders = [...this.orders];
-      
+
       this.renderOrders();
       this.updateStats();
       this.hideLoading();
@@ -254,20 +271,20 @@ class VendorOrdersManager {
   // Filter orders by status
   private filterByStatus(status: string): void {
     this.currentFilter = status;
-    
+
     if (status === 'all') {
       this.filteredOrders = [...this.orders];
     } else {
       this.filteredOrders = this.orders.filter(order => order.status === status);
     }
-    
+
     this.renderOrders();
   }
 
   // Search orders
   private searchOrders(query: string): void {
     const searchTerm = query.toLowerCase().trim();
-    
+
     if (searchTerm === '') {
       this.filterByStatus(this.currentFilter);
       return;
@@ -280,7 +297,7 @@ class VendorOrdersManager {
       order.service.toLowerCase().includes(searchTerm) ||
       order.pickupAddress.toLowerCase().includes(searchTerm)
     );
-    
+
     this.renderOrders();
   }
 
@@ -288,7 +305,7 @@ class VendorOrdersManager {
   private renderOrders(): void {
     const tableBody = document.getElementById('ordersTableBody');
     const emptyState = document.getElementById('emptyState');
-    
+
     if (!tableBody || !emptyState) return;
 
     if (this.filteredOrders.length === 0) {
@@ -378,24 +395,24 @@ class VendorOrdersManager {
           <div class="value">KES ${order.totalAmount.toLocaleString()}</div>
         </div>
       </div>
-      
+
       <div style="margin: 20px 0;">
         <div class="label" style="margin-bottom: 8px;">Pickup Address</div>
         <div class="value">${order.pickupAddress}</div>
       </div>
-      
+
       <div style="margin: 20px 0;">
         <div class="label" style="margin-bottom: 8px;">Delivery Address</div>
         <div class="value">${order.deliveryAddress}</div>
       </div>
-      
+
       ${order.specialInstructions ? `
         <div style="margin: 20px 0;">
           <div class="label" style="margin-bottom: 8px;">Special Instructions</div>
           <div class="value">${order.specialInstructions}</div>
         </div>
       ` : ''}
-      
+
       <div style="margin: 20px 0;">
         <div class="label" style="margin-bottom: 8px;">Status History</div>
         <div class="status-history">
@@ -413,12 +430,12 @@ class VendorOrdersManager {
   }
 
   // Show status update modal
-  private showStatusUpdateModal(orderId: string): void {
+  private openStatusUpdateModal(orderId: string): void {
     const order = this.orders.find(o => o.id === orderId);
     if (!order) return;
 
     this.currentOrderId = orderId;
-    
+
     const currentStatusDisplay = document.getElementById('currentStatusDisplay');
     if (currentStatusDisplay) {
       currentStatusDisplay.innerHTML = `
@@ -447,9 +464,9 @@ class VendorOrdersManager {
     };
 
     const availableStatuses = statusFlow[currentStatus] || [];
-    
+
     newStatusSelect.innerHTML = '<option value="">Select New Status</option>' +
-      availableStatuses.map(status => 
+      availableStatuses.map(status =>
         `<option value="${status}">${this.formatStatus(status)}</option>`
       ).join('');
   }
@@ -458,7 +475,7 @@ class VendorOrdersManager {
   private handleStatusChange(): void {
     const newStatusSelect = document.getElementById('newStatus') as HTMLSelectElement;
     const deliveryPhotoSection = document.getElementById('deliveryPhotoSection');
-    
+
     if (newStatusSelect && deliveryPhotoSection) {
       // Show photo upload for delivery status
       if (newStatusSelect.value === 'delivered') {
@@ -475,10 +492,10 @@ class VendorOrdersManager {
 
     try {
       this.showLoading();
-      
+
       // Simulate API call
       await this.updateOrderStatus(this.currentOrderId, 'accepted', 'Order accepted by rider');
-      
+
       this.showToast('Order accepted successfully!', 'success');
       this.hideModal('orderDetailsModal');
       this.hideLoading();
@@ -489,7 +506,7 @@ class VendorOrdersManager {
   }
 
   // Show rejection modal
-  private showRejectionModal(): void {
+  private openRejectionModal(): void {
     this.showModal('rejectionModal');
   }
 
@@ -507,11 +524,11 @@ class VendorOrdersManager {
 
     try {
       this.showLoading();
-      
+
       // Update order with rejection
-      await this.updateOrderStatus(this.currentOrderId, 'rejected', 
+      await this.updateOrderStatus(this.currentOrderId, 'rejected',
         `Rejected: ${rejectionReason}. ${rejectionNotes}`);
-      
+
       // Update order object
       const order = this.orders.find(o => o.id === this.currentOrderId);
       if (order) {
@@ -542,9 +559,9 @@ class VendorOrdersManager {
 
     try {
       this.showLoading();
-      
+
       await this.updateOrderStatus(this.currentOrderId, newStatus as any, statusNotes);
-      
+
       this.showToast('Order status updated successfully!', 'success');
       this.hideModal('statusUpdateModal');
       this.hideLoading();
@@ -580,16 +597,16 @@ class VendorOrdersManager {
     const completedToday = document.getElementById('completedToday');
 
     if (totalOrders) totalOrders.textContent = this.orders.length.toString();
-    
+
     if (pendingOrders) {
       const pending = this.orders.filter(o => o.status === 'pending').length;
       pendingOrders.textContent = pending.toString();
     }
-    
+
     if (completedToday) {
       const today = new Date().toDateString();
-      const completedTodayCount = this.orders.filter(o => 
-        o.status === 'completed' && 
+      const completedTodayCount = this.orders.filter(o =>
+        o.status === 'completed' &&
         new Date(o.statusHistory[o.statusHistory.length - 1]?.timestamp || '').toDateString() === today
       ).length;
       completedToday.textContent = completedTodayCount.toString();
@@ -617,16 +634,6 @@ class VendorOrdersManager {
 
   private formatDateTime(timestamp: string): string {
     return new Date(timestamp).toLocaleString('en-KE');
-  }
-
-  private navigateToPage(page: string): void {
-    console.log(`Navigating to ${page}`);
-    // In a real SPA, this would handle routing
-    if (page === 'dashboard') {
-      window.location.href = 'vendor-dashboard.html';
-    } else if (page === 'profile') {
-      window.location.href = 'profile.html';
-    }
   }
 
   private showModal(modalId: string): void {
@@ -685,7 +692,7 @@ class VendorOrdersManager {
   }
 
   private debounce(func: Function, wait: number) {
-    let timeout: number;
+    let timeout: any;
     return function executedFunction(...args: any[]) {
       const later = () => {
         clearTimeout(timeout);
@@ -696,18 +703,3 @@ class VendorOrdersManager {
     };
   }
 }
-
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  try {
-    const vendorOrders = new VendorOrdersManager();
-    console.log('Vendor Orders Manager initialized');
-    
-    // Make available globally for debugging
-    (window as any).vendorOrders = vendorOrders;
-  } catch (error) {
-    console.error('Failed to initialize Vendor Orders Manager:', error);
-  }
-});
-
-export { VendorOrdersManager };

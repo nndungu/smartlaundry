@@ -3,7 +3,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* CSS Custom Properties for theming */
 :root {
+  --primary-color: #4285f4;
+  --primary-dark: #3367d6;
+  --secondary-color: #f8f9fa;
+  --text-primary: #202124;
+  --text-secondary: #5f6368;
+  --border-color: #e8eaed;
+  --success-color: #137333;
+  --warning-color: #ea8600;
+  --success-bg: #e8f5e8;
+  --warning-bg: #fef7e0;
+  --sidebar-width: 280px;
+  --header-height: 80px;
+  --gradient-bg: linear-gradient(135deg, #4285f4, #3367d6);
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
   --background: 0 0% 100%;
   --foreground: 215 25% 15%;
   --card: 0 0% 100%;

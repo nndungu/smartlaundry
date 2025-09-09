@@ -32,8 +32,17 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/auth/forgot-password/forgot-password').then(m => m.ForgotPasswordComponent)
   },
 
-  {
-    path: 'vendor',
-    loadComponent: () => import('./pages/dashboard/vendor/vendor-dashboard').then(m => m.VendorDashboardComponent)
-  }
-];
+      {
+        path: 'orders',
+        loadComponent: () => import('./pages/dashboard/vendor/order-status/order-status.component').then(m => m.OrderStatusComponent)
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./pages/dashboard/vendor/profile/profile.component').then(m => m.ProfileComponent)
+      },
+      {
+        path: 'payments',
+        loadComponent: () => import('./pages/dashboard/vendor/payments/payments.component').then(m => m.PaymentsComponent)
+      }
+    ]
+

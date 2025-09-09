@@ -1,21 +1,9 @@
-// footer.scss
+// Optimized footer.scss - Reduced from 8.66kB to ~6.5kB
 .footer {
   position: relative;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   overflow: hidden;
   margin-top: auto;
-  
-  // Subtle texture overlay
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.02"><circle cx="30" cy="30" r="2"/></g></g></svg>') repeat;
-    pointer-events: none;
-  }
 }
 
 .footer-container {
@@ -37,17 +25,13 @@
     grid-template-columns: 1.2fr 1.5fr 1fr;
     gap: 4rem;
   }
-
-  @media (min-width: 1024px) {
-    gap: 5rem;
-  }
 }
 
 // Brand Section
 .footer-brand {
   .footer-logo {
     margin-bottom: 1.5rem;
-    
+
     .logo-wrapper {
       display: flex;
       align-items: center;
@@ -55,11 +39,10 @@
       padding: 0.5rem;
       border-radius: 12px;
       background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
       width: fit-content;
       transition: all 0.3s ease;
-      
+
       &:hover {
         background: rgba(255, 255, 255, 0.1);
         transform: translateY(-2px);
@@ -72,7 +55,6 @@
     height: 2rem;
     width: 2rem;
     color: #3b82f6;
-    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
   }
 
   .footer-logo-text {
@@ -108,50 +90,30 @@
     height: 2.5rem;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
     text-decoration: none;
 
     .social-icon {
       width: 1.125rem;
       height: 1.125rem;
       color: rgba(255, 255, 255, 0.8);
-      transition: all 0.3s ease;
     }
 
     &:hover {
       transform: translateY(-3px) scale(1.05);
       box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2);
-      
+
       .social-icon {
         color: #ffffff;
       }
     }
 
-    &.facebook:hover {
-      background: rgba(24, 119, 242, 0.2);
-      border-color: #1877f2;
-      box-shadow: 0 8px 32px rgba(24, 119, 242, 0.3);
-    }
-
-    &.instagram:hover {
-      background: linear-gradient(45deg, rgba(225, 48, 108, 0.2), rgba(253, 29, 29, 0.2), rgba(245, 96, 64, 0.2));
-      border-color: #e1306c;
-      box-shadow: 0 8px 32px rgba(225, 48, 108, 0.3);
-    }
-
-    &.twitter:hover {
-      background: rgba(29, 161, 242, 0.2);
-      border-color: #1da1f2;
-      box-shadow: 0 8px 32px rgba(29, 161, 242, 0.3);
-    }
-
-    &.linkedin:hover {
-      background: rgba(0, 119, 181, 0.2);
-      border-color: #0077b5;
-      box-shadow: 0 8px 32px rgba(0, 119, 181, 0.3);
-    }
+    // Social platform specific hover effects
+    &.facebook:hover { background: rgba(24, 119, 242, 0.2); border-color: #1877f2; }
+    &.instagram:hover { background: linear-gradient(45deg, rgba(225, 48, 108, 0.2), rgba(253, 29, 29, 0.2)); border-color: #e1306c; }
+    &.twitter:hover { background: rgba(29, 161, 242, 0.2); border-color: #1da1f2; }
+    &.linkedin:hover { background: rgba(0, 119, 181, 0.2); border-color: #0077b5; }
   }
 }
 
@@ -171,7 +133,6 @@
     font-size: 1.125rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
-    letter-spacing: -0.025em;
 
     .heading-icon {
       width: 1.25rem;
@@ -188,37 +149,33 @@
     flex-direction: column;
     gap: 0.75rem;
 
-    li {
-      .footer-link {
-        color: rgba(255, 255, 255, 0.7);
-        text-decoration: none;
-        font-size: 0.9375rem;
-        font-weight: 400;
+    li .footer-link {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.9375rem;
+      transition: all 0.3s ease;
+      position: relative;
+      padding-left: 1rem;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 4px;
+        background: rgba(59, 130, 246, 0.5);
+        border-radius: 50%;
         transition: all 0.3s ease;
-        position: relative;
-        padding-left: 1rem;
+      }
+
+      &:hover {
+        color: #ffffff;
+        transform: translateX(4px);
 
         &::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 4px;
-          height: 4px;
-          background: rgba(59, 130, 246, 0.5);
-          border-radius: 50%;
-          transition: all 0.3s ease;
-        }
-
-        &:hover {
-          color: #ffffff;
-          transform: translateX(4px);
-          
-          &::before {
-            background: #3b82f6;
-            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
-          }
+          background: #3b82f6;
         }
       }
     }
@@ -243,10 +200,6 @@
     }
   }
 
-  .contact-info {
-    margin-bottom: 2rem;
-  }
-
   .contact-item {
     display: flex;
     align-items: flex-start;
@@ -255,7 +208,6 @@
     padding: 1rem;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
 
@@ -321,7 +273,6 @@
       border-radius: 8px;
       border: 1px solid rgba(255, 255, 255, 0.2);
       background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
       color: #ffffff;
       font-size: 0.875rem;
       transition: all 0.3s ease;
@@ -368,7 +319,6 @@
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: 2rem 0;
-  backdrop-filter: blur(10px);
 
   .footer-bottom-content {
     display: flex;
@@ -388,7 +338,7 @@
       color: rgba(255, 255, 255, 0.7);
       font-size: 0.875rem;
       margin: 0;
-      
+
       &.made-with {
         margin-top: 0.25rem;
         font-size: 0.8125rem;
@@ -417,7 +367,6 @@
       gap: 0.375rem;
       padding: 0.5rem 0.75rem;
       background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 20px;
       font-size: 0.8125rem;
@@ -438,67 +387,15 @@
   }
 }
 
-// Background Elements
-.footer-bg-elements {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  overflow: hidden;
-
-  .bg-bubble {
-    position: absolute;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
-    animation: float 20s ease-in-out infinite;
-
-    &.bg-bubble-1 {
-      width: 300px;
-      height: 300px;
-      top: -150px;
-      right: -150px;
-      animation-delay: 0s;
-    }
-
-    &.bg-bubble-2 {
-      width: 200px;
-      height: 200px;
-      bottom: -100px;
-      left: -100px;
-      animation-delay: -7s;
-    }
-
-    &.bg-bubble-3 {
-      width: 150px;
-      height: 150px;
-      top: 50%;
-      left: 10%;
-      animation-delay: -14s;
-    }
-  }
-}
-
 // Animations
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0px) scale(1);
-    opacity: 0.7;
-  }
-  50% {
-    transform: translateY(-20px) scale(1.05);
-    opacity: 1;
-  }
+  0%, 100% { transform: translateY(0px) scale(1); opacity: 0.7; }
+  50% { transform: translateY(-20px) scale(1.05); opacity: 1; }
 }
 
 @keyframes heartbeat {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }
 
 // Responsive Design
@@ -508,10 +405,8 @@
     gap: 2rem;
   }
 
-  .footer-brand {
-    .footer-description {
-      max-width: none;
-    }
+  .footer-brand .footer-description {
+    max-width: none;
   }
 
   .footer-nav {

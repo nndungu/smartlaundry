@@ -1,98 +1,208 @@
-<div class="dashboard-container">
-  <!-- Sidebar Navigation -->
-  <nav class="sidebar">
-    <div class="logo">SmartLaundry</div>
-    <ul class="nav-menu">
-      <li class="nav-item active" data-page="dashboard">
-        <span class="nav-icon">📊</span>
-        <span class="nav-text">Dashboard</span>
-      </li>
-      <li class="nav-item" data-page="orders">
-        <span class="nav-icon">📦</span>
-        <span class="nav-text">Orders</span>
-      </li>
-      <li class="nav-item" data-page="profile">
-        <span class="nav-icon">👤</span>
-        <span class="nav-text">Profile</span>
-      </li>
-    </ul>
-  </nav>
+<div class="vendor-container">
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="logo">SmartLaundry</div>
+        <ul class="nav-menu">
+            <li class="nav-item" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </li>
+            <li class="nav-item active" data-page="orders">
+                <span class="nav-icon">📋</span>
+                <span class="nav-text">Orders</span>
+            </li>
+            <li class="nav-item" data-page="profile">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">Profile</span>
+            </li>
+            <li class="nav-item" data-page="payments">
+                <span class="nav-icon">💳</span>
+                <span class="nav-text">Payments</span>
+            </li>
+        </ul>
+                <li class="nav-item" data-page="profile">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-text">Profile</span>
+                </li>
+            </ul>
+        </nav>
 
-  <!-- Main Content Area -->
-  <main class="main-content">
-    <!-- Header -->
-    <header class="dashboard-header">
-      <div class="search-container">
-        <div class="search-bar">
-          <span class="search-icon">🔍</span>
-          <input type="text" placeholder="Search..." id="searchInput" class="search-input" />
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="page-header">
+                <div class="search-container">
+                    <div class="search-bar">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" placeholder="Search..." id="searchInput" class="search-input">
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" id="notificationBtn">🔔</button>
+                    <button class="icon-btn" id="profileBtn">👤</button>
+                </div>
+            </header>
+
+            <!-- Page Title -->
+            <div class="page-title-section">
+                <h1 class="page-title">Orders Management</h1>
+                <div class="stats-summary">
+                    <div class="stat-item">
+                        <span class="stat-value" id="totalOrders">0</span>
+                        <span class="stat-label">Total Orders</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="pendingOrders">0</span>
+                        <span class="stat-label">Pending</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="completedToday">0</span>
+                        <span class="stat-label">Completed Today</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="tab-btn active" data-status="all">All Orders</button>
+                <button class="tab-btn" data-status="pending">Pending</button>
+                <button class="tab-btn" data-status="accepted">Accepted</button>
+                <button class="tab-btn" data-status="picked">Picked Up</button>
+                <button class="tab-btn" data-status="delivered">Delivered</button>
+            </div>
+
+            <!-- Orders Table -->
+            <section class="orders-table-section">
+                <div class="table-container">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Service</th>
+                                <th>Pickup Address</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Orders will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <div class="empty-icon">📋</div>
+                    <h3>No Orders Found</h3>
+                    <p>No orders match your current filter.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="modal-overlay" id="orderDetailsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Order Details</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body" id="orderDetailsBody">
+                <!-- Order details will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="closeModalBtn">Close</button>
+                <button class="btn btn-danger" id="rejectOrderBtn">❌ Reject</button>
+                <button class="btn btn-success" id="acceptOrderBtn">✅ Accept</button>
+            </div>
         </div>
-      </div>
-      <div class="header-actions">
-        <button class="icon-btn" id="notificationBtn" title="Notifications">🔔</button>
-        <button class="icon-btn" id="profileBtn" title="Profile">👤</button>
-      </div>
-    </header>
+    </div>
 
-    <!-- Vendor Dashboard Title -->
-    <section class="welcome-section">
-      <h1 class="welcome-title">Vendor Dashboard</h1>
-    </section>
+    <!-- Status Update Modal -->
+    <div class="modal-overlay" id="statusUpdateModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Update Order Status</h3>
+                <button class="modal-close" id="statusModalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="current-status" id="currentStatusDisplay">
+                    <!-- Current status will be shown here -->
+                </div>
+                <div class="form-group">
+                    <label for="newStatus">Update Status To:</label>
+                    <select id="newStatus" class="form-select">
+                        <option value="">Select New Status</option>
+                        <option value="accepted">Accepted</option>
+                        <option value="picked">Picked Up</option>
+                        <option value="in-transit">In Transit</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="statusNotes">Notes (Optional)</label>
+                    <textarea id="statusNotes" placeholder="Add any notes about this status update..." rows="3"></textarea>
+                </div>
+                <div class="form-group" id="deliveryPhotoSection" style="display: none;">
+                    <label for="deliveryPhoto">Delivery Photo</label>
+                    <input type="file" id="deliveryPhoto" accept="image/*">
+                    <small>Upload a photo as proof of delivery</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelStatusBtn">Cancel</button>
+                <button class="btn btn-primary" id="confirmStatusBtn">Update Status</button>
+            </div>
+        </div>
+    </div>
 
-    <!-- Orders Table -->
-    <section class="history-section">
-      <div class="table-container">
-        <table class="order-table" id="orderTable">
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Status</th>
-              <th>Status</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody id="orderTableBody">
-            <tr class="order-row" data-order="1234">
-              <td class="order-id">#1234</td>
-              <td class="order-status-text">Picked</td>
-              <td class="order-status-badge">
-                <span class="status-badge completed">Picked</span>
-              </td>
-              <td class="order-total">KES 500</td>
-            </tr>
-            <tr class="order-row" data-order="1235">
-              <td class="order-id">#1235</td>
-              <td class="order-status-text">Janess</td>
-              <td class="order-status-badge"></td>
-              <td class="order-total">KES 800</td>
-            </tr>
-            <tr class="order-row" data-order="1236">
-              <td class="order-id">#1236</td>
-              <td class="order-status-text">Bob Johnson</td>
-              <td class="order-status-badge"></td>
-              <td class="order-total">KES 600</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+    <!-- Rejection Reason Modal -->
+    <div class="modal-overlay" id="rejectionModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Reject Order</h3>
+                <button class="modal-close" id="rejectionModalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Please provide a reason for rejecting this order:</p>
+                <div class="form-group">
+                    <label for="rejectionReason">Rejection Reason</label>
+                    <select id="rejectionReason" class="form-select">
+                        <option value="">Select a reason</option>
+                        <option value="vehicle-breakdown">Vehicle Breakdown</option>
+                        <option value="too-far">Location Too Far</option>
+                        <option value="time-conflict">Time Conflict</option>
+                        <option value="overbooked">Already Overbooked</option>
+                        <option value="weather">Bad Weather Conditions</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="rejectionNotes">Additional Notes</label>
+                    <textarea id="rejectionNotes" placeholder="Provide additional details..." rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelRejectionBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmRejectionBtn">Confirm Rejection</button>
+            </div>
+        </div>
+    </div>
 
-    <!-- Earnings Chart -->
-    <section class="earnings-section">
-      <h2 class="section-title">Earnings</h2>
-      <svg id="earningsChart" width="100%" height="200" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" aria-label="Earnings Chart" role="img">
-        <defs>
-          <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#4285f4" stop-opacity="0.3" />
-            <stop offset="100%" stop-color="#4285f4" stop-opacity="0" />
-          </linearGradient>
-        </defs>
-        <path id="linePath" fill="url(#gradient)" stroke="#4285f4" stroke-width="3" fill-opacity="0.3" />
-        <polyline id="linePolyline" fill="none" stroke="#4285f4" stroke-width="3" />
-        <g id="pointsGroup" fill="#4285f4" />
-        <g id="xAxisLabels" fill="#5f6368" font-size="14" font-family="Arial, sans-serif" />
-        <g id="yAxisLabels" fill="#5f6368" font-size="14" font-family="Arial, sans-serif" />
-      </svg>
-    </section>
-  </main>
-</div>
+    <!-- Success/Error Toast -->
+    <div class="toast-container" id="toastContainer">
+        <!-- Toast messages will appear here -->
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <script src="orders.ts"></script>
+</body>
+</html>

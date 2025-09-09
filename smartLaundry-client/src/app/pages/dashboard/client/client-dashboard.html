@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartLaundry - Client Dashboard</title>
+    <link rel="stylesheet" href="client-dashboard.scss">
+</head>
+<body>
+    <div class="dasboard-container">
+        <!--side bar nav -->
+        nav class="sidebar">
+            <div class="logo-details">SmartLaundry</div>
+            <ul class="nav-menu">
+
+                <li class="nav-item active" data page="Dashboard">
+                    <span class="nav-icon"></span>
+                    <span class="nav-text">Dashboard</span>
+                </li>
+
+                <li class="nav-item" data page="Book Service">
+                    <span class="nav-icon">🛒</span>
+                    <span class="nav-text">Book Service</span>
+                </li>
+                <li class="nav-item" data page="My Orders">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-text">My Orders</span>
+                </li>
+                <li class="nav-item" data page="order-tracking">    
+                    <span class="nav-icon">🚚</span>
+                    <span class="nav-text">Order Tracking</span>
+                </li>
+                <li class="nav-item" data page="Oder History">
+                    <span class="nav-icon">📜</span>
+                    <span class="nav-text">Order History</span>
+                </li>
+                <li class="nav-item" data page="Payments">
+                    <span class="nav-icon">💳</span>
+                    <span class="nav-text">Payments</span>
+                </li>
+                <li class="nav-item" data page="Notifications">
+                    <span class="nav-icon">🔔</span>
+                    <span class="nav-text">Notifications</span>
+                </li>
+                <li class="nav-item" data page="Profile">
+                    <span class="nav-icon">👤</span >
+                    <span class="nav-text">Profile</span>
+                </li>
+                </ul>
+        </nav>
+        <!--main content -->
+        <main class="main-content">
+            <!--top nav bar -->
+            <header class="dashboard header">
+                <div class="search-container">
+                    <div class="searchbar">
+                    <div class="search-icon">🔍</div>
+                    <input type="text" placeholder="Search..." class="search-input">
+                </div>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn" id="notificationBtn" title="Notifications">🔔</button>
+                    <button class="icon-btn" id="profileBtn" title="Profile">👤</button>
+                </div>
+            </header>
+             <!-- Welcome Section -->
+            <section class="welcome-section">
+                <h1 class="welcome-title">Welcome Back 👋</h1>
+                <p class="welcome-subtitle">Here's an overview of your laundry activity.</p>
+            </section>
+
+            <!-- Order Tracking Section -->
+            <section class="tracking-section">
+                <h2 class="section-title">Order Tracking</h2>
+                <div class="progress-tracker" id="progressTracker">
+                    <div class="progress-step completed">
+                        <div class="progress-circle">
+                            <span class="progress-icon">✓</span>
+                        </div>
+                        <div class="progress-line completed"></div>
+                        <span class="progress-label">Order Placed</span>
+                    </div>
+                    <div class="progress-step completed">
+                        <div class="progress-circle">
+                            <span class="progress-icon">✓</span>
+                        </div>
+                        <div class="progress-line"></div>
+                        <span class="progress-label">Picked Up</span>
+                    </div>
+                    <div class="progress-step">
+                        <div class="progress-circle">
+                            <span class="progress-icon"></span>
+                        </div>
+                        <div class="progress-line"></div>
+                        <span class="progress-label">Cleaning</span>
+                    </div>
+                    <div class="progress-step">
+                        <div class="progress-circle">
+                            <span class="progress-icon"></span>
+                        </div>
+                        <div class="progress-line"></div>
+                        <span class="progress-label">Delivery</span>
+                    </div>
+                    <div class="progress-step">
+                        <div class="progress-circle">
+                            <span class="progress-icon"></span>
+                        </div>
+                        <span class="progress-label">Completed</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Order History Section -->
+            <section class="history-section">
+                <h2 class="section-title">Order History</h2>
+                <div class="table-container">
+                    <table class="order-table" id="orderTable">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Service</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderTableBody">
+                            <tr class="order-row" data-order="1234">
+                                <td class="order-id">#1234</td>
+                                <td class="service-type">Wash & Fold</td>
+                                <td class="order-date">2025-09-01</td>
+                                <td class="order-status">
+                                    <span class="status-badge completed">Completed</span>
+                                </td>
+                                <td class="order-total">KES 500</td>
+                            </tr>
+                            <tr class="order-row" data-order="1235">
+                                <td class="order-id">#1235</td>
+                                <td class="service-type">Dry Cleaning</td>
+                                <td class="order-date">2025-09-05</td>
+                                <td class="order-status">
+                                    <span class="status-badge in-progress">In Progress</span>
+                                </td>
+                                <td class="order-total">KES 800</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <script src="client-dashboard.ts"></script>
+</body>
+</html>
+
+
+                        
+
+                   

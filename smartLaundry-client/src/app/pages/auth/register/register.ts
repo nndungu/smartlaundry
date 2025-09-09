@@ -1,5 +1,5 @@
 // register.component.ts
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -8,7 +8,8 @@ import { Router } from '@angular/router';
   selector: 'app-register',
   templateUrl: './register.html',
   styleUrls: ['./register.scss'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule],
+  encapsulation: ViewEncapsulation.None
 })
 export class RegisterComponent {
   selectedRole = '';

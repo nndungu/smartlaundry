@@ -1,14 +1,16 @@
 // login.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common'; 
-import { FormsModule } from '@angular/forms';   
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
-  imports: [CommonModule, FormsModule]  
+  imports: [CommonModule, FormsModule],
+  encapsulation: ViewEncapsulation.None
 })
 export class LoginComponent implements OnInit {
   showPassword = false;
