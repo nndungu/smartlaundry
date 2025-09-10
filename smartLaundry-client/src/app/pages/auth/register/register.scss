@@ -1,48 +1,90 @@
-// register.component.scss
-// This component uses Tailwind CSS classes in the template
-// If you're not using Tailwind, uncomment the CSS below and remove Tailwind classes from HTML
+/* Removed duplicate Tailwind imports to avoid conflicts */
+/* Custom styles for register page */
 
 :host {
-  // Custom styles that Tailwind doesn't cover
-  
-  // Ensure dropdowns appear above other elements
-  .relative {
-    z-index: 10;
-    
-    > div[class*="absolute"] {
-      z-index: 50;
-    }
-  }
+  display: block;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  // Custom focus styles for better accessibility
-  button:focus-visible,
-  input:focus-visible {
-    outline: 2px solid #3b82f6;
-    outline-offset: 2px;
-  }
+.card {
+  @apply bg-white shadow-2xl rounded-lg p-6 max-w-md w-full border-0;
+}
 
-  // Smooth transitions for interactive elements
-  button,
-  input,
-  a {
-    transition: all 0.15s ease-in-out;
-  }
+.header {
+  @apply text-center mb-6;
+}
 
-  // Custom scrollbar for dropdown if needed
-  .overflow-y-auto::-webkit-scrollbar {
-    width: 4px;
-  }
+.header h2 {
+  @apply text-2xl font-bold text-gray-900;
+}
 
-  .overflow-y-auto::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
+.header p {
+  @apply text-sm text-gray-600;
+}
 
-  .overflow-y-auto::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 2px;
-  }
+.form-group {
+  @apply space-y-2;
+}
 
-  .overflow-y-auto::-webkit-scrollbar-thumb:hover {
-    background: #a1a1a1;
-  }
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+select {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+}
+
+button {
+  @apply w-full py-3 px-4 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+button:disabled {
+  @apply bg-gray-400 cursor-not-allowed;
+}
+
+
+
+.checkbox-label {
+  @apply flex items-start space-x-2 text-sm text-gray-600;
+}
+
+.checkbox-label input {
+  @apply mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500;
+}
+
+.divider {
+  @apply relative mt-6;
+}
+
+.divider-line {
+  @apply absolute inset-0 flex items-center;
+}
+
+.divider-line div {
+  @apply w-full border-t border-gray-300;
+}
+
+.divider-text {
+  @apply relative flex justify-center text-sm px-2 bg-white text-gray-500;
+}
+
+.google-button {
+  @apply w-full py-3 px-4 border border-gray-300 rounded-md font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center space-x-2;
+}
+
+.google-icon {
+  @apply w-5 h-5;
+}
+
+.signin-link {
+  @apply text-center text-sm text-gray-600 mt-4;
+}
+
+.signin-link a {
+  @apply text-blue-600 hover:text-blue-800 underline font-medium ml-1;
 }

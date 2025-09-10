@@ -2,19 +2,19 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { 
-    path: 'register', 
+  {
+    path: 'register',
     loadComponent: () => import('./pages/auth/register/register').then(m => m.RegisterComponent)
   },
-  { 
-    path: 'login', 
+  {
+    path: 'login',
     loadComponent: () => import('./pages/auth/login/login').then(m => m.LoginComponent)
   },
 
   {path: 'home',
      loadComponent: () => import('./pages/home/home').then(m => m.HomeComponent)},
 
-  // Removed about page route 
+  // Removed about page route
   // {path: 'about',
   //    loadComponent: () => import('./pages/about/about').then(m => m.AboutComponent)},
 
@@ -32,17 +32,25 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/auth/forgot-password/forgot-password').then(m => m.ForgotPasswordComponent)
   },
 
-      {
-        path: 'orders',
-        loadComponent: () => import('./pages/dashboard/vendor/order-status/order-status.component').then(m => m.OrderStatusComponent)
-      },
-      {
-        path: 'profile',
-        loadComponent: () => import('./pages/dashboard/vendor/profile/profile.component').then(m => m.ProfileComponent)
-      },
-      {
-        path: 'payments',
-        loadComponent: () => import('./pages/dashboard/vendor/payments/payments.component').then(m => m.PaymentsComponent)
-      }
+  {
+    path: 'orders',
+    loadComponent: () => import('./pages/dashboard/vendor/order-status/order-status').then(m => m.OrderStatusComponent)
+  },
+  {
+    path: 'profile',
+    loadComponent: () => import('./pages/dashboard/vendor/profile/profile').then(m => m.ProfileComponent)
+  },
+  {
+    path: 'payments',
+    loadComponent: () => import('./pages/dashboard/vendor/payments/payments').then(m => m.PaymentsComponent)
+  },
+  {
+    path: 'vendor-dashboard',
+    loadComponent: () => import('./pages/dashboard/vendor/vendor-dashboard').then(m => m.VendorDashboardComponent)
+  },
+  {
+    path: 'vendor',
+    redirectTo: 'vendor-dashboard',
+    pathMatch: 'full'
+  }
     ]
-

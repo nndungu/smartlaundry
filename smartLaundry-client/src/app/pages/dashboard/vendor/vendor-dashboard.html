@@ -3,63 +3,64 @@
     <nav class="sidebar">
         <div class="logo">SmartLaundry</div>
         <ul class="nav-menu">
-            <li class="nav-item" data-page="dashboard">
+            <li class="nav-item" [class.active]="activeSection === 'dashboard'" data-page="dashboard" (click)="navigateToSection('dashboard')">
                 <span class="nav-icon">📊</span>
                 <span class="nav-text">Dashboard</span>
             </li>
-            <li class="nav-item active" data-page="orders">
+            <li class="nav-item" [class.active]="activeSection === 'orders'" data-page="orders" (click)="navigateToSection('orders')">
                 <span class="nav-icon">📋</span>
                 <span class="nav-text">Orders</span>
             </li>
-            <li class="nav-item" data-page="profile">
+            <li class="nav-item" [class.active]="activeSection === 'profile'" data-page="profile" (click)="navigateToSection('profile')">
                 <span class="nav-icon">👤</span>
                 <span class="nav-text">Profile</span>
             </li>
-            <li class="nav-item" data-page="payments">
+            <li class="nav-item" [class.active]="activeSection === 'payments'" data-page="payments" (click)="navigateToSection('payments')">
                 <span class="nav-icon">💳</span>
                 <span class="nav-text">Payments</span>
             </li>
         </ul>
-                <li class="nav-item" data-page="profile">
-                    <span class="nav-icon">👤</span>
-                    <span class="nav-text">Profile</span>
-                </li>
-            </ul>
-        </nav>
+    </nav>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Header -->
-            <header class="page-header">
-                <div class="search-container">
-                    <div class="search-bar">
-                        <span class="search-icon">🔍</span>
-                        <input type="text" placeholder="Search..." id="searchInput" class="search-input">
-                    </div>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="search-container">
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="Search..." id="searchInput" class="search-input">
                 </div>
-                <div class="header-actions">
-                    <button class="icon-btn" id="notificationBtn">🔔</button>
-                    <button class="icon-btn" id="profileBtn">👤</button>
-                </div>
-            </header>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" id="notificationBtn">🔔</button>
+                <button class="icon-btn" id="profileBtn">👤</button>
+            </div>
+        </header>
 
-            <!-- Page Title -->
-            <div class="page-title-section">
-                <h1 class="page-title">Orders Management</h1>
-                <div class="stats-summary">
-                    <div class="stat-item">
-                        <span class="stat-value" id="totalOrders">0</span>
-                        <span class="stat-label">Total Orders</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value" id="pendingOrders">0</span>
-                        <span class="stat-label">Pending</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value" id="completedToday">0</span>
-                        <span class="stat-label">Completed Today</span>
-                    </div>
+        <!-- Page Title -->
+        <div class="page-title-section">
+            <h1 class="page-title">{{ pageTitle }}</h1>
+            <div *ngIf="activeSection === 'dashboard'" class="stats-summary">
+                <div class="stat-item">
+                    <span class="stat-value" id="totalOrders">0</span>
+                    <span class="stat-label">Total Orders</span>
                 </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="pendingOrders">0</span>
+                    <span class="stat-label">Pending</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="completedToday">0</span>
+                    <span class="stat-label">Completed Today</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <section *ngIf="activeSection === 'dashboard'">
+            <div class="welcome-message">
+                <p>{{ pageContent }}</p>
             </div>
 
             <!-- Filter Tabs -->
@@ -99,110 +100,119 @@
                     <p>No orders match your current filter.</p>
                 </div>
             </section>
-        </main>
-    </div>
+        </section>
 
-    <!-- Order Details Modal -->
-    <div class="modal-overlay" id="orderDetailsModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Order Details</h3>
-                <button class="modal-close" id="modalClose">&times;</button>
+        <!-- Coming Soon Container -->
+        <section *ngIf="activeSection !== 'dashboard'" class="coming-soon-section">
+            <div class="coming-soon-card">
+                <div class="coming-soon-icon">🚧</div>
+                <h2>{{ pageTitle }}</h2>
+                <p>{{ pageContent }}</p>
+                <div class="coming-soon-note">
+                    <small>This feature is coming soon. Stay tuned for updates!</small>
+                </div>
             </div>
-            <div class="modal-body" id="orderDetailsBody">
-                <!-- Order details will be populated here -->
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="closeModalBtn">Close</button>
-                <button class="btn btn-danger" id="rejectOrderBtn">❌ Reject</button>
-                <button class="btn btn-success" id="acceptOrderBtn">✅ Accept</button>
-            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Order Details Modal -->
+<div class="modal-overlay" id="orderDetailsModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Order Details</h3>
+            <button class="modal-close" id="modalClose">&times;</button>
+        </div>
+        <div class="modal-body" id="orderDetailsBody">
+            <!-- Order details will be populated here -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="closeModalBtn">Close</button>
+            <button class="btn btn-danger" id="rejectOrderBtn">❌ Reject</button>
+            <button class="btn btn-success" id="acceptOrderBtn">✅ Accept</button>
         </div>
     </div>
+</div>
 
-    <!-- Status Update Modal -->
-    <div class="modal-overlay" id="statusUpdateModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Update Order Status</h3>
-                <button class="modal-close" id="statusModalClose">&times;</button>
+<!-- Status Update Modal -->
+<div class="modal-overlay" id="statusUpdateModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Update Order Status</h3>
+            <button class="modal-close" id="statusModalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="current-status" id="currentStatusDisplay">
+                <!-- Current status will be shown here -->
             </div>
-            <div class="modal-body">
-                <div class="current-status" id="currentStatusDisplay">
-                    <!-- Current status will be shown here -->
-                </div>
-                <div class="form-group">
-                    <label for="newStatus">Update Status To:</label>
-                    <select id="newStatus" class="form-select">
-                        <option value="">Select New Status</option>
-                        <option value="accepted">Accepted</option>
-                        <option value="picked">Picked Up</option>
-                        <option value="in-transit">In Transit</option>
-                        <option value="delivered">Delivered</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="statusNotes">Notes (Optional)</label>
-                    <textarea id="statusNotes" placeholder="Add any notes about this status update..." rows="3"></textarea>
-                </div>
-                <div class="form-group" id="deliveryPhotoSection" style="display: none;">
-                    <label for="deliveryPhoto">Delivery Photo</label>
-                    <input type="file" id="deliveryPhoto" accept="image/*">
-                    <small>Upload a photo as proof of delivery</small>
-                </div>
+            <div class="form-group">
+                <label for="newStatus">Update Status To:</label>
+                <select id="newStatus" class="form-select">
+                    <option value="">Select New Status</option>
+                    <option value="accepted">Accepted</option>
+                    <option value="picked">Picked Up</option>
+                    <option value="in-transit">In Transit</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="completed">Completed</option>
+                </select>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelStatusBtn">Cancel</button>
-                <button class="btn btn-primary" id="confirmStatusBtn">Update Status</button>
+            <div class="form-group">
+                <label for="statusNotes">Notes (Optional)</label>
+                <textarea id="statusNotes" placeholder="Add any notes about this status update..." rows="3"></textarea>
+            </div>
+            <div class="form-group" id="deliveryPhotoSection" style="display: none;">
+                <label for="deliveryPhoto">Delivery Photo</label>
+                <input type="file" id="deliveryPhoto" accept="image/*">
+                <small>Upload a photo as proof of delivery</small>
             </div>
         </div>
-    </div>
-
-    <!-- Rejection Reason Modal -->
-    <div class="modal-overlay" id="rejectionModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Reject Order</h3>
-                <button class="modal-close" id="rejectionModalClose">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>Please provide a reason for rejecting this order:</p>
-                <div class="form-group">
-                    <label for="rejectionReason">Rejection Reason</label>
-                    <select id="rejectionReason" class="form-select">
-                        <option value="">Select a reason</option>
-                        <option value="vehicle-breakdown">Vehicle Breakdown</option>
-                        <option value="too-far">Location Too Far</option>
-                        <option value="time-conflict">Time Conflict</option>
-                        <option value="overbooked">Already Overbooked</option>
-                        <option value="weather">Bad Weather Conditions</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="rejectionNotes">Additional Notes</label>
-                    <textarea id="rejectionNotes" placeholder="Provide additional details..." rows="3"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelRejectionBtn">Cancel</button>
-                <button class="btn btn-danger" id="confirmRejectionBtn">Confirm Rejection</button>
-            </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="cancelStatusBtn">Cancel</button>
+            <button class="btn btn-primary" id="confirmStatusBtn">Update Status</button>
         </div>
     </div>
+</div>
 
-    <!-- Success/Error Toast -->
-    <div class="toast-container" id="toastContainer">
-        <!-- Toast messages will appear here -->
+<!-- Rejection Reason Modal -->
+<div class="modal-overlay" id="rejectionModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Reject Order</h3>
+            <button class="modal-close" id="rejectionModalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Please provide a reason for rejecting this order:</p>
+            <div class="form-group">
+                <label for="rejectionReason">Rejection Reason</label>
+                <select id="rejectionReason" class="form-select">
+                    <option value="">Select a reason</option>
+                    <option value="vehicle-breakdown">Vehicle Breakdown</option>
+                    <option value="too-far">Location Too Far</option>
+                    <option value="time-conflict">Time Conflict</option>
+                    <option value="overbooked">Already Overbooked</option>
+                    <option value="weather">Bad Weather Conditions</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="rejectionNotes">Additional Notes</label>
+                <textarea id="rejectionNotes" placeholder="Provide additional details..." rows="3"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="cancelRejectionBtn">Cancel</button>
+            <button class="btn btn-danger" id="confirmRejectionBtn">Confirm Rejection</button>
+        </div>
     </div>
+</div>
 
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <p>Processing...</p>
-    </div>
+<!-- Success/Error Toast -->
+<div class="toast-container" id="toastContainer">
+    <!-- Toast messages will appear here -->
+</div>
 
-    <script src="orders.ts"></script>
-</body>
-</html>
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <p>Processing...</p>
+</div>

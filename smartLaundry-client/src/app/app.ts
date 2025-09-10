@@ -13,3 +13,5 @@ import { FooterComponent } from './shared/components/footer/footer';
 export class AppComponent {
   protected readonly title = signal('smartLaundry-client');
 }
+
+export const App = AppComponent;

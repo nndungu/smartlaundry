@@ -1,197 +1,256 @@
-<div class="vendor-container">
-        <!-- Sidebar Navigation -->
-        <nav class="sidebar">
-            <div class="logo">SmartLaundry</div>
-            <ul class="nav-menu">
-                <li class="nav-item" data-page="dashboard">
-                    <span class="nav-icon">📊</span>
-                    <span class="nav-text">Dashboard</span>
-                </li>
-                <li class="nav-item active" data-page="orders">
-                    <span class="nav-icon">📋</span>
-                    <span class="nav-text">Orders</span>
-                </li>
-                <li class="nav-item" data-page="profile">
-                    <span class="nav-icon">👤</span>
-                    <span class="nav-text">Profile</span>
-                </li>
-            </ul>
-        </nav>
+<div class="vendor-orders-dashboard p-4 max-w-7xl mx-auto">
+  <!-- Header with Notifications -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">Order Management Dashboard</h1>
+    
+    <!-- Notification Bell -->
+    <div class="relative">
+      <button 
+        (click)="toggleNotifications()"
+        class="relative p-2 text-gray-600 hover:text-gray-900 transition-colors"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M15 17h5l-5 5v-5zm-8-10l3-3v3h5l-3 3h-5z M7.502 19.425C7.502 19.425 6.25 18.5 5.25 17.5c-1-1-1.75-2.25-1.75-2.25L7.5 11.25v8.175z"/>
+        </svg>
+        <!-- Notification Badge -->
+        <span 
+          *ngIf="newOrdersCount > 0"
+          class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse"
+        >
+          {{newOrdersCount}}
+        </span>
+      </button>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Header -->
-            <header class="page-header">
-                <div class="search-container">
-                    <div class="search-bar">
-                        <span class="search-icon">🔍</span>
-                        <input type="text" placeholder="Search..." id="searchInput" class="search-input">
-                    </div>
-                </div>
-                <div class="header-actions">
-                    <button class="icon-btn" id="notificationBtn">🔔</button>
-                    <button class="icon-btn" id="profileBtn">👤</button>
-                </div>
-            </header>
-
-            <!-- Page Title -->
-            <div class="page-title-section">
-                <h1 class="page-title">Orders Management</h1>
-                <div class="stats-summary">
-                    <div class="stat-item">
-                        <span class="stat-value" id="totalOrders">0</span>
-                        <span class="stat-label">Total Orders</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value" id="pendingOrders">0</span>
-                        <span class="stat-label">Pending</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value" id="completedToday">0</span>
-                        <span class="stat-label">Completed Today</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Filter Tabs -->
-            <div class="filter-tabs">
-                <button class="tab-btn active" data-status="all">All Orders</button>
-                <button class="tab-btn" data-status="pending">Pending</button>
-                <button class="tab-btn" data-status="accepted">Accepted</button>
-                <button class="tab-btn" data-status="picked">Picked Up</button>
-                <button class="tab-btn" data-status="delivered">Delivered</button>
-            </div>
-
-            <!-- Orders Table -->
-            <section class="orders-table-section">
-                <div class="table-container">
-                    <table class="orders-table">
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Customer</th>
-                                <th>Service</th>
-                                <th>Pickup Address</th>
-                                <th>Status</th>
-                                <th>Total</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ordersTableBody">
-                            <!-- Orders will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Empty State -->
-                <div class="empty-state" id="emptyState" style="display: none;">
-                    <div class="empty-icon">📋</div>
-                    <h3>No Orders Found</h3>
-                    <p>No orders match your current filter.</p>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <!-- Order Details Modal -->
-    <div class="modal-overlay" id="orderDetailsModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Order Details</h3>
-                <button class="modal-close" id="modalClose">&times;</button>
-            </div>
-            <div class="modal-body" id="orderDetailsBody">
-                <!-- Order details will be populated here -->
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="closeModalBtn">Close</button>
-                <button class="btn btn-danger" id="rejectOrderBtn">❌ Reject</button>
-                <button class="btn btn-success" id="acceptOrderBtn">✅ Accept</button>
-            </div>
+      <!-- Notification Dropdown -->
+      <div 
+        *ngIf="showNotifications && newOrdersCount > 0"
+        class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border z-50"
+      >
+        <div class="p-4 border-b">
+          <h3 class="font-medium text-gray-900">New Orders ({{newOrdersCount}})</h3>
         </div>
-    </div>
-
-    <!-- Status Update Modal -->
-    <div class="modal-overlay" id="statusUpdateModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Update Order Status</h3>
-                <button class="modal-close" id="statusModalClose">&times;</button>
+        <div class="max-h-64 overflow-y-auto">
+          <div 
+            *ngFor="let order of orders; trackBy: trackByOrderId"
+            class="p-3 border-b hover:bg-gray-50 cursor-pointer"
+            [class.bg-blue-50]="order.isNew"
+          >
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="font-medium text-sm text-gray-900">#{{order.id}} - {{order.customer}}</p>
+                <p class="text-xs text-gray-600">{{order.service}}</p>
+                <p class="text-xs text-gray-500">{{formatDateTime(order.pickup)}}</p>
+              </div>
+              <span 
+                class="text-xs px-2 py-1 rounded-full"
+                [class]="getStatusClass(order.status)"
+              >
+                {{order.status}}
+              </span>
             </div>
-            <div class="modal-body">
-                <div class="current-status" id="currentStatusDisplay">
-                    <!-- Current status will be shown here -->
-                </div>
-                <div class="form-group">
-                    <label for="newStatus">Update Status To:</label>
-                    <select id="newStatus" class="form-select">
-                        <option value="">Select New Status</option>
-                        <option value="accepted">Accepted</option>
-                        <option value="picked">Picked Up</option>
-                        <option value="in-transit">In Transit</option>
-                        <option value="delivered">Delivered</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="statusNotes">Notes (Optional)</label>
-                    <textarea id="statusNotes" placeholder="Add any notes about this status update..." rows="3"></textarea>
-                </div>
-                <div class="form-group" id="deliveryPhotoSection" style="display: none;">
-                    <label for="deliveryPhoto">Delivery Photo</label>
-                    <input type="file" id="deliveryPhoto" accept="image/*">
-                    <small>Upload a photo as proof of delivery</small>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelStatusBtn">Cancel</button>
-                <button class="btn btn-primary" id="confirmStatusBtn">Update Status</button>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Rejection Reason Modal -->
-    <div class="modal-overlay" id="rejectionModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3>Reject Order</h3>
-                <button class="modal-close" id="rejectionModalClose">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>Please provide a reason for rejecting this order:</p>
-                <div class="form-group">
-                    <label for="rejectionReason">Rejection Reason</label>
-                    <select id="rejectionReason" class="form-select">
-                        <option value="">Select a reason</option>
-                        <option value="vehicle-breakdown">Vehicle Breakdown</option>
-                        <option value="too-far">Location Too Far</option>
-                        <option value="time-conflict">Time Conflict</option>
-                        <option value="overbooked">Already Overbooked</option>
-                        <option value="weather">Bad Weather Conditions</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="rejectionNotes">Additional Notes</label>
-                    <textarea id="rejectionNotes" placeholder="Provide additional details..." rows="3"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelRejectionBtn">Cancel</button>
-                <button class="btn btn-danger" id="confirmRejectionBtn">Confirm Rejection</button>
-            </div>
+  <!-- Desktop Table View -->
+  <div class="hidden lg:block">
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pickup Time</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr 
+            *ngFor="let order of orders; trackBy: trackByOrderId"
+            class="hover:bg-gray-50 transition-colors"
+            [class.bg-blue-50]="order.isNew"
+            [class.animate-pulse]="order.isNew"
+          >
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              #{{order.id}}
+              <span *ngIf="order.isNew" class="ml-2 inline-block w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{order.customer}}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{order.service}}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{formatDateTime(order.pickup)}}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span 
+                class="inline-flex px-2 py-1 text-xs font-semibold rounded-full transition-all"
+                [class]="getStatusClass(order.status)"
+              >
+                {{order.status}}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
+              <!-- Accept/Reject Buttons for Pending Orders -->
+              <div *ngIf="isPending(order.status)" class="flex space-x-2">
+                <button
+                  (click)="showConfirmation('accept', order.id)"
+                  class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm transition-colors flex items-center"
+                >
+                  ✅ Accept
+                </button>
+                <button
+                  (click)="showConfirmation('reject', order.id)"
+                  class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm transition-colors flex items-center"
+                >
+                  ❌ Reject
+                </button>
+              </div>
+              
+              <!-- Status Dropdown for Accepted Orders -->
+              <div *ngIf="canChangeStatus(order.status)" class="flex items-center">
+                <select
+                  (change)="updateOrderStatus(order.id, $event)"
+                  [value]="order.status"
+                  class="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="Accepted" [selected]="order.status === 'Accepted'">Accepted</option>
+                  <option value="Picked" [selected]="order.status === 'Picked'">Picked</option>
+                  <option value="In Progress" [selected]="order.status === 'In Progress'">In Progress</option>
+                  <option value="Delivered" [selected]="order.status === 'Delivered'">Delivered</option>
+                  <option value="Completed" [selected]="order.status === 'Completed'">Completed</option>
+                </select>
+              </div>
+              
+              <!-- No Actions for Rejected/Completed -->
+              <span *ngIf="order.status === 'Rejected' || order.status === 'Completed'" 
+                    class="text-gray-500 text-sm">
+                No actions available
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Mobile Card View -->
+  <div class="lg:hidden space-y-4">
+    <div 
+      *ngFor="let order of orders; trackBy: trackByOrderId"
+      class="bg-white rounded-lg shadow-md p-4 transition-all hover:shadow-lg"
+      [class.border-l-4]="order.isNew"
+      [class.border-blue-500]="order.isNew"
+      [class.bg-blue-50]="order.isNew"
+    >
+      <div class="flex justify-between items-start mb-3">
+        <div>
+          <h3 class="font-semibold text-lg text-gray-900 flex items-center">
+            #{{order.id}}
+            <span *ngIf="order.isNew" class="ml-2 inline-block w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
+          </h3>
+          <p class="text-gray-600">{{order.customer}}</p>
         </div>
+        <span 
+          class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+          [class]="getStatusClass(order.status)"
+        >
+          {{order.status}}
+        </span>
+      </div>
+      
+      <div class="space-y-2 mb-4">
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-500">Service:</span>
+          <span class="text-gray-900">{{order.service}}</span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-500">Pickup:</span>
+          <span class="text-gray-900">{{formatDateTime(order.pickup)}}</span>
+        </div>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div class="flex justify-end space-x-2">
+        <!-- Accept/Reject Buttons for Pending Orders -->
+        <div *ngIf="isPending(order.status)" class="flex space-x-2 w-full">
+          <button
+            (click)="showConfirmation('accept', order.id)"
+            class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md text-sm transition-colors"
+          >
+            ✅ Accept
+          </button>
+          <button
+            (click)="showConfirmation('reject', order.id)"
+            class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md text-sm transition-colors"
+          >
+            ❌ Reject
+          </button>
+        </div>
+        
+        <!-- Status Dropdown for Accepted Orders -->
+        <div *ngIf="canChangeStatus(order.status)" class="w-full">
+          <select
+            (change)="updateOrderStatus(order.id, $event)"
+            [value]="order.status"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="Accepted">Accepted</option>
+            <option value="Picked">Picked</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Success/Error Toast -->
-    <div class="toast-container" id="toastContainer">
-        <!-- Toast messages will appear here -->
+  <!-- Confirmation Modal -->
+  <div 
+    *ngIf="showConfirmModal" 
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    (click)="closeModal()"
+  >
+    <div class="bg-white rounded-lg p-6 max-w-md w-mx-4" (click)="$event.stopPropagation()">
+      <h2 class="text-lg font-semibold mb-4">Confirm Action</h2>
+      <p class="text-gray-600 mb-6">
+        Are you sure you want to {{confirmAction}} order #{{selectedOrderId}}?
+      </p>
+      <div class="flex justify-end space-x-3">
+        <button
+          (click)="closeModal()"
+          class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          (click)="confirmDecision()"
+          class="px-4 py-2 rounded-md text-white transition-colors"
+          [class.bg-green-600]="confirmAction === 'accept'"
+          [class.hover:bg-green-700]="confirmAction === 'accept'"
+          [class.bg-red-600]="confirmAction === 'reject'"
+          [class.hover:bg-red-700]="confirmAction === 'reject'"
+        >
+          {{confirmAction === 'accept' ? 'Accept' : 'Reject'}}
+        </button>
+      </div>
     </div>
+  </div>
 
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <p>Processing...</p>
+  <!-- Toast Notification -->
+  <div 
+    *ngIf="showToast"
+    class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all z-50"
+    [class.translate-x-0]="showToast"
+    [class.translate-x-full]="!showToast"
+  >
+    <div class="flex items-center">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+      {{toastMessage}}
     </div>
-
-
+  </div>
+</div>

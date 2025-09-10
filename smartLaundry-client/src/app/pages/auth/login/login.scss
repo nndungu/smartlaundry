@@ -1,75 +1,109 @@
-// login.component.scss
+/* Removed duplicate Tailwind imports to avoid conflicts */
+/* Custom styles for login page */
+
 :host {
-  // Custom styles that Tailwind doesn't cover
-  
-  // Ensure proper z-index for dropdowns and modals
-  .relative {
-    z-index: 10;
-  }
+  display: block;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  // Custom focus styles for better accessibility
-  button:focus-visible,
-  input:focus-visible {
-    outline: 2px solid #3b82f6;
-    outline-offset: 2px;
-  }
+.card {
+  @apply bg-white shadow-2xl rounded-lg p-6 max-w-md w-full border-0;
+}
 
-  // Smooth transitions for all interactive elements
-  button,
-  input,
-  a {
-    transition: all 0.15s ease-in-out;
-  }
+.header {
+  @apply text-center mb-6;
+}
 
-  // Custom styling for loading spinner
-  .animate-spin {
-    animation: spin 1s linear infinite;
-  }
+.header h2 {
+  @apply text-2xl font-bold text-gray-900;
+}
 
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
+.header p {
+  @apply text-sm text-gray-600;
+}
 
-  // Custom hover effects for links
-  a {
-    &:hover {
-      transform: translateY(-1px);
-    }
-  }
+.form-group {
+  @apply space-y-2;
+}
 
-  // Custom button hover effects
-  button:not(:disabled) {
-    &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    }
+input[type="email"],
+input[type="password"] {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+}
 
-    &:active {
-      transform: translateY(0);
-    }
-  }
+input.ng-invalid.ng-touched {
+  @apply border-red-500;
+}
 
-  // Error input styling
-  input.border-red-500 {
-    border-color: #ef4444 !important;
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
-  }
+button {
+  @apply w-full py-3 px-4 rounded-md font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
 
-  // Success and error message animations
-  .bg-green-50,
-  .bg-red-50 {
-    animation: slideIn 0.3s ease-out;
-  }
+button:disabled {
+  @apply bg-gray-400 cursor-not-allowed;
+}
 
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+.checkbox-label {
+  @apply flex items-center space-x-2 text-sm text-gray-600;
+}
+
+.checkbox-label input {
+  @apply h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500;
+}
+
+.divider {
+  @apply relative mt-6;
+}
+
+.divider-line {
+  @apply absolute inset-0 flex items-center;
+}
+
+.divider-line div {
+  @apply w-full border-t border-gray-300;
+}
+
+.divider-text {
+  @apply relative flex justify-center text-sm px-2 bg-white text-gray-500;
+}
+
+.google-button {
+  @apply w-full py-3 px-4 border border-gray-300 rounded-md font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center space-x-2;
+}
+
+.google-icon {
+  @apply w-5 h-5;
+}
+
+.signup-link {
+  @apply text-center text-sm text-gray-600 mt-4;
+}
+
+.signup-link a {
+  @apply text-blue-600 hover:text-blue-800 underline font-medium ml-1;
+}
+
+.forgot-link {
+  @apply text-sm text-blue-600 hover:text-blue-800 underline;
+}
+
+.error-message {
+  @apply bg-red-50 border border-red-200 rounded-md p-3;
+}
+
+.error-message p {
+  @apply text-sm text-red-800;
+}
+
+.success-message {
+  @apply bg-green-50 border border-green-200 rounded-md p-3;
+}
+
+.success-message p {
+  @apply text-sm text-green-800;
 }
