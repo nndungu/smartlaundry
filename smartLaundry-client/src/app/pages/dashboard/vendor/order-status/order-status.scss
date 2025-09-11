@@ -1,5 +1,8 @@
 /* Order Status Component Styles */
 .vendor-orders-dashboard {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   /* Custom animations */
   @keyframes slideInRight {
     from {

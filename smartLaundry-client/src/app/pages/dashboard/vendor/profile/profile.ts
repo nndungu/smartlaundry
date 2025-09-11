@@ -18,14 +18,14 @@ export class ProfileComponent implements OnInit {
   notification: { type: string; message: string } | null = null;
 
   businessCategories = [
-    'Laundry Service',
-    'Dry Cleaning',
-    'Wash & Fold',
-    'Express Laundry',
-    'Premium Laundry',
-    'Household Items',
-    'Shoe Cleaning',
-    'Stain Treatment'
+    'Motorcycle Delivery',
+    'Taxi Service',
+    'Courier Service',
+    'Ride Sharing',
+    'Logistics & Freight',
+    'Public Transport',
+    'Bike Rental',
+    'Car Rental'
   ];
 
   constructor(private fb: FormBuilder) {}
