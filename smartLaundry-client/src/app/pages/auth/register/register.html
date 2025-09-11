@@ -28,14 +28,14 @@
           <div class="relative">
             <button
               type="button"
-              (click)="toggleRoleDropdown()"
+              (click)="toggleRoleDropdown($event)"
               class="w-full px-3 py-2 border border-gray-300 rounded-md text-left bg-white flex items-center justify-between hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <div class="flex items-center space-x-2">
                 <span *ngIf="selectedRole" class="h-4 w-4">
                   {{ getRoleIcon(selectedRole) }}
                 </span>
-                <span [ngClass]="selectedRole ? 'text-gray-900' : 'text-gray-500'">
+                <span [class.text-gray-900]="selectedRole" [class.text-gray-500]="!selectedRole">
                   {{ selectedRole ? getRoleLabel(selectedRole) : 'Select your role' }}
                 </span>
               </div>

@@ -1,15 +1,19 @@
 // register.component.ts
-import { Component, HostListener, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule, NgIf, NgForOf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../services/auth/auth'; // Fixed import path
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { UserCredential } from '@angular/fire/auth'; // Added UserCredential import
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.html',
   styleUrls: ['./register.scss'],
-  imports: [CommonModule, FormsModule],
-  encapsulation: ViewEncapsulation.None
+  standalone: true,
+  imports: [CommonModule, FormsModule, NgIf, NgForOf]
 })
 export class RegisterComponent {
   selectedRole = '';
@@ -46,7 +50,7 @@ export class RegisterComponent {
     }
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {} // Added AuthService injection
 
   // Computed properties
   get isFormValid(): boolean {
@@ -54,7 +58,8 @@ export class RegisterComponent {
   }
 
   // Methods
-  toggleRoleDropdown(): void {
+  toggleRoleDropdown(event: Event): void {
+    event.stopPropagation();
     this.showRoleDropdown = !this.showRoleDropdown;
   }
 
@@ -145,13 +150,20 @@ export class RegisterComponent {
 
     console.log('Registration data:', registrationData);
 
-    // Here you would typically call your authentication service
-    // Example: this.authService.register(registrationData).subscribe(...)
-    
-    alert('Registration successful! Please check your email for verification.');
-    
-    // Redirect to login page
-    this.router.navigate(['/login']);
+    // Use AuthService to register user with Firebase
+    this.authService.register(registrationData.email, registrationData.password)
+      .pipe(
+        catchError(error => {
+          alert('Registration failed: ' + (error.message || 'Unknown error'));
+          return of(null);
+        })
+      )
+      .subscribe((userCredential: UserCredential) => { // Typed userCredential
+        if (userCredential) {
+          alert('Registration successful! Please check your email for verification.');
+          this.router.navigate(['/login']);
+        }
+      });
   }
 
   signInWithGoogle(): void {

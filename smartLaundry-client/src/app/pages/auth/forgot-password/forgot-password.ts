@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subscription, interval } from 'rxjs';
+import { AuthService } from '../../../services/auth/auth';
 
 export interface ForgotPasswordRequest {
   email: string;
@@ -45,7 +45,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
-    private http: HttpClient
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -82,23 +82,18 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     const email = this.forgotPasswordForm.get('email')?.value.trim().toLowerCase();
 
     try {
-      const response = await this.sendPasswordResetEmail(email);
-      
+      await this.sendPasswordResetEmail(email);
+
       this.submittedEmail = email;
       this.isSuccess = true;
-      
-      // Update expiry time from API response
-      if (response.expiresInMinutes) {
-        this.resetLinkExpiryMinutes = response.expiresInMinutes;
-      }
 
       // Start resend cooldown
       this.startResendCooldown(60); // 60 seconds cooldown
-      
+
       // Reset form
       this.forgotPasswordForm.reset();
-      
-    } catch (error) {
+
+    } catch (error: any) {
       console.error('Error sending password reset email:', error);
       this.handleError(error);
     } finally {
@@ -117,7 +112,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     try {
       await this.sendPasswordResetEmail(this.submittedEmail);
       this.startResendCooldown(60); // 60 seconds cooldown
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error resending password reset email:', error);
       this.handleError(error);
     } finally {
@@ -125,19 +120,8 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async sendPasswordResetEmail(email: string): Promise<ForgotPasswordResponse> {
-    const requestPayload: ForgotPasswordRequest = { email };
-    
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    });
-
-    return this.http.post<ForgotPasswordResponse>(
-      `${this.API_BASE_URL}/auth/forgot-password`,
-      requestPayload,
-      { headers }
-    ).toPromise() as Promise<ForgotPasswordResponse>;
+  private async sendPasswordResetEmail(email: string): Promise<void> {
+    return this.authService.sendPasswordResetEmail(email).toPromise();
   }
 
   private startResendCooldown(seconds: number): void {
@@ -158,28 +142,32 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     });
   }
 
-  private handleError(error: any): void {
-    let errorMessage = 'An unexpected error occurred. Please try again.';
+  clearGlobalError(): void {
+    this.globalError = '';
+  }
 
-    if (error?.error?.message) {
-      errorMessage = error.error.message;
-    } else if (error?.message) {
-      errorMessage = error.message;
-    } else if (error?.status === 0) {
-      errorMessage = 'Unable to connect to the server. Please check your internet connection.';
-    } else if (error?.status === 404) {
-      errorMessage = 'Email address not found in our system.';
-    } else if (error?.status === 429) {
-      errorMessage = 'Too many requests. Please wait a few minutes before trying again.';
-    } else if (error?.status >= 500) {
-      errorMessage = 'Server error. Please try again later.';
+  private handleError(error: any): void {
+    let errorMessage = '';
+
+    if (error?.code) {
+      switch (error.code) {
+        case 'auth/user-not-found':
+          errorMessage = 'No account found with this email address.';
+          break;
+        case 'auth/invalid-email':
+          errorMessage = 'Please enter a valid email address.';
+          break;
+        case 'auth/too-many-requests':
+          errorMessage = 'Too many requests. Please wait a few minutes before trying again.';
+          break;
+        default:
+          errorMessage = error.message || 'An error occurred while sending the reset email.';
+      }
+    } else {
+      errorMessage = error.message || 'Network error. Please check your internet connection.';
     }
 
     this.globalError = errorMessage;
-  }
-
-  clearGlobalError(): void {
-    this.globalError = '';
   }
 
   goBack(): void {

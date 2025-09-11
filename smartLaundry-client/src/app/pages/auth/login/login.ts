@@ -1,16 +1,24 @@
-// login.component.ts
+// src/app/pages/auth/login/login.ts
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ViewEncapsulation } from '@angular/core';
+import { FormsModule } from '@angular/forms';        
+import { CommonModule } from '@angular/common';      
+import { RouterModule } from '@angular/router';      
+import { AuthService } from '../../../services/auth/auth'; // Fixed import path
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { UserCredential } from '@angular/fire/auth'; // Added UserCredential import
 
 @Component({
   selector: 'app-login',
+  standalone: true,                                 
+  imports: [                                         
+    CommonModule,    // For ngClass, ngIf, etc.
+    FormsModule,     // For ngModel
+    RouterModule     // For routerLink
+  ],
   templateUrl: './login.html',
-  styleUrls: ['./login.scss'],
-  imports: [CommonModule, FormsModule],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./login.scss']
 })
 export class LoginComponent implements OnInit {
   showPassword = false;
@@ -30,7 +38,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService // Added AuthService injection
   ) {}
 
   ngOnInit(): void {
@@ -62,55 +71,46 @@ export class LoginComponent implements OnInit {
     this.generalError = '';
     this.successMessage = '';
 
-    // Simulate API call
-    setTimeout(() => {
-      this.performLogin();
-    }, 1500);
+    // Use AuthService to perform login with Firebase
+    this.authService.login(this.formData.email.trim().toLowerCase(), this.formData.password)
+      .pipe(
+        catchError(error => {
+          this.isLoading = false;
+          this.generalError = this.getErrorMessage(error);
+          return of(null);
+        })
+      )
+      .subscribe((userCredential: UserCredential) => { // Typed userCredential
+        if (userCredential) {
+          this.isLoading = false;
+          this.successMessage = 'Login successful! Redirecting to dashboard...';
+
+          if (this.rememberMe) {
+            localStorage.setItem('rememberMe', 'true'); // Added rememberMe localStorage
+          }
+
+          setTimeout(() => {
+            this.router.navigate(['/dashboard']);
+          }, 1500);
+        }
+      });
   }
 
-  private performLogin(): void {
-    // Here you would typically call your authentication service
-    const loginData = {
-      email: this.formData.email.trim().toLowerCase(),
-      password: this.formData.password,
-      rememberMe: this.rememberMe
-    };
-
-    console.log('Login attempt:', { email: loginData.email, rememberMe: loginData.rememberMe });
-
-    // Simulate different login scenarios
-    if (this.formData.email === 'demo@laundrymart.com' && this.formData.password === 'demo123') {
-      // Success scenario
-      this.isLoading = false;
-      this.successMessage = 'Login successful! Redirecting to dashboard...';
-      
-      // Store authentication data (in real app, this would come from the API)
-      if (this.rememberMe) {
-        localStorage.setItem('rememberMe', 'true');
-      }
-      
-      // Redirect after success message
-      setTimeout(() => {
-        this.router.navigate(['/dashboard']);
-      }, 1500);
-      
-    } else if (this.formData.email === 'locked@example.com') {
-      // Account locked scenario
-      this.isLoading = false;
-      this.generalError = 'Your account has been temporarily locked due to too many failed login attempts. Please try again later or reset your password.';
-      
-    } else if (this.formData.email === 'unverified@example.com') {
-      // Unverified email scenario
-      this.isLoading = false;
-      this.generalError = 'Please verify your email address before signing in. Check your inbox for a verification link.';
-      
-    } else {
-      // Failed login scenario
-      this.isLoading = false;
-      this.generalError = 'Invalid email or password. Please try again.';
-      
-      // Clear password field on failed login
-      this.formData.password = '';
+  private getErrorMessage(error: any): string {
+    // Map Firebase auth errors to user-friendly messages
+    if (!error || !error.code) {
+      return 'An unknown error occurred. Please try again.';
+    }
+    switch (error.code) {
+      case 'auth/user-not-found':
+      case 'auth/wrong-password':
+        return 'Invalid email or password. Please try again.';
+      case 'auth/user-disabled':
+        return 'Your account has been temporarily locked. Please contact support.';
+      case 'auth/email-not-verified':
+        return 'Please verify your email address before signing in.';
+      default:
+        return error.message || 'An error occurred during login.';
     }
   }
 
@@ -118,13 +118,13 @@ export class LoginComponent implements OnInit {
     console.log('Google sign-in initiated');
     this.generalError = '';
     this.successMessage = '';
-    
+
     // Here you would typically integrate with Google OAuth
     // Example: this.authService.signInWithGoogle().subscribe(...)
-    
+
     // For demo purposes
     this.successMessage = 'Redirecting to Google sign-in...';
-    
+
     // Simulate Google OAuth flow
     setTimeout(() => {
       alert('Google sign-in functionality would be implemented here');
