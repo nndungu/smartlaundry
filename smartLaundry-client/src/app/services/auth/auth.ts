@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, of } from 'rxjs';
-import { RegisterRequest } from '../../models/auth/register-request.model';
-import { AuthResponse, RegisterResponse } from '../../models/auth/auth-response.model';
+import { Injectable, inject } from '@angular/core';
+import { Observable, BehaviorSubject, map, from } from 'rxjs';
 import { User } from '../../models/auth/user.model';
+
+import { Auth, authState, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -12,40 +11,45 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  private auth = inject(Auth);
 
-  register(registerData: RegisterRequest): Observable<RegisterResponse> {
-    // Mock registration for demo
-    return of({
-      user: {
-        id: '1',
-        email: registerData.email,
-        firstName: registerData.firstName,
-        lastName: registerData.lastName,
-        phone: registerData.phone,
-        role: registerData.role,
-        isActive: true,
-        isEmailVerified: false,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      token: 'demo_token_' + Date.now(),
-      refreshToken: 'demo_refresh_' + Date.now(),
-      expiresIn: 3600,
-      message: 'Registration successful'
-    });
+  register(email: string, password: string): Observable<any> {
+    return from(createUserWithEmailAndPassword(this.auth, email, password));
   }
 
-  isAuthenticated(): boolean {
-    return false; // Simplified for now
+  login(email: string, password: string): Observable<any> {
+    return from(signInWithEmailAndPassword(this.auth, email, password));
   }
 
-  getCurrentUser(): User | null {
-    return this.currentUserSubject.value;
+  logout(): Observable<void> {
+    return from(signOut(this.auth));
   }
 
-  logout(): void {
-    this.currentUserSubject.next(null);
-    // Additional logout logic can be added here, e.g., clearing tokens
+  getCurrentUser(): Observable<User | null> {
+    return authState(this.auth).pipe(
+      map(firebaseUser => {
+        if (firebaseUser) {
+          return {
+            id: firebaseUser.uid,
+            email: firebaseUser.email,
+          } as User;
+        }
+        return null;
+      })
+    );
+  }
+
+  isAuthenticated(): Observable<boolean> {
+    return authState(this.auth).pipe(
+      map(user => !!user)
+    );
+  }
+
+  sendPasswordResetEmail(email: string): Observable<void> {
+    return from(sendPasswordResetEmail(this.auth, email));
+  }
+
+  setCurrentUser(user: User | null): void {
+    this.currentUserSubject.next(user);
   }
 }
