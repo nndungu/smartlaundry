@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-vendor-dashboard',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './vendor-dashboard.html',
   styleUrls: ['./vendor-dashboard.scss']
 })
@@ -13,6 +13,7 @@ export class VendorDashboardComponent implements OnInit {
   pageTitle: string = 'Dashboard';
   pageContent: string = '';
   vendorName: string = 'SmartLaundry Vendor';
+  sidebarOpen: boolean = false;
 
   constructor(private router: Router) {}
 
@@ -29,17 +30,21 @@ export class VendorDashboardComponent implements OnInit {
         this.pageContent = 'Dashboard statistics and overview will be shown here.';
         break;
       case 'orders':
-        this.router.navigate(['/orders']);
+        this.router.navigate(['vendor-dashboard/orders']);
         break;
       case 'profile':
-        this.router.navigate(['/profile']);
+        this.router.navigate(['vendor-dashboard/profile']);
         break;
       case 'payments':
-        this.router.navigate(['/payments']);
+        this.router.navigate(['vendor-dashboard/payments']);
         break;
       default:
         this.pageTitle = '';
         this.pageContent = '';
     }
+  }
+
+  toggleSidebar(): void {
+    this.sidebarOpen = !this.sidebarOpen;
   }
 }

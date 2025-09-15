@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './order-history.html',
   styleUrl: './order-history.scss'
 })
-export class OrderHistory {
+export class OrderHistoryComponent {
 
 }

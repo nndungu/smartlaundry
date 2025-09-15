@@ -1,4 +1,4 @@
-// register.component.ts
+ // register.component.ts
 import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule, NgIf, NgForOf } from '@angular/common';
@@ -31,6 +31,8 @@ export class RegisterComponent {
     confirmPassword: '',
     adminPasscode: ''
   };
+
+  validationErrors: {[key: string]: string} = {};
 
   roles = [
     { 
@@ -87,53 +89,54 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
-    if (!this.isFormValid) {
-      return;
+    // Clear previous errors
+    this.validationErrors = {};
+
+    // Validate role selection
+    if (!this.selectedRole) {
+      this.validationErrors['role'] = 'Role is required';
+    }
+
+    // Validate terms agreement
+    if (!this.termsAgreed) {
+      this.validationErrors['terms'] = 'You must agree to the terms and conditions';
     }
 
     // Validate required fields
     if (!this.formData.firstName.trim()) {
-      alert('First name is required');
-      return;
+      this.validationErrors['firstName'] = 'First name is required';
     }
 
     if (!this.formData.lastName.trim()) {
-      alert('Last name is required');
-      return;
+      this.validationErrors['lastName'] = 'Last name is required';
     }
 
     if (!this.formData.email.trim()) {
-      alert('Email is required');
-      return;
-    }
-
-    if (!this.isEmailValid()) {
-      alert('Please enter a valid email address');
-      return;
+      this.validationErrors['email'] = 'Email is required';
+    } else if (!this.isEmailValid()) {
+      this.validationErrors['email'] = 'Please enter a valid email address';
     }
 
     if (!this.formData.phone.trim()) {
-      alert('Phone number is required');
-      return;
+      this.validationErrors['phone'] = 'Phone number is required';
     }
 
     if (!this.formData.password.trim()) {
-      alert('Password is required');
-      return;
-    }
-
-    if (this.formData.password.length < 8) {
-      alert('Password must be at least 8 characters long');
-      return;
+      this.validationErrors['password'] = 'Password is required';
+    } else if (this.formData.password.length < 8) {
+      this.validationErrors['password'] = 'Password must be at least 8 characters long';
     }
 
     if (this.formData.password !== this.formData.confirmPassword) {
-      alert('Passwords do not match');
-      return;
+      this.validationErrors['confirmPassword'] = 'Passwords do not match';
     }
 
     if (this.selectedRole === 'admin' && !this.formData.adminPasscode.trim()) {
-      alert('Admin passcode is required for administrator role');
+      this.validationErrors['adminPasscode'] = 'Admin passcode is required for administrator role';
+    }
+
+    // If there are validation errors, don't proceed
+    if (Object.keys(this.validationErrors).length > 0) {
       return;
     }
 
@@ -145,7 +148,7 @@ export class RegisterComponent {
       phone: this.formData.phone.trim(),
       password: this.formData.password,
       role: this.selectedRole,
-      ...(this.selectedRole === 'admin' && { adminPasscode: this.formData.adminPasscode })
+    ...(this.selectedRole === 'admin' && { adminPasscode: this.formData.adminPasscode })
     };
 
     console.log('Registration data:', registrationData);

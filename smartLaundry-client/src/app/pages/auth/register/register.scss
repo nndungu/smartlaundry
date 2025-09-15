@@ -46,3 +46,22 @@
     background: #a1a1a1;
   }
 }
+
+// Styles for validation error states
+label.border-red-500 {
+  border-color: #f87171; /* Tailwind red-400 */
+  padding-left: 0.25rem; /* px-1 */
+  padding-right: 0.25rem;
+  border-radius: 0; /* removed rounded corners */
+}
+
+input.border-red-500 {
+  border-color: #f87171 !important;
+  border-radius: 0; /* removed rounded corners */
+}
+
+.text-red-600 {
+  color: #dc2626; /* Tailwind red-600 */
+  margin-top: 0.25rem; /* mt-1 */
+  font-size: 0.875rem; /* text-sm */
+}

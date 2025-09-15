@@ -69,7 +69,7 @@ body {
 
 // Sidebar Styles (matching your nav.sidebar)
 .sidebar {
-  @include gradient-bg;
+  background-color: $primary-color;
   width: $sidebar-width;
   padding: 24px;
   color: white;
@@ -283,6 +283,7 @@ header.dashboard.header {
       align-items: center;
       position: relative;
       flex: 1;
+      min-width: 0;
 
       // Progress Circle (matching your .progress-circle)
       .progress-circle {
@@ -310,7 +311,8 @@ header.dashboard.header {
         position: absolute;
         top: 20px;
         left: 50%;
-        right: -50%;
+        right: 0;
+        width: calc(100% - 40px);
         height: 4px;
         background: $border-color;
         z-index: 1;
@@ -319,6 +321,14 @@ header.dashboard.header {
         &.completed {
           background: $primary-color;
         }
+      }
+
+      .step-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        margin-top: 4px;
       }
 
       // Progress Label (matching your .progress-label)
@@ -669,6 +679,17 @@ header.dashboard.header {
   }
 }
 
+/* Override dark mode to force light mode for client dashboard */
+body {
+  background-color: #ffffff !important;
+  color: #202124 !important;
+}
+
+.main-content {
+  background-color: #ffffff !important;
+  color: #202124 !important;
+}
+
 // Dark Mode Support (optional)
 @media (prefers-color-scheme: dark) {
   body {
@@ -777,5 +798,37 @@ header.dashboard.header {
   &.delivered {
     background: $success-bg;
     color: $success-color;
+  }
+}
+
+// Quick Actions Styles
+.quick-actions-grid {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.quick-action-btn {
+  flex: 1 1 20%;
+  min-width: 120px;
+  padding: 16px 24px;
+  margin: 8px 0;
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $primary-dark;
   }
 }

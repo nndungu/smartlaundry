@@ -3,6 +3,15 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box;
+}
+.vendor-orders-dashboard {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   /* Custom animations */
   @keyframes slideInRight {
     from {

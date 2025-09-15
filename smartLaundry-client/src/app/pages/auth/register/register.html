@@ -1,4 +1,4 @@
-<!-- register.component.html -->
+ <!-- register.component.html -->
 <div class="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 flex items-center justify-center p-1">
   <div class="w-full max-w-md">
     <!-- Header Section -->
@@ -24,12 +24,13 @@
       <div class="space-y-4">
         <!-- Role Selection Dropdown -->
         <div class="space-y-2">
-          <label class="text-sm font-medium text-gray-900">Role</label>
+          <label class="text-sm font-medium text-gray-900" [ngClass]="{'border border-red-500 rounded px-1': validationErrors['role']}">Role</label>
           <div class="relative">
             <button
               type="button"
               (click)="toggleRoleDropdown($event)"
               class="w-full px-3 py-2 border border-gray-300 rounded-md text-left bg-white flex items-center justify-between hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [ngClass]="{'border-red-500': validationErrors['role']}"
             >
               <div class="flex items-center space-x-2">
                 <span *ngIf="selectedRole" class="h-4 w-4">
@@ -43,7 +44,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
               </svg>
             </button>
-            
+
             <div *ngIf="showRoleDropdown" class="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50">
               <button
                 *ngFor="let role of roles"
@@ -56,72 +57,84 @@
               </button>
             </div>
           </div>
+          <p *ngIf="validationErrors['role']" class="text-red-600 text-sm mt-1">{{ validationErrors['role'] }}</p>
         </div>
 
         <!-- Conditional Admin Passcode Field -->
         <div *ngIf="selectedRole === 'admin'" class="space-y-2">
-          <label class="text-sm font-medium text-gray-900">Admin Passcode</label>
+          <label class="text-sm font-medium text-gray-900" [ngClass]="{'border border-red-500 rounded px-1': validationErrors['adminPasscode']}">Admin Passcode</label>
           <input
             type="password"
             [(ngModel)]="formData.adminPasscode"
             class="w-full px-3 py-2 border border-red-200 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+            [ngClass]="{'border-red-500': validationErrors['adminPasscode']}"
             placeholder="Enter admin passcode"
           />
           <p class="text-xs text-red-600">Special passcode required for administrator access</p>
+          <p *ngIf="validationErrors['adminPasscode']" class="text-red-600 text-sm mt-1">{{ validationErrors['adminPasscode'] }}</p>
         </div>
 
         <!-- Two-column grid for First/Last Name -->
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
-            <label class="text-sm font-medium text-gray-900">First Name</label>
+            <label class="text-sm font-medium text-gray-900" [ngClass]="{'border border-red-500 rounded px-1': validationErrors['firstName']}">First Name</label>
             <input
               type="text"
               [(ngModel)]="formData.firstName"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [ngClass]="{'border-red-500': validationErrors['firstName']}"
               placeholder="John"
             />
+            <p *ngIf="validationErrors['firstName']" class="text-red-600 text-sm mt-1">{{ validationErrors['firstName'] }}</p>
           </div>
           <div class="space-y-2">
-            <label class="text-sm font-medium text-gray-900">Last Name</label>
+            <label class="text-sm font-medium text-gray-900" [ngClass]="{'border border-red-500 rounded px-1': validationErrors['lastName']}">Last Name</label>
             <input
               type="text"
               [(ngModel)]="formData.lastName"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [ngClass]="{'border-red-500': validationErrors['lastName']}"
               placeholder="Doe"
             />
+            <p *ngIf="validationErrors['lastName']" class="text-red-600 text-sm mt-1">{{ validationErrors['lastName'] }}</p>
           </div>
         </div>
 
         <!-- Email Field -->
         <div class="space-y-2">
-          <label class="text-sm font-medium text-gray-900">Email</label>
+          <label class="text-sm font-medium text-gray-900" [ngClass]="{'border border-red-500 rounded px-1': validationErrors['email']}">Email</label>
           <input
             type="email"
             [(ngModel)]="formData.email"
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            [ngClass]="{'border-red-500': validationErrors['email']}"
             placeholder="john.doe@example.com"
           />
+          <p *ngIf="validationErrors['email']" class="text-red-600 text-sm mt-1">{{ validationErrors['email'] }}</p>
         </div>
 
         <!-- Phone Field -->
         <div class="space-y-2">
-          <label class="text-sm font-medium text-gray-900">Phone</label>
+          <label class="text-sm font-medium text-gray-900" [ngClass]="{'border border-red-500 rounded px-1': validationErrors['phone']}">Phone</label>
           <input
             type="tel"
             [(ngModel)]="formData.phone"
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            [ngClass]="{'border-red-500': validationErrors['phone']}"
             placeholder="+1 (555) 123-4567"
           />
+          <p *ngIf="validationErrors['phone']" class="text-red-600 text-sm mt-1">{{ validationErrors['phone'] }}</p>
         </div>
 
         <!-- Password Field -->
         <div class="space-y-2">
-          <label class="text-sm font-medium text-gray-900">Password</label>
+          <label class="text-sm font-medium text-gray-900" [ngClass]="{'border border-red-500 rounded px-1': validationErrors['password']}">Password</label>
           <div class="relative">
             <input
               [type]="showPassword ? 'text' : 'password'"
               [(ngModel)]="formData.password"
               class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [ngClass]="{'border-red-500': validationErrors['password']}"
               placeholder="Create a strong password"
             />
             <button
@@ -138,16 +151,18 @@
               </svg>
             </button>
           </div>
+          <p *ngIf="validationErrors['password']" class="text-red-600 text-sm mt-1">{{ validationErrors['password'] }}</p>
         </div>
 
         <!-- Confirm Password Field -->
         <div class="space-y-2">
-          <label class="text-sm font-medium text-gray-900">Confirm Password</label>
+          <label class="text-sm font-medium text-gray-900" [ngClass]="{'border border-red-500 px-1': validationErrors['confirmPassword']}">Confirm Password</label>
           <div class="relative">
             <input
               [type]="showConfirmPassword ? 'text' : 'password'"
               [(ngModel)]="formData.confirmPassword"
-              class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full px-3 py-2 pr-10 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [ngClass]="{'border-red-500': validationErrors['confirmPassword']}"
               placeholder="Confirm your password"
             />
             <button
@@ -164,6 +179,7 @@
               </svg>
             </button>
           </div>
+          <p *ngIf="validationErrors['confirmPassword']" class="text-red-600 text-sm mt-1">{{ validationErrors['confirmPassword'] }}</p>
         </div>
 
         <!-- Terms Checkbox -->
@@ -181,6 +197,7 @@
             <a href="#" class="text-blue-600 hover:text-blue-800 underline">Privacy Policy</a>
           </label>
         </div>
+        <p *ngIf="validationErrors['terms']" class="text-red-600 text-sm mt-1">{{ validationErrors['terms'] }}</p>
 
         <!-- Create Account Button -->
         <button

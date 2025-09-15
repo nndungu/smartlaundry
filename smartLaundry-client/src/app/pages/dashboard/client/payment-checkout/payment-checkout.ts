@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './payment-checkout.html',
   styleUrl: './payment-checkout.scss'
 })
-export class PaymentCheckout {
+export class PaymentCheckoutComponent {
 
 }

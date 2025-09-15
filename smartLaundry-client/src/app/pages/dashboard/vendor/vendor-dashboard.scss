@@ -57,9 +57,13 @@ body {
   background: linear-gradient(135deg, $primary-color, $primary-dark);
   color: white;
   padding: 24px;
-  position: relative;
-  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow-y: auto;
   @include card-shadow;
+  z-index: 1000;
 
   .logo {
     font-size: 28px;
@@ -104,18 +108,52 @@ body {
 
 // Main Content
 .main-content {
-  flex: 1;
-  height: 100%;
+  margin-left: $sidebar-width;
+  height: 100vhght ;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  padding: 32px;
+  padding: 0;
   background-color: #f5f7fa;
 }
 
-// Page Header 
+// Remove extra padding/margin on subpages inside main content
+.main-content > * {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+// Page Header
 .page-header {
   @include flex-between;
   margin-bottom: 32px;
+
+  .hamburger-btn {
+    display: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: white;
+    border: 1px solid $border-color;
+    @include flex-center;
+    cursor: pointer;
+    font-size: 18px;
+    @include transition;
+    @include card-shadow;
+    margin-right: 16px;
+
+    &:hover {
+      background: $secondary-color;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+  }
 
   .search-container {
     flex: 1;
@@ -719,9 +757,17 @@ body {
 // Responsive Design
 @media (max-width: 768px) {
   .sidebar {
-    width: 100%;
-    height: auto;
-    position: relative;
+    width: $sidebar-width;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    transition: left 0.3s ease;
+    z-index: 1001;
+
+    &.open {
+      left: 0;
+    }
   }
 
   .main-content {
@@ -730,6 +776,10 @@ body {
   }
 
   .page-header {
+    .hamburger-btn {
+      display: flex;
+    }
+
     flex-direction: column;
     gap: 16px;
     align-items: stretch;
