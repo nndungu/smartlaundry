@@ -45,28 +45,6 @@ $header-height: 80px;
   }
 }
 
-// Reset and Base Styles
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: #ffffff;
-  color: $text-primary;
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-
-// Dashboard Container (matching your .dasboard-container typo)
-.dasboard-container,
-.dashboard-container {
-  display: flex;
-  min-height: 100vh;
-}
-
 // Sidebar Styles (matching your nav.sidebar)
 .sidebar {
   background-color: $primary-color;
@@ -116,30 +94,44 @@ body {
       &.active {
         background: rgba(255, 255, 255, 0.15);
         transform: translateX(4px);
-        
-        .nav-icon {
-          transform: scale(1.1);
-        }
       }
 
-      // Navigation Icon (matching your .nav-icon)
       .nav-icon {
         width: 20px;
-        height: 20px;
         margin-right: 16px;
         font-size: 18px;
-        @include flex-center;
-        @include transition;
       }
 
-      // Navigation Text (matching your .nav-text)
       .nav-text {
         flex: 1;
-        font-weight: 500;
       }
     }
   }
 }
+
+// Reset and Base Styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #ffffff;
+  color: $text-primary;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+// Dashboard Container (matching your .dasboard-container typo)
+.dasboard-container,
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+
 
 // Main Content Styles (matching your .main-content)
 .main-content {
@@ -585,9 +577,8 @@ header.dashboard.header {
     position: relative;
   }
 
-  .main-content {
-    margin-left: 0;
-    padding: 20px;
+  .sidebar.mobile-open {
+    display: block;
   }
 
   .dashboard-header,

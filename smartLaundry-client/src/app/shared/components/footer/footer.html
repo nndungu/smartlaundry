@@ -4,10 +4,12 @@
     <!-- Main Footer Content -->
     <div class="footer-content">
       <!-- Company Section -->
-      <div class="footer-brand">
+      <div class="footer-section footer-brand">
         <div class="footer-logo">
           <div class="logo-wrapper">
-            <lucide-icon [img]="DropletIcon" class="footer-logo-icon"></lucide-icon>
+            <svg class="footer-logo-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.5 12L10.5 15L16.5 9M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+            </svg>
             <span class="footer-logo-text">Laundry Smart</span>
           </div>
         </div>
@@ -17,74 +19,87 @@
         </p>
         <div class="social-links">
           <a href="#" class="social-link facebook" aria-label="Facebook">
-            <lucide-icon [img]="FacebookIcon" class="social-icon"></lucide-icon>
+            <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
           </a>
           <a href="#" class="social-link instagram" aria-label="Instagram">
-            <lucide-icon [img]="InstagramIcon" class="social-icon"></lucide-icon>
+            <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.618 5.367 11.986 11.988 11.986C18.635 23.973 24.002 18.605 24.002 11.987 24.002 5.367 18.635.001 12.017.001zm5.568 16.172c-.492.492-1.17.758-1.906.758H8.32c-1.487 0-2.664-1.177-2.664-2.664V8.321c0-1.487 1.177-2.665 2.664-2.665h7.359c1.487 0 2.664 1.178 2.664 2.665v5.945c0 .736-.266 1.414-.758 1.906z"/>
+            </svg>
           </a>
           <a href="#" class="social-link twitter" aria-label="Twitter">
-            <lucide-icon [img]="TwitterIcon" class="social-icon"></lucide-icon>
-          
-          <!--<a href="#" class="social-link linkedin" aria-label="LinkedIn">
-            <lucide-icon [img]="LinkedinIcon" class="social-icon"></lucide-icon>-->
-          
+            <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            </svg>
           </a>
+        </div>
       </div>
 
-      <!-- Navigation Links -->
-      <div class="footer-nav">
-        <div class="footer-section">
-          <h3 class="footer-heading">
-            <lucide-icon [img]="SparklesIcon" class="heading-icon"></lucide-icon>
-            Services
-          </h3>
-          <ul class="footer-links">
-            <li><a routerLink="/services" class="footer-link">Wash & Fold</a></li>
-            <li><a routerLink="/services" class="footer-link">Dry Cleaning</a></li>
-            <li><a routerLink="/services" class="footer-link">Ironing</a></li>
-            <li><a routerLink="/services" class="footer-link">Pickup & Delivery</a></li>
-            <li><a routerLink="/services" class="footer-link">Commercial Services</a></li>
-          </ul>
-        </div>
+      <!-- Services Section -->
+      <div class="footer-section">
+        <h3 class="footer-heading">
+          <svg class="heading-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+          </svg>
+          Services
+        </h3>
+        <ul class="footer-links">
+          <li><a routerLink="/services" class="footer-link">Wash & Fold</a></li>
+          <li><a routerLink="/services" class="footer-link">Dry Cleaning</a></li>
+          <li><a routerLink="/services" class="footer-link">Ironing</a></li>
+          <li><a routerLink="/services" class="footer-link">Pickup & Delivery</a></li>
+          <li><a routerLink="/services" class="footer-link">Commercial Services</a></li>
+        </ul>
+      </div>
 
-        <div class="footer-section">
-          <h3 class="footer-heading">
-            <lucide-icon [img]="BuildingIcon" class="heading-icon"></lucide-icon>
-            Company
-          </h3>
-          <ul class="footer-links">
-            <li><a routerLink="/about" class="footer-link">About Us</a></li>
-            <li><a routerLink="/contact" class="footer-link">Contact</a></li>
-            <li><a routerLink="/careers" class="footer-link">Careers</a></li>
-            <li><a routerLink="/blog" class="footer-link">Blog</a></li>
-            <li><a routerLink="/locations" class="footer-link">Locations</a></li>
-          </ul>
-        </div>
+      <!-- Company Section -->
+      <div class="footer-section">
+        <h3 class="footer-heading">
+          <svg class="heading-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1"/>
+          </svg>
+          Company
+        </h3>
+        <ul class="footer-links">
+          <li><a routerLink="/about" class="footer-link">About Us</a></li>
+          <li><a routerLink="/contact" class="footer-link">Contact</a></li>
+          <li><a routerLink="/careers" class="footer-link">Careers</a></li>
+          <li><a routerLink="/blog" class="footer-link">Blog</a></li>
+          <li><a routerLink="/locations" class="footer-link">Locations</a></li>
+        </ul>
+      </div>
 
-        <div class="footer-section">
-          <h3 class="footer-heading">
-            <lucide-icon [img]="HelpCircleIcon" class="heading-icon"></lucide-icon>
-            Support
-          </h3>
-          <ul class="footer-links">
-            <li><a routerLink="/help" class="footer-link">Help Center</a></li>
-            <li><a routerLink="/pricing" class="footer-link">Pricing</a></li>
-            <li><a routerLink="/faq" class="footer-link">FAQ</a></li>
-            <li><a routerLink="/terms" class="footer-link">Terms of Service</a></li>
-            <li><a routerLink="/privacy" class="footer-link">Privacy Policy</a></li>
-          </ul>
-        </div>
+      <!-- Support Section -->
+      <div class="footer-section">
+        <h3 class="footer-heading">
+          <svg class="heading-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          Support
+        </h3>
+        <ul class="footer-links">
+          <li><a routerLink="/help" class="footer-link">Help Center</a></li>
+          <li><a routerLink="/pricing" class="footer-link">Pricing</a></li>
+          <li><a routerLink="/faq" class="footer-link">FAQ</a></li>
+          <li><a routerLink="/terms" class="footer-link">Terms of Service</a></li>
+          <li><a routerLink="/privacy" class="footer-link">Privacy Policy</a></li>
+        </ul>
       </div>
 
       <!-- Contact Section -->
-      <div class="footer-contact">
+      <div class="footer-section footer-contact">
         <h3 class="footer-heading">
-          <lucide-icon [img]="MessageCircleIcon" class="heading-icon"></lucide-icon>
+          <svg class="heading-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+          </svg>
           Get in Touch
         </h3>
         <div class="contact-info">
           <div class="contact-item">
-            <lucide-icon [img]="PhoneIcon" class="contact-icon"></lucide-icon>
+            <svg class="contact-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
             <div class="contact-details">
               <span class="contact-label">Phone</span>
               <a href="tel:+254750972619" class="contact-value">+254 750 972 619</a>
@@ -92,7 +107,9 @@
           </div>
           
           <div class="contact-item">
-            <lucide-icon [img]="MailIcon" class="contact-icon"></lucide-icon>
+            <svg class="contact-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
             <div class="contact-details">
               <span class="contact-label">Email</span>
               <a href="mailto:hello@laundrysmart.com" class="contact-value">hello@laundrysmart.com</a>
@@ -100,7 +117,10 @@
           </div>
           
           <div class="contact-item">
-            <lucide-icon [img]="MapPinIcon" class="contact-icon"></lucide-icon>
+            <svg class="contact-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
             <div class="contact-details">
               <span class="contact-label">Address</span>
               <span class="contact-value">123 Clean Street<br>Nairobi, Kenya</span>
@@ -111,17 +131,20 @@
         <!-- Newsletter Signup -->
         <div class="newsletter">
           <h4 class="newsletter-title">Stay Updated</h4>
-          <div class="newsletter-form">
+          <form class="newsletter-form" (ngSubmit)="onNewsletterSubmit($event)">
             <input 
               type="email" 
               placeholder="Enter your email" 
               class="newsletter-input"
               aria-label="Email address"
+              required
             >
             <button type="submit" class="newsletter-btn">
-              <lucide-icon [img]="SendIcon" class="btn-icon"></lucide-icon>
+              <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+              </svg>
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
@@ -130,21 +153,31 @@
     <div class="footer-bottom">
       <div class="footer-bottom-content">
         <div class="copyright">
-          <p>&copy; 2024 Laundry Smart. All rights reserved.</p>
-          <p class="made-with">Made with <lucide-icon [img]="HeartIcon" class="heart-icon"></lucide-icon> in Kenya</p>
+          <p>&copy; {{ currentYear }} Laundry Smart. All rights reserved.</p>
+          <p class="made-with">Made with 
+            <svg class="heart-icon" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg> in Kenya
+          </p>
         </div>
         
         <div class="footer-badges">
           <div class="badge">
-            <lucide-icon [img]="ShieldCheckIcon" class="badge-icon"></lucide-icon>
+            <svg class="badge-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
             <span>Secure Payment</span>
           </div>
           <div class="badge">
-            <lucide-icon [img]="TruckIcon" class="badge-icon"></lucide-icon>
+            <svg class="badge-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8"/>
+            </svg>
             <span>Fast Delivery</span>
           </div>
           <div class="badge">
-            <lucide-icon [img]="ClockIcon" class="badge-icon"></lucide-icon>
+            <svg class="badge-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
             <span>24/7 Support</span>
           </div>
         </div>
@@ -158,3 +191,4 @@
     <div class="bg-bubble bg-bubble-2"></div>
     <div class="bg-bubble bg-bubble-3"></div>
   </div>
+</footer>

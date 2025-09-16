@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule, NgIf, NgFor } from '@angular/common';
 
 interface Order {
   id: number;
@@ -11,6 +12,7 @@ interface Order {
 
 @Component({
   selector: 'app-order-status',
+  imports: [CommonModule, NgIf, NgFor],
   templateUrl: './order-status.html',
   styleUrls: ['./order-status.scss']
 })

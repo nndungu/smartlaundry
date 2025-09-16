@@ -1,443 +1,470 @@
-// Optimized footer.scss - Reduced from 8.66kB to ~6.5kB
+// footer.component.scss
+
+// Variables
+$primary-color: #2563eb;
+$primary-hover: #1d4ed8;
+$text-light: #64748b;
+$text-dark: #1e293b;
+$bg-dark: #0f172a;
+$bg-darker: #020617;
+$border-color: #334155;
+$success-color: #10b981;
+$hover-transition: all 0.3s ease;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Footer Component
 .footer {
   position: relative;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  width: 100%;
+  background: linear-gradient(135deg, $bg-dark 0%, $bg-darker 100%);
+  color: #e2e8f0;
   overflow: hidden;
   margin-top: auto;
-}
 
-.footer-container {
-  position: relative;
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1rem;
-  z-index: 1;
-}
-
-.footer-content {
-  padding: 4rem 0 2rem;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-  color: #ffffff;
-
-  @media (min-width: 768px) {
-    grid-template-columns: 1.2fr 1.5fr 1fr;
-    gap: 4rem;
+  // Container
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
   }
-}
 
-// Brand Section
-.footer-brand {
-  .footer-logo {
-    margin-bottom: 1.5rem;
+  // Main Content
+  .footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+    gap: 40px;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid $border-color;
 
-    .logo-wrapper {
+    @media (max-width: 1024px) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 30px;
+      padding: 40px 0 30px;
+    }
+  }
+
+  // Footer Sections
+  .footer-section {
+    .footer-heading {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      padding: 0.5rem;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      width: fit-content;
-      transition: all 0.3s ease;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
-      }
-    }
-  }
-
-  .footer-logo-icon {
-    height: 2rem;
-    width: 2rem;
-    color: #3b82f6;
-  }
-
-  .footer-logo-text {
-    font-size: 1.375rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.025em;
-  }
-
-  .footer-description {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-    max-width: 300px;
-  }
-}
-
-// Social Links
-.social-links {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-
-  .social-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-    text-decoration: none;
-
-    .social-icon {
-      width: 1.125rem;
-      height: 1.125rem;
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    &:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2);
-
-      .social-icon {
-        color: #ffffff;
-      }
-    }
-
-    // Social platform specific hover effects
-    &.facebook:hover { background: rgba(24, 119, 242, 0.2); border-color: #1877f2; }
-    &.instagram:hover { background: linear-gradient(45deg, rgba(225, 48, 108, 0.2), rgba(253, 29, 29, 0.2)); border-color: #e1306c; }
-    &.twitter:hover { background: rgba(29, 161, 242, 0.2); border-color: #1da1f2; }
-    &.linkedin:hover { background: rgba(0, 119, 181, 0.2); border-color: #0077b5; }
-  }
-}
-
-// Navigation
-.footer-nav {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2.5rem;
-}
-
-.footer-section {
-  .footer-heading {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #ffffff;
-    font-size: 1.125rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-
-    .heading-icon {
-      width: 1.25rem;
-      height: 1.25rem;
-      color: #3b82f6;
-    }
-  }
-
-  .footer-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-
-    li .footer-link {
-      color: rgba(255, 255, 255, 0.7);
-      text-decoration: none;
-      font-size: 0.9375rem;
-      transition: all 0.3s ease;
-      position: relative;
-      padding-left: 1rem;
-
-      &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 4px;
-        height: 4px;
-        background: rgba(59, 130, 246, 0.5);
-        border-radius: 50%;
-        transition: all 0.3s ease;
-      }
-
-      &:hover {
-        color: #ffffff;
-        transform: translateX(4px);
-
-        &::before {
-          background: #3b82f6;
-        }
-      }
-    }
-  }
-}
-
-// Contact Section
-.footer-contact {
-  .footer-heading {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #ffffff;
-    font-size: 1.125rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-
-    .heading-icon {
-      width: 1.25rem;
-      height: 1.25rem;
-      color: #3b82f6;
-    }
-  }
-
-  .contact-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    margin-bottom: 1.25rem;
-    padding: 1rem;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .contact-icon {
-      width: 1.125rem;
-      height: 1.125rem;
-      color: #3b82f6;
-      flex-shrink: 0;
-      margin-top: 0.125rem;
-    }
-
-    .contact-details {
-      flex: 1;
-
-      .contact-label {
-        display: block;
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 0.25rem;
-      }
-
-      .contact-value {
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 0.9375rem;
-        font-weight: 500;
-        text-decoration: none;
-        line-height: 1.4;
-        transition: color 0.3s ease;
-
-        &:hover {
-          color: #3b82f6;
-        }
-      }
-    }
-  }
-}
-
-// Newsletter
-.newsletter {
-  .newsletter-title {
-    color: #ffffff;
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-  }
-
-  .newsletter-form {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-
-    .newsletter-input {
-      flex: 1;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: rgba(255, 255, 255, 0.1);
+      gap: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
       color: #ffffff;
-      font-size: 0.875rem;
-      transition: all 0.3s ease;
+      margin-bottom: 20px;
 
-      &::placeholder {
-        color: rgba(255, 255, 255, 0.5);
-      }
-
-      &:focus {
-        outline: none;
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        background: rgba(255, 255, 255, 0.15);
+      .heading-icon {
+        width: 20px;
+        height: 20px;
+        color: $primary-color;
       }
     }
 
-    .newsletter-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 2.5rem;
-      height: 2.5rem;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-
-      &:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
-      }
-
-      .btn-icon {
-        width: 1rem;
-        height: 1rem;
-        color: #ffffff;
-      }
-    }
-  }
-}
-
-// Footer Bottom
-.footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 2rem 0;
-
-  .footer-bottom-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-
-    @media (max-width: 767px) {
-      flex-direction: column;
-      text-align: center;
-    }
-  }
-
-  .copyright {
-    p {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 0.875rem;
+    .footer-links {
+      list-style: none;
+      padding: 0;
       margin: 0;
 
-      &.made-with {
-        margin-top: 0.25rem;
-        font-size: 0.8125rem;
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
+      li {
+        margin-bottom: 12px;
 
-        .heart-icon {
-          width: 0.875rem;
-          height: 0.875rem;
-          color: #ef4444;
-          animation: heartbeat 2s ease-in-out infinite;
+        .footer-link {
+          color: $text-light;
+          text-decoration: none;
+          font-size: 0.9rem;
+          transition: $hover-transition;
+          display: inline-block;
+
+          &:hover {
+            color: $primary-color;
+            transform: translateX(4px);
+          }
         }
       }
     }
   }
 
-  .footer-badges {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+  // Brand Section
+  .footer-brand {
+    .footer-logo {
+      margin-bottom: 20px;
 
-    .badge {
+      .logo-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .footer-logo-icon {
+          width: 32px;
+          height: 32px;
+          color: $primary-color;
+        }
+
+        .footer-logo-text {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #ffffff;
+        }
+      }
+    }
+
+    .footer-description {
+      color: $text-light;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      max-width: 280px;
+    }
+
+    .social-links {
       display: flex;
-      align-items: center;
-      gap: 0.375rem;
-      padding: 0.5rem 0.75rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      font-size: 0.8125rem;
-      color: rgba(255, 255, 255, 0.8);
-      transition: all 0.3s ease;
+      gap: 12px;
 
-      .badge-icon {
-        width: 0.875rem;
-        height: 0.875rem;
-        color: #3b82f6;
+      .social-link {
+        @include flex-center;
+        width: 40px;
+        height: 40px;
+        background: rgba(37, 99, 235, 0.1);
+        border: 1px solid rgba(37, 99, 235, 0.2);
+        border-radius: 10px;
+        transition: $hover-transition;
+
+        .social-icon {
+          width: 18px;
+          height: 18px;
+          color: $primary-color;
+        }
+
+        &:hover {
+          background: $primary-color;
+          border-color: $primary-color;
+          transform: translateY(-2px);
+
+          .social-icon {
+            color: white;
+          }
+        }
+
+        &.facebook:hover {
+          background: #1877f2;
+          border-color: #1877f2;
+        }
+
+        &.instagram:hover {
+          background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+          border-color: #e1306c;
+        }
+
+        &.twitter:hover {
+          background: #1da1f2;
+          border-color: #1da1f2;
+        }
+      }
+    }
+  }
+
+  // Contact Section
+  .footer-contact {
+    .contact-info {
+      margin-bottom: 30px;
+
+      .contact-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 20px;
+
+        .contact-icon {
+          width: 18px;
+          height: 18px;
+          color: $primary-color;
+          margin-top: 2px;
+          flex-shrink: 0;
+        }
+
+        .contact-details {
+          .contact-label {
+            display: block;
+            font-size: 0.8rem;
+            color: $text-light;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+
+          .contact-value {
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: $hover-transition;
+
+            &:hover {
+              color: $primary-color;
+            }
+          }
+        }
+      }
+    }
+
+    .newsletter {
+      .newsletter-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 16px;
       }
 
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: translateY(-1px);
+      .newsletter-form {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+
+        .newsletter-input {
+          flex: 1;
+          padding: 12px 16px;
+          background: rgba(30, 41, 59, 0.5);
+          border: 1px solid $border-color;
+          border-radius: 8px;
+          color: #e2e8f0;
+          font-size: 0.9rem;
+          transition: $hover-transition;
+
+          &::placeholder {
+            color: $text-light;
+          }
+
+          &:focus {
+            outline: none;
+            border-color: $primary-color;
+            background: rgba(30, 41, 59, 0.8);
+          }
+        }
+
+        .newsletter-btn {
+          @include flex-center;
+          width: 44px;
+          height: 44px;
+          background: $primary-color;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: $hover-transition;
+
+          .btn-icon {
+            width: 18px;
+            height: 18px;
+            color: white;
+          }
+
+          &:hover {
+            background: $primary-hover;
+            transform: translateY(-1px);
+          }
+        }
+      }
+    }
+  }
+
+  // Bottom Section
+  .footer-bottom {
+    padding: 30px 0;
+
+    .footer-bottom-content {
+      @include flex-between;
+      flex-wrap: wrap;
+      gap: 20px;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+    }
+
+    .copyright {
+      p {
+        color: $text-light;
+        font-size: 0.85rem;
+        margin: 0;
+
+        &.made-with {
+          margin-top: 8px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+
+          @media (max-width: 768px) {
+            justify-content: center;
+          }
+
+          .heart-icon {
+            width: 16px;
+            height: 16px;
+            color: #ef4444;
+            animation: heartbeat 1.5s ease-in-out infinite;
+          }
+        }
+      }
+    }
+
+    .footer-badges {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+
+      @media (max-width: 768px) {
+        justify-content: center;
+      }
+
+      .badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: $text-light;
+        font-size: 0.8rem;
+
+        .badge-icon {
+          width: 16px;
+          height: 16px;
+          color: $success-color;
+        }
+
+        span {
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+
+  // Background Elements
+  .footer-bg-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+
+    .bg-bubble {
+      position: absolute;
+      background: rgba(37, 99, 235, 0.03);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+
+      &.bg-bubble-1 {
+        width: 200px;
+        height: 200px;
+        top: -50px;
+        left: 10%;
+        animation-delay: 0s;
+      }
+
+      &.bg-bubble-2 {
+        width: 150px;
+        height: 150px;
+        top: 50%;
+        right: 15%;
+        animation-delay: 2s;
+      }
+
+      &.bg-bubble-3 {
+        width: 100px;
+        height: 100px;
+        bottom: -30px;
+        left: 60%;
+        animation-delay: 4s;
       }
     }
   }
 }
 
 // Animations
-@keyframes float {
-  0%, 100% { transform: translateY(0px) scale(1); opacity: 0.7; }
-  50% { transform: translateY(-20px) scale(1.05); opacity: 1; }
-}
-
 @keyframes heartbeat {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-}
-
-// Responsive Design
-@media (max-width: 767px) {
-  .footer-content {
-    text-align: center;
-    gap: 2rem;
+  0%, 100% {
+    transform: scale(1);
   }
-
-  .footer-brand .footer-description {
-    max-width: none;
-  }
-
-  .footer-nav {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  .social-links {
-    justify-content: center;
-  }
-
-  .contact-item {
-    text-align: left;
-  }
-
-  .footer-badges {
-    justify-content: center;
+  50% {
+    transform: scale(1.1);
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(5px) rotate(-1deg);
+  }
+}
+
+// Global Layout Helper Classes (add to your global styles)
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page-content {
+    flex: 1;
+  }
+}
+
+// Responsive adjustments
 @media (max-width: 480px) {
-  .footer-container {
-    padding: 0 0.75rem;
-  }
+  .footer {
+    .footer-content {
+      padding: 30px 0 20px;
+    }
 
-  .footer-content {
-    padding: 3rem 0 1.5rem;
-  }
+    .footer-brand {
+      .footer-logo {
+        .logo-wrapper {
+          .footer-logo-text {
+            font-size: 1.3rem;
+          }
+        }
+      }
+    }
 
-  .footer-badges .badge {
-    font-size: 0.75rem;
-    padding: 0.375rem 0.5rem;
+    .footer-bottom {
+      padding: 20px 0;
+
+      .footer-badges {
+        gap: 16px;
+
+        .badge {
+          font-size: 0.75rem;
+        }
+      }
+    }
   }
 }

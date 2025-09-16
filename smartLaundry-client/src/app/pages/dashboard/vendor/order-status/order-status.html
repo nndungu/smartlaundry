@@ -1,58 +1,7 @@
-<div class="vendor-orders-dashboard p-4 max-w-7xl mx-auto">
-  <!-- Header with Notifications -->
-  <div class="flex justify-between items-center mb-6">
+<div class="vendor-orders-dashboard p-4">
+  <!-- Page Title -->
+  <div class="mb-6">
     <h1 class="text-2xl font-bold text-gray-900">Order Management Dashboard</h1>
-    
-    <!-- Notification Bell -->
-    <div class="relative">
-      <button 
-        (click)="toggleNotifications()"
-        class="relative p-2 text-gray-600 hover:text-gray-900 transition-colors"
-      >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                d="M15 17h5l-5 5v-5zm-8-10l3-3v3h5l-3 3h-5z M7.502 19.425C7.502 19.425 6.25 18.5 5.25 17.5c-1-1-1.75-2.25-1.75-2.25L7.5 11.25v8.175z"/>
-        </svg>
-        <!-- Notification Badge -->
-        <span 
-          *ngIf="newOrdersCount > 0"
-          class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse"
-        >
-          {{newOrdersCount}}
-        </span>
-      </button>
-
-      <!-- Notification Dropdown -->
-      <div 
-        *ngIf="showNotifications && newOrdersCount > 0"
-        class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border z-50"
-      >
-        <div class="p-4 border-b">
-          <h3 class="font-medium text-gray-900">New Orders ({{newOrdersCount}})</h3>
-        </div>
-        <div class="max-h-64 overflow-y-auto">
-          <div 
-            *ngFor="let order of orders; trackBy: trackByOrderId"
-            class="p-3 border-b hover:bg-gray-50 cursor-pointer"
-            [class.bg-blue-50]="order.isNew"
-          >
-            <div class="flex justify-between items-start">
-              <div>
-                <p class="font-medium text-sm text-gray-900">#{{order.id}} - {{order.customer}}</p>
-                <p class="text-xs text-gray-600">{{order.service}}</p>
-                <p class="text-xs text-gray-500">{{formatDateTime(order.pickup)}}</p>
-              </div>
-              <span 
-                class="text-xs px-2 py-1 rounded-full"
-                [class]="getStatusClass(order.status)"
-              >
-                {{order.status}}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <!-- Desktop Table View -->
