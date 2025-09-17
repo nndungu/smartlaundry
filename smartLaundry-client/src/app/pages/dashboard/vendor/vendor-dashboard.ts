@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 interface Order {
   id: number;
@@ -15,9 +16,12 @@ interface Order {
   templateUrl: './vendor-dashboard.html',
   styleUrls: ['./vendor-dashboard.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, RouterModule]
 })
 export class VendorDashboardComponent implements OnInit {
+  sidebarOpen = false;
+  activeSection = 'dashboard';
+
   orders: Order[] = [
     { id: 101, customer: 'Alice Johnson', service: 'Wash & Fold', pickup: '2025-09-12 09:30', status: 'Pending', isNew: true },
     { id: 102, customer: 'Brian Smith', service: 'Dry Cleaning', pickup: '2025-09-12 13:00', status: 'Accepted' },
@@ -158,5 +162,13 @@ export class VendorDashboardComponent implements OnInit {
 
   trackByOrderId(index: number, order: Order): number {
     return order.id;
+  }
+
+  navigateToSection(section: string): void {
+    this.activeSection = section;
+  }
+
+  toggleSidebar(): void {
+    this.sidebarOpen = !this.sidebarOpen;
   }
 }

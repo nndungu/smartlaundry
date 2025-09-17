@@ -1,100 +1,34 @@
-<!-- services.component.html -->
-<!-- Hero Section -->
-<section class="hero">
+<div class="services-container">
   <div class="container">
-    <h1>Our Services</h1>
-    <p>
-      Professional laundry and dry cleaning services designed to make your life easier. 
-      From everyday wash & fold to specialized garment care, we handle it all with expertise and care.
-    </p>
-  </div>
-</section>
+    <div class="services-header">
+      <h1 class="page-title">Our Services</h1>
+      <p class="page-subtitle">Discover our comprehensive range of laundry and dry cleaning services</p>
+    </div>
 
-<!-- Main Services Section -->
-<section class="services-section">
-  <div class="container">
     <div class="services-grid">
-      <div class="service-card fade-in" *ngFor="let service of services">
-        <img [src]="service.image" [alt]="service.alt" class="service-image">
-        <div class="service-content">
-          <div class="service-header">
-            <div class="service-icon">
-              <i [class]="service.icon"></i>
-            </div>
-            <div class="service-info">
-              <h3>{{ service.title }}</h3>
-              <p>{{ service.description }}</p>
-            </div>
-          </div>
-          <div class="service-price">{{ service.price }} <span>{{ service.priceUnit }}</span></div>
-          <ul class="service-features">
-            <li *ngFor="let feature of service.features">{{ feature }}</li>
-          </ul>
-          <button class="service-btn" (click)="onServiceBook(service)">Book Now</button>
+      <div
+        class="service-card"
+        *ngFor="let service of services; trackBy: trackByFn"
+        [class.featured]="service.featured"
+        (click)="onServiceClick(service)">
+
+        <img *ngIf="service.imageUrl" [src]="service.imageUrl" alt="{{service.title}}" class="service-image" />
+
+        <div class="service-card-content">
+          <h3 class="service-title">{{ service.title }}</h3>
+          <p class="service-description">{{ service.description }}</p>
         </div>
+
+        <div class="service-card-overlay"></div>
       </div>
     </div>
 
-    <!-- Additional Services -->
-    <div class="section-header fade-in">
-      <h2>Additional Services</h2>
-      <p>Extra services to meet all your laundry and garment care needs.</p>
-    </div>
-
-    <div class="additional-services">
-      <div class="addon-card fade-in" *ngFor="let addon of additionalServices">
-        <div class="addon-icon">
-          <i [class]="addon.icon"></i>
-        </div>
-        <div class="addon-info">
-          <h3>{{ addon.title }}</h3>
-          <p>{{ addon.description }}</p>
-          <div class="addon-price">{{ addon.price }}</div>
-        </div>
+    <div class="services-footer">
+      <div class="contact-cta">
+        <h3>Need a custom solution?</h3>
+        <p>Contact us for personalized laundry services tailored to your specific needs.</p>
+        <button class="cta-button" type="button">Get In Touch</button>
       </div>
     </div>
   </div>
-</section>
-
-<!-- Process Gallery Section -->
-<section class="process-gallery">
-  <div class="container">
-    <div class="section-header fade-in">
-      <h2>Our Professional Process</h2>
-      <p>See how we handle your precious garments with care and precision at every step.</p>
-    </div>
-
-    <div class="process-grid">
-      <div class="process-item fade-in" *ngFor="let step of processSteps">
-        <div class="process-image-wrapper">
-          <img [src]="step.image" [alt]="step.alt" class="process-image">
-          <div class="process-overlay">
-            <div class="process-number">{{ step.number }}</div>
-          </div>
-        </div>
-        <h3>{{ step.title }}</h3>
-        <p>{{ step.description }}</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Service Features Section -->
-<section class="service-features-section">
-  <div class="container">
-    <div class="section-header fade-in">
-      <h2>Why Choose Our Services?</h2>
-      <p>We go above and beyond to ensure your complete satisfaction with every order.</p>
-    </div>
-
-    <div class="features-grid">
-      <div class="feature-item fade-in" *ngFor="let feature of serviceFeatures">
-        <div class="feature-icon">
-          <i [class]="feature.icon"></i>
-        </div>
-        <h3>{{ feature.title }}</h3>
-        <p>{{ feature.description }}</p>
-      </div>
-    </div>
-  </div>
-</section>
+</div>

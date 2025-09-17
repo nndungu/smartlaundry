@@ -22,7 +22,7 @@
   top: 0;
   width: 100%;
   z-index: 50;
-  background: transparent;
+  background: white;
   height: 60px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -55,7 +55,7 @@
 .logo-icon {
   height: 2rem;
   width: 2rem;
-  color: white;
+  color: #111111;
 }
 
 .logo-text {
@@ -100,7 +100,7 @@
 }
 /* Navbar container */
 .navbar {
-  background-color: transparent; /* make it see-through */
+  background-color: white; /* make it visible */
   box-shadow: none; /* remove shadow if any */
   border: none; /* remove border if any */
   position: fixed; /* keep it at the top */

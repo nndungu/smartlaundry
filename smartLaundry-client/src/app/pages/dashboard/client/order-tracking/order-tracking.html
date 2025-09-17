@@ -1,1 +1,303 @@
-<p>order-tracking works!</p>
+<div class="order-tracking-container">
+  <div class="container">
+    <!-- Header Section -->
+    <div class="page-header">
+      <h1 class="page-title">Track Your Order</h1>
+      <p class="page-subtitle">Enter your tracking ID to see the real-time status of your laundry order</p>
+    </div>
+
+    <!-- Tracking Form Section -->
+    <section class="tracking-form-section">
+      <div class="form-container">
+        <form [formGroup]="trackingForm" (ngSubmit)="trackOrder()" class="tracking-form">
+          <div class="form-group">
+            <label for="trackingId">Tracking ID</label>
+            <div class="input-container">
+              <input 
+                type="text" 
+                id="trackingId" 
+                formControlName="trackingId"
+                [class.error]="isFieldInvalid('trackingId')"
+                placeholder="Enter tracking ID (e.g., SL-2024-001)"
+                [disabled]="isLoading">
+              <button 
+                type="submit" 
+                class="track-btn"
+                [disabled]="trackingForm.invalid || isLoading"
+                [attr.aria-label]="isLoading ? 'Searching for order...' : 'Track order'">
+                <span *ngIf="!isLoading">Track Order</span>
+                <span *ngIf="isLoading" class="loading-spinner">
+                  <i class="spinner" aria-hidden="true"></i>
+                  Searching...
+                </span>
+              </button>
+            </div>
+            <div class="error-message" *ngIf="isFieldInvalid('trackingId')">
+              {{ getFieldError('trackingId') }}
+            </div>
+          </div>
+          
+          <div class="help-text">
+            <p><strong>Where to find your tracking ID:</strong></p>
+            <ul>
+              <li>Check your confirmation email or SMS</li>
+              <li>Look for ID format: SL-YYYY-XXX (e.g., SL-2024-001)</li>
+              <li>Contact support if you can't find your ID</li>
+            </ul>
+          </div>
+        </form>
+
+        <!-- Error Message -->
+        <div class="error-alert" *ngIf="errorMessage" role="alert">
+          <i class="error-icon" aria-hidden="true">❌</i>
+          <div class="error-content">
+            <h3>Order Not Found</h3>
+            <p>{{ errorMessage }}</p>
+            <button type="button" class="retry-btn" (click)="clearSearch()">Try Again</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Order Details Section -->
+<section class="order-details-section" *ngIf="currentOrder">
+      <div class="order-header">
+        <div class="order-info">
+          <h2 class="order-title">Order {{ currentOrder?.id }}</h2>
+          <p class="order-date" *ngIf="currentOrder?.orderDate">Placed on {{ formatDate(currentOrder.orderDate!) }}</p>
+        </div>
+        
+        <div class="order-actions">
+          <button 
+            type="button" 
+            class="action-btn refresh-btn" 
+            (click)="refreshOrder()"
+            [disabled]="isLoading"
+            [attr.aria-label]="'Refresh order status'">
+            <i class="refresh-icon" [class.spinning]="isLoading" aria-hidden="true">🔄</i>
+            Refresh
+          </button>
+          
+          <div class="auto-refresh-toggle">
+            <label class="toggle-switch">
+              <input 
+                type="checkbox" 
+                [checked]="autoRefreshEnabled"
+                (change)="toggleAutoRefresh()">
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">Auto-refresh</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-section">
+        <div class="progress-header">
+          <h3>Order Progress</h3>
+          <span class="progress-percentage">{{ getStatusProgress() }}% Complete</span>
+        </div>
+        <div class="progress-bar">
+          <div 
+            class="progress-fill" 
+            [style.width.%]="getStatusProgress()"
+            [attr.aria-valuenow]="getStatusProgress()"
+            [attr.aria-valuemin]="0"
+            [attr.aria-valuemax]="100"
+            role="progressbar"
+            [attr.aria-label]="'Order progress: ' + getStatusProgress() + '% complete'">
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Timeline -->
+      <div class="status-timeline">
+        <h3 class="timeline-title">Order Status Timeline</h3>
+        
+        <div class="timeline">
+          <div 
+            class="timeline-item" 
+            *ngFor="let status of currentOrder.statusHistory; trackBy: trackByStatusId"
+            [class.completed]="status.completed"
+            [class.active]="status.active">
+            
+            <div class="timeline-marker">
+              <div class="marker-icon">{{ status.icon }}</div>
+            </div>
+            
+            <div class="timeline-content">
+              <div class="status-header">
+                <h4 class="status-title">{{ status.title }}</h4>
+                <span class="status-time" *ngIf="status.timestamp">
+                  {{ formatTime(status.timestamp) }}
+                </span>
+              </div>
+              
+              <p class="status-description">{{ status.description }}</p>
+              
+              <div class="status-estimate" *ngIf="status.estimatedTime && status.active">
+                <i class="clock-icon" aria-hidden="true">⏰</i>
+                {{ status.estimatedTime }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary-grid">
+        <!-- Customer Information -->
+        <div class="summary-card customer-info">
+          <h3 class="card-title">Customer Information</h3>
+          <div class="info-list">
+            <div class="info-item">
+              <span class="info-label">Name:</span>
+              <span class="info-value">{{ currentOrder?.customerName }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Phone:</span>
+              <span class="info-value">{{ currentOrder?.customerPhone }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Email:</span>
+              <span class="info-value">{{ currentOrder?.customerEmail }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Service Details -->
+        <div class="summary-card service-details">
+          <h3 class="card-title">Service Details</h3>
+          <div class="info-list">
+            <div class="info-item">
+              <span class="info-label">Package:</span>
+              <span class="info-value">{{ currentOrder?.packageName }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Total Amount:</span>
+              <span class="info-value price">{{ currentOrder?.currency }} {{ currentOrder?.totalAmount | number }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Estimated Delivery:</span>
+              <span class="info-value" *ngIf="currentOrder?.estimatedDelivery">{{ formatDate(currentOrder.estimatedDelivery!) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delivery Information -->
+        <div class="summary-card delivery-info">
+          <h3 class="card-title">Pickup & Delivery</h3>
+          <div class="info-list">
+            <div class="info-item">
+              <span class="info-label">Pickup Address:</span>
+              <span class="info-value">{{ currentOrder?.pickupAddress }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Delivery Address:</span>
+              <span class="info-value">{{ currentOrder?.deliveryAddress }}</span>
+            </div>
+            <div class="info-item" *ngIf="currentOrder?.driverName">
+              <span class="info-label">Driver:</span>
+              <span class="info-value">{{ currentOrder?.driverName }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Special Instructions -->
+        <div class="summary-card special-instructions" *ngIf="currentOrder?.specialInstructions">
+          <h3 class="card-title">Special Instructions</h3>
+          <p class="instructions-text">{{ currentOrder?.specialInstructions }}</p>
+        </div>
+      </div>
+
+      <!-- Items List -->
+      <div class="items-section">
+        <h3 class="section-title">Items in Your Order</h3>
+        <div class="items-grid">
+          <div 
+            class="item-card" 
+            *ngFor="let item of currentOrder.items; trackBy: trackByItemId">
+            <div class="item-info">
+              <h4 class="item-name">{{ item.name }}</h4>
+              <div class="item-details">
+                <span class="item-quantity">Qty: {{ item.quantity }}</span>
+                <span class="item-category">{{ item.category }}</span>
+                <span class="item-condition" [class.stained]="item.condition === 'Stained'">
+                  {{ item.condition }}
+                </span>
+              </div>
+              <p class="item-notes" *ngIf="item.notes">
+                <i class="note-icon" aria-hidden="true">📝</i>
+                {{ item.notes }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button 
+          type="button" 
+          class="action-btn primary-btn" 
+          *ngIf="currentOrder.driverPhone"
+          (click)="callDriver()">
+          <i class="phone-icon" aria-hidden="true">📞</i>
+          Call Driver
+        </button>
+        
+        <button 
+          type="button" 
+          class="action-btn secondary-btn" 
+          (click)="contactSupport()">
+          <i class="support-icon" aria-hidden="true">🆘</i>
+          Contact Support
+        </button>
+        
+        <button 
+          type="button" 
+          class="action-btn secondary-btn" 
+          (click)="clearSearch()">
+          <i class="search-icon" aria-hidden="true">🔍</i>
+          Track Another Order
+        </button>
+      </div>
+    </section>
+
+    <!-- Help Section -->
+    <section class="help-section" *ngIf="!currentOrder && !errorMessage">
+      <div class="help-content">
+        <h3>Need Help Tracking Your Order?</h3>
+        
+        <div class="help-grid">
+          <div class="help-item">
+            <div class="help-icon">📧</div>
+            <h4>Check Your Email</h4>
+            <p>Your tracking ID was sent to your email address when you placed the order.</p>
+          </div>
+          
+          <div class="help-item">
+            <div class="help-icon">📱</div>
+            <h4>Check SMS</h4>
+            <p>We also send tracking updates via SMS to your registered phone number.</p>
+          </div>
+          
+          <div class="help-item">
+            <div class="help-icon">📞</div>
+            <h4>Call Support</h4>
+            <p>Can't find your tracking ID? Our support team is here to help.</p>
+            <button type="button" class="help-btn" (click)="contactSupport()">
+              Call +254 116 174 326
+            </button>
+          </div>
+          
+          <div class="help-item">
+            <div class="help-icon">⏰</div>
+            <h4>Order Updates</h4>
+            <p>We provide real-time updates throughout your laundry journey.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

@@ -52,8 +52,10 @@ $header-height: 80px;
   padding: 24px;
   color: white;
   @include card-shadow;
-  position: fixed;
-  height: 100vh;
+  position: sticky;
+  top: 0;
+  height: auto;
+  max-height: 100vh;
   overflow-y: auto;
   z-index: 1000;
 
@@ -136,7 +138,7 @@ body {
 // Main Content Styles (matching your .main-content)
 .main-content {
   flex: 1;
-  margin-left: $sidebar-width;
+  margin-left: 0;
   padding: 32px;
   background-color: #ffffff;
   min-height: 100vh;

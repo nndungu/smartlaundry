@@ -1,1 +1,288 @@
+<div class="book-service-container">
+  <div class="container">
+    <!-- Header Section -->
+    <div class="page-header">
+      <h1 class="page-title">Book Your Laundry Service</h1>
+      <p class="page-subtitle">Choose from our convenient laundry packages and enjoy professional service with free pickup and delivery</p>
+    </div>
 
+    <!-- Laundry Packages Section -->
+    <section id="laundry-packages" class="packages-section">
+      <h2 class="section-title">Choose Your Package</h2>
+      
+      <div class="packages-grid">
+        <div 
+          class="package-card" 
+          *ngFor="let package of laundryPackages; trackBy: trackByPackageId"
+          [class.popular]="package.popular"
+          [class.selected]="selectedPackage?.id === package.id"
+          (click)="selectPackage(package)">
+          
+          <!-- Popular Badge -->
+          <div class="popular-badge" *ngIf="package.popular">
+            <span>Most Popular</span>
+          </div>
+          
+          <!-- Package Image -->
+          <div class="package-image" *ngIf="package.image">
+            <img [src]="package.image" [alt]="package.name" loading="lazy">
+          </div>
+          
+          <!-- Package Content -->
+          <div class="package-content">
+            <div class="package-header">
+              <h3 class="package-name">{{ package.name }}</h3>
+              <p class="package-size">{{ package.size }} Package</p>
+            </div>
+            
+            <div class="package-details">
+              <div class="bag-info">
+                <span class="bag-count">{{ package.bagCount }}</span>
+                <span class="bag-text">{{ package.bagSize }} laundry bag{{ package.bagCount > 1 ? 's' : '' }}</span>
+              </div>
+              
+              <p class="ideal-for">Perfect for {{ package.idealFor }}</p>
+              <p class="time-saved">{{ package.timesSaved }}</p>
+              <p class="includes-delivery">Free Delivery</p>
+            </div>
+            
+            <div class="package-pricing">
+              <div class="price-container">
+                <span class="original-price" *ngIf="package.originalPrice">{{ package.currency }} {{ package.originalPrice | number }}</span>
+                <span class="current-price">{{ package.currency }} {{ package.price | number }}</span>
+              </div>
+              <div class="savings" *ngIf="package.originalPrice">
+                Save {{ package.currency }} {{ (package.originalPrice - package.price) | number }}
+              </div>
+            </div>
+            
+            <div class="package-features">
+              <h4>What's Included:</h4>
+              <ul>
+                <li *ngFor="let feature of package.features">
+                  <i class="check-icon" aria-hidden="true">✓</i>
+                  {{ feature }}
+                </li>
+              </ul>
+            </div>
+            
+            <button class="select-package-btn" [attr.aria-label]="'Select ' + package.name">
+              {{ selectedPackage?.id === package.id ? 'Selected' : 'Select Package' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Booking Form Section -->
+    <section id="booking-form" class="booking-form-section" *ngIf="showBookingForm && selectedPackage">
+      <div class="form-container">
+        <h2 class="section-title">Complete Your Booking</h2>
+        
+        <!-- Selected Package Summary -->
+        <div class="selected-package-summary">
+          <h3>Selected Package: {{ selectedPackage.name }}</h3>
+          <p>{{ selectedPackage.description }}</p>
+          <div class="package-price">
+            Base Price: {{ selectedPackage.currency }} {{ selectedPackage.price | number }}
+          </div>
+        </div>
+
+        <!-- Booking Form -->
+        <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-form">
+          
+          <!-- Customer Information -->
+          <div class="form-section">
+            <h4>Customer Information</h4>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="customerName">Full Name *</label>
+                <input 
+                  type="text" 
+                  id="customerName" 
+                  formControlName="customerName"
+                  [class.error]="isFieldInvalid('customerName')"
+                  placeholder="Enter your full name">
+                <div class="error-message" *ngIf="isFieldInvalid('customerName')">
+                  {{ getFieldError('customerName') }}
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input 
+                  type="tel" 
+                  id="phone" 
+                  formControlName="phone"
+                  [class.error]="isFieldInvalid('phone')"
+                  placeholder="+254 700 000 000">
+                <div class="error-message" *ngIf="isFieldInvalid('phone')">
+                  {{ getFieldError('phone') }}
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input 
+                type="email" 
+                id="email" 
+                formControlName="email"
+                [class.error]="isFieldInvalid('email')"
+                placeholder="your.email@example.com">
+              <div class="error-message" *ngIf="isFieldInvalid('email')">
+                {{ getFieldError('email') }}
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="address">Pickup Address *</label>
+              <textarea 
+                id="address" 
+                formControlName="address"
+                [class.error]="isFieldInvalid('address')"
+                placeholder="Enter your complete pickup address including building name, floor, and any special directions"
+                rows="3"></textarea>
+              <div class="error-message" *ngIf="isFieldInvalid('address')">
+                {{ getFieldError('address') }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Pickup Schedule -->
+          <div class="form-section">
+            <h4>Pickup Schedule</h4>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="pickupDate">Pickup Date *</label>
+                <input 
+                  type="date" 
+                  id="pickupDate" 
+                  formControlName="pickupDate"
+                  [min]="getMinDate()"
+                  [class.error]="isFieldInvalid('pickupDate')">
+                <div class="error-message" *ngIf="isFieldInvalid('pickupDate')">
+                  Please select a valid pickup date
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="pickupTime">Pickup Time *</label>
+                <select 
+                  id="pickupTime" 
+                  formControlName="pickupTime"
+                  [class.error]="isFieldInvalid('pickupTime')">
+                  <option value="">Select time slot</option>
+                  <option *ngFor="let slot of timeSlots" [value]="slot">{{ slot }}</option>
+                </select>
+                <div class="error-message" *ngIf="isFieldInvalid('pickupTime')">
+                  Please select a pickup time
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add-ons -->
+          <div class="form-section">
+            <h4>Additional Services (Optional)</h4>
+            
+            <div class="addons-grid">
+              <div class="addon-item" *ngFor="let addon of addons">
+                <label class="addon-checkbox">
+                  <input 
+                    type="checkbox" 
+                    [value]="addon.id"
+                    [checked]="bookingForm.get('addons')?.value?.includes(addon.id)"
+                    (change)="onAddonChange(addon.id, $event)">
+                  <span class="checkmark"></span>
+                  <div class="addon-details">
+                    <span class="addon-name">{{ addon.name }}</span>
+                    <span class="addon-price">+{{ selectedPackage.currency }} {{ addon.price | number }}</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Special Instructions -->
+          <div class="form-section">
+            <h4>Special Instructions (Optional)</h4>
+            <div class="form-group">
+              <textarea 
+                id="specialInstructions" 
+                formControlName="specialInstructions"
+                placeholder="Any special instructions for handling your laundry (e.g., delicate items, stain locations, preferred folding style)"
+                rows="3"></textarea>
+            </div>
+          </div>
+
+          <!-- Order Summary -->
+          <div class="order-summary">
+            <h4>Order Summary</h4>
+            <div class="summary-item">
+              <span>{{ selectedPackage.name }}</span>
+              <span>{{ selectedPackage.currency }} {{ selectedPackage.price | number }}</span>
+            </div>
+            
+            <div class="summary-item" *ngFor="let addonId of bookingForm.get('addons')?.value">
+              <ng-container *ngFor="let addon of addons">
+                <ng-container *ngIf="addon.id === addonId">
+                  <span>{{ addon.name }}</span>
+                  <span>{{ selectedPackage.currency }} {{ addon.price | number }}</span>
+                </ng-container>
+              </ng-container>
+            </div>
+            
+            <div class="summary-total">
+              <span>Total Amount:</span>
+              <span>{{ selectedPackage.currency }} {{ calculateTotal() | number }}</span>
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" (click)="resetForm()">
+              Cancel
+            </button>
+            <button type="submit" class="btn-primary" [disabled]="bookingForm.invalid">
+              Confirm Booking
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-choose-us">
+      <h2 class="section-title">Why Choose Smart Laundry?</h2>
+      
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <div class="benefit-icon">🚚</div>
+          <h3>Free Pickup & Delivery</h3>
+          <p>We come to you! Free pickup and delivery right to your doorstep.</p>
+        </div>
+        
+        <div class="benefit-item">
+          <div class="benefit-icon">⚡</div>
+          <h3>Same Day Service</h3>
+          <p>Need it fast? Get your laundry back the same day with our express service.</p>
+        </div>
+        
+        <div class="benefit-item">
+          <div class="benefit-icon">🌿</div>
+          <h3>Eco-Friendly</h3>
+          <p>We use environmentally safe detergents that are gentle on your clothes and the planet.</p>
+        </div>
+        
+        <div class="benefit-item">
+          <div class="benefit-icon">💯</div>
+          <h3>Quality Guarantee</h3>
+          <p>Not satisfied? We'll rewash your items for free or provide a full refund.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

@@ -1,24 +1,58 @@
- import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../services/auth/auth';
+import { Subscription } from 'rxjs';
+
+export interface Order {
+  id: string;
+  service: string;
+  date: string;
+  status: string;
+  statusClass: string;
+  total: string;
+}
 
 @Component({
   selector: 'app-client-dashboard',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './client-dashboard.html',
   styleUrls: ['./client-dashboard.scss']
 })
-export class ClientDashboardComponent {
+export class ClientDashboardComponent implements OnInit, OnDestroy {
   isMobileMenuOpen = false;
   notificationCount = 0;
   userName = 'User';
+  private userSubscription: Subscription = new Subscription();
 
   navItems = [
     { id: 'dashboard', text: 'Dashboard', icon: '📊', active: true },
-    { id: 'orders', text: 'Orders', icon: '📋', active: false },
-    { id: 'profile', text: 'Profile', icon: '👤', active: false },
-    { id: 'payments', text: 'Payments', icon: '💳', active: false }
+    { id: 'book-service', text: 'Book Service', icon: '🛒', active: false },
+    { id: 'order-tracking', text: 'Order Tracking', icon: '📱', active: false },
+    { id: 'order-history', text: 'Order History', icon: '📜', active: false },
+    { id: 'payments', text: 'Payments', icon: '💳', active: false },
+    { id: 'notifications', text: 'Notifications', icon: '🔔', active: false },
+    { id: 'profile', text: 'Profile', icon: '👤', active: false }
   ];
 
-  constructor(@Inject(Router) private router: Router) {}
+  orderTableData: Order[] = [];
+
+  constructor(@Inject(Router) private router: Router, private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.userSubscription = this.authService.getCurrentUser().subscribe(user => {
+      if (user && user.firstName && user.lastName) {
+        this.userName = `${user.firstName} ${user.lastName}`;
+      } else {
+        this.userName = 'User';
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.userSubscription.unsubscribe();
+  }
 
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
@@ -47,8 +81,34 @@ export class ClientDashboardComponent {
 
   navigateToPage(pageId: string): void {
     this.navItems.forEach(item => item.active = (item.id === pageId));
-    // Implement navigation logic here
-    console.log('Navigate to:', pageId);
+    let route = '';
+    switch(pageId) {
+      case 'dashboard':
+        route = '/client-dashboard';
+        break;
+      case 'book-service':
+        route = '/client-dashboard/book-service';
+        break;
+      case 'order-tracking':
+        route = '/client-dashboard/order-tracking';
+        break;
+      case 'order-history':
+        route = '/order-history';
+        break;
+      case 'payments':
+        route = '/payments';
+        break;
+      case 'notifications':
+        route = '/notifications';
+        break;
+      case 'profile':
+        route = '/profile';
+        break;
+      default:
+        route = '/client-dashboard';
+    }
+    this.router.navigate([route]);
+    console.log('Navigate to:', route);
   }
 
   openSupport(): void {
@@ -62,7 +122,6 @@ export class ClientDashboardComponent {
   }
 
   isLoading = false;
-  orderTableData = [];
   currentOrderProgress = {
     placed: { completed: false, time: '' },
     pickup: { completed: false, time: '' },

@@ -1,199 +1,140 @@
-// services.component.ts
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+
+export interface LaundryService {
+  id: number;
+  title: string;
+  description: string;
+  imageUrl?: string;
+  route?: string;
+  featured?: boolean;
+}
 
 @Component({
   selector: 'app-services',
   standalone: true,
   imports: [CommonModule],
-  templateUrl:  './services.html',
-  styleUrls: ['./services.scss'],
+  templateUrl: './services.html',
+  styleUrls: ['./services.scss']
 })
 export class ServicesComponent implements OnInit {
 
-  services = [
+  services: LaundryService[] = [
     {
-      image:'assets/images/wash-fold.jpg',
-      alt: 'Wash and Fold Service',
-      icon: 'fas fa-tshirt',
+      id: 1,
+      title: 'Premium Dry Cleaning',
+      description: 'At Smart Laundry, we know that understanding fabric is key to delivering a quality service. We use the latest technology and methods to ensure that every garment entrusted to us receives the care it deserves.',
+      route: '/services/premium-dry-cleaning',
+      featured: true,
+      imageUrl: 'assets/premium-laundry1.jpg'
+    },
+    {
+      id: 2,
+      title: 'Commercial Dry Cleaning',
+      description: 'Smart Laundry specializes in premium commercial dry cleaning. We\'ve worked with several companies including, Government agencies, banks, hotels, fitness centers and hair studios.',
+      route: '/services/commercial-dry-cleaning',
+      imageUrl: 'assets/commercial-dry-cleaning-2.jpg'
+    },
+    {
+      id: 3,
+      title: 'Pressing Services',
+      description: 'We offer quality laundry pressing & ironing services for all types of clothes with speedy pickup and delivery to your doorstep. With the help of the latest technology, we make sure to provide professional results.',
+      route: '/services/pressing-services',
+      imageUrl: 'assets/pressing-3.jpg'
+    },
+    {
+      id: 4,
+      title: 'Smart Repeat',
+      description: 'Smart Repeat is our monthly premium service allowing you to go about your daily living without a worry about laundry, we offer a wide range of options to choose from.',
+      route: '/services/smart-repeat',
+      featured: true,
+      imageUrl: 'assets/smart-repeat-4.jpg'
+    },
+    {
+      id: 5,
+      title: 'Free Pickup & Delivery',
+      description: 'Did you know that we offer free pickup and delivery? Enjoy stress-free dry cleaning and laundry service that works around your schedule.',
+      route: '/services/pickup-delivery',
+      imageUrl: 'assets/free-delivery-5.jpg'
+    },
+    {
+      id: 6,
       title: 'Wash & Fold',
-      description: 'Professional washing and folding service',
-      price: '$12.99',
-      priceUnit: 'per load',
-      features: [
-        'Same-day pickup and delivery',
-        'Eco-friendly detergents',
-        'Sorted by fabric type',
-        'Neatly folded and packaged',
-        'Stain pre-treatment included',
-        'Fresh scent or fragrance-free'
-      ]
+      description: 'This is the best service for your everyday laundry needs. Our Wash & Fold laundry service helps you to Save 4+ hours per week.',
+      route: '/services/wash-fold',
+      imageUrl: 'assets/wash-fold-6.jpg'
     },
     {
-      image:'assets/images/dry-cleaning.jpg',
-      alt: 'Dry Cleaning Service',
-      icon: 'fas fa-spray-can',
-      title: 'Dry Cleaning',
-      description: 'Expert dry cleaning for delicate garments',
-      price: '$8.99',
-      priceUnit: 'per item',
-      features: [
-        'Specialized stain removal',
-        'Gentle fabric care',
-        'Professional pressing',
-        'Protective garment bags',
-        'Wedding dress cleaning',
-        'Leather and suede care'
-      ]
+      id: 7,
+      title: 'Corporate Laundry',
+      description: 'Smart Laundry specializes in premium commercial dry cleaning. We\'ve worked with several companies including, Government agencies, banks, hotels, fitness centers.',
+      route: '/services/corporate-laundry',
+      imageUrl: 'assets/offcial-wear-washing.jpg'
     },
     {
-      image: 'assets/images/laundry-iron.jpg',
-      alt: 'Ironing Service',
-      icon: 'fas fa-iron',
-      title: 'Ironing Service',
-      description: 'Crisp ironing for shirts and formal wear',
-      price: '$3.99',
-      priceUnit: 'per item',
-      features: [
-        'Professional steam ironing',
-        'Wrinkle-free finish',
-        'Hanging or folded delivery',
-        'Quick turnaround time',
-        'Shirt pressing specialty',
-        'Uniform pressing available'
-      ]
+      id: 8,
+      title: 'Carpet & Rugs',
+      description: 'We offer quick and efficient carpet cleaning services. We use the best equipment and cleaning methods to restore the glossiness of your carpet or rug.',
+      route: '/services/carpet-rugs',
+      imageUrl:'assets/carpets.jpg'
+    },
+    {
+      id: 9,
+      title: 'Wedding Gown Cleaning',
+      description: 'Your wedding day is one of the most special moments of your life. Keeping your wedding dress clean and preserved is an important piece of cherishing the memories of your big day.',
+      route: '/services/wedding-gown',
+      imageUrl: 'assets/wedding-gown-10.jpg'
+    },
+    {
+      id: 10,
+      title: 'Leather & Suede Cleaning',
+      description: 'Besides our premium dry cleaning and laundry services, Smart Laundry provides unmatched leather cleaning & suede cleaning services.',
+      route: '/services/leather-suede',
+      imageUrl: 'assets/suede-leather-11.jpg'
+    },
+    {
+      id: 11,
+      title: 'Beddings & Duvets',
+      description: 'Washing your duvets and beddings can seem like a challenge or a time-consuming task. And will it even fit in the washer? Let us handle it for you.',
+      route: '/services/beddings-duvets',
+      imageUrl: 'assets/beddings-duvets-13.jpg'
+    },
+    {
+      id: 12,
+      title: 'Bulky Laundry',
+      description: 'From time to time, you may find yourself too busy to do your own laundry due to personal commitments or work-related arrangements. We\'re here to help.',
+      route: '/services/bulky-laundry',
+      imageUrl: 'assets/bulky-laundry-14.jpg'
+    },
+    {
+      id: 13,
+      title: 'Shoes',
+      description: 'Smart Laundry is proud to offer shoe cleaning services that will clean and restore your shoes so they look as good as new!',
+      route: '/services/shoes',
+      imageUrl: 'assets/shoes-14.jpg'
+    },
+    {
+      id: 14,
+      title: 'Curtains',
+      description: 'Your curtains represent the entire feel of a room. The material they are made from, the style and how they hang, and even the way they open affects the ambiance.',
+      route: '/services/curtains',
+      imageUrl: 'assets/curtains-16.jpg'
     }
   ];
 
-  additionalServices = [
-    {
-      icon: 'fas fa-clock',
-      title: 'Express Service',
-      description: 'Need it fast? Get your laundry back in 4 hours with our express service for urgent needs.',
-      price: '+$5.00'
-    },
-    {
-      icon: 'fas fa-shield-alt',
-      title: 'Premium Care',
-      description: 'Special handling for luxury items and delicate fabrics with extra attention and care.',
-      price: '+$3.00'
-    },
-    {
-      icon: 'fas fa-check-circle',
-      title: 'Stain Treatment',
-      description: 'Professional stain removal for tough spots, wine, grease, ink, and other difficult stains.',
-      price: '$2.99'
-    },
-    {
-      icon: 'fas fa-award',
-      title: 'Alterations',
-      description: 'Professional tailoring and alteration services including hemming, fitting, and repairs.',
-      price: 'From $15.00'
-    },
-    {
-      icon: 'fas fa-home',
-      title: 'Household Items',
-      description: 'Cleaning for bedding, curtains, comforters, pillows, and other household textiles.',
-      price: 'From $8.99'
-    },
-    {
-      icon: 'fas fa-shoe-prints',
-      title: 'Shoe Care',
-      description: 'Professional shoe cleaning and restoration services for leather, suede, and fabric shoes.',
-      price: 'From $12.99'
-    }
-  ];
-
-  processSteps = [
-    {
-      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-      alt: 'Sorting and Inspection',
-      number: '1',
-      title: 'Sorting & Inspection',
-      description: 'Every item is carefully sorted by fabric type, color, and care instructions. We inspect for stains and special requirements.'
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-      alt: 'Professional Washing',
-      number: '2',
-      title: 'Professional Washing',
-      description: 'State-of-the-art machines and eco-friendly detergents ensure thorough cleaning while protecting fabric integrity.'
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1521335752418-7b4eef3ffe45?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-      alt: 'Drying and Care',
-      number: '3',
-      title: 'Drying & Care',
-      description: 'Proper drying techniques preserve fabric quality. Delicate items receive special air-drying treatment.'
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-      alt: 'Folding and Packaging',
-      number: '4',
-      title: 'Folding & Packaging',
-      description: 'Expert folding and packaging ensures your clothes arrive fresh, wrinkle-free, and ready to wear.'
-    }
-  ];
-
-  serviceFeatures = [
-    {
-      icon: 'fas fa-check-circle',
-      title: 'Quality Assured',
-      description: 'Every item is carefully inspected before delivery to ensure the highest standards.'
-    },
-    {
-      icon: 'fas fa-clock',
-      title: 'On-Time Delivery',
-      description: 'We guarantee delivery within your chosen time window or your money back.'
-    },
-    {
-      icon: 'fas fa-shield-alt',
-      title: 'Damage Protection',
-      description: 'Full insurance coverage for complete peace of mind with every order.'
-    },
-    {
-      icon: 'fas fa-award',
-      title: 'Expert Care',
-      description: 'Trained professionals with years of experience handle your precious garments.'
-    },
-    {
-      icon: 'fas fa-leaf',
-      title: 'Eco-Friendly',
-      description: 'Environmentally safe cleaning products and energy-efficient processes.'
-    },
-    {
-      icon: 'fas fa-mobile-alt',
-      title: 'Easy Booking',
-      description: 'Simple online booking system with real-time tracking and notifications.'
-    }
-  ];
+  constructor() { }
 
   ngOnInit(): void {
-    this.setupAnimations();
   }
 
-  private setupAnimations(): void {
-    setTimeout(() => {
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      };
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      }, observerOptions);
-
-      document.querySelectorAll('.fade-in').forEach(el => {
-        observer.observe(el);
-      });
-    }, 100);
+  onServiceClick(service: LaundryService): void {
+    // Handle service click - navigate to service detail
+    console.log('Navigating to:', service.route);
+    // You can implement router navigation here
+    // this.router.navigate([service.route]);
   }
 
-  onServiceBook(service: any): void {
-    console.log('Service booking clicked:', service.title);
+  trackByFn(index: number, service: LaundryService): number {
+    return service.id;
   }
 }

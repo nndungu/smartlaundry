@@ -1,6 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, BehaviorSubject, map, from } from 'rxjs';
+import { Observable, BehaviorSubject, map, from, switchMap } from 'rxjs';
 import { User } from '../../models/auth/user.model';
+import { HttpClient } from '@angular/common/http';
+import { API_ENDPOINTS } from '../../core/constants/api-endpoints';
 
 import { Auth, authState, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from '@angular/fire/auth';
 
@@ -12,6 +14,7 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   private auth = inject(Auth);
+  private http = inject(HttpClient);
 
   register(email: string, password: string): Observable<any> {
     return from(createUserWithEmailAndPassword(this.auth, email, password));
@@ -27,14 +30,12 @@ export class AuthService {
 
   getCurrentUser(): Observable<User | null> {
     return authState(this.auth).pipe(
-      map(firebaseUser => {
+      switchMap(firebaseUser => {
         if (firebaseUser) {
-          return {
-            id: firebaseUser.uid,
-            email: firebaseUser.email,
-          } as User;
+          // Fetch full user profile from backend API
+          return this.http.get<User>(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.USER.PROFILE}`);
         }
-        return null;
+        return [null];
       })
     );
   }
