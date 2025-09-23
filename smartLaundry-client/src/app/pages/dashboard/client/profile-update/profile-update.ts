@@ -1,14 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CommonModule } from '@angular/common';
-import { Customer } from '../../../../models/customer.model';
-import { CustomerService } from '../../../../services/customer-profile.service';
+import { Subject, takeUntil } from 'rxjs';
+
+interface ProfileData {
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  address: {
+    streetAddress: string;
+    city: string;
+    zipCode: string;
+  };
+  profilePicture?: string;
+}
 
 @Component({
   selector: 'app-profile-update',
@@ -16,217 +27,239 @@ import { CustomerService } from '../../../../services/customer-profile.service';
   styleUrls: ['./profile-update.scss'],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatIconModule,
     MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
     MatProgressSpinnerModule
   ]
 })
-export class ProfileUpdateComponent implements OnInit {
-  profileForm: FormGroup;
-  customer: Customer | null = null;
-  originalData: Customer | null = null;
+export class ProfileUpdateComponent implements OnInit, OnDestroy {
+  profileForm!: FormGroup;
   isLoading = false;
   isSaving = false;
-  isUploading = false;
-  selectedFile: File | null = null;
-  avatarPreview: string | null = null;
-  customerId = '123'; // This would typically come from route params or auth service
+  hasUnsavedChanges = false;
+
+  // Profile picture management
+  currentProfilePicture = 'assets/home1.webp';
+  selectedImageFile: File | null = null;
+  imagePreview: string | null = null;
+  isUploadingImage = false;
+
+  private destroy$ = new Subject<void>();
+  private originalFormData: any;
 
   constructor(
     private fb: FormBuilder,
-    private customerService: CustomerService,
     private snackBar: MatSnackBar
   ) {
-    this.profileForm = this.createForm();
+    this.initializeForm();
   }
 
   ngOnInit(): void {
-    this.loadCustomerProfile();
+    this.loadProfileData();
   }
 
-  private createForm(): FormGroup {
-    return this.fb.group({
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private initializeForm(): void {
+    this.profileForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', [Validators.required, Validators.pattern(/^\+?[\d\s\-\(\)]{10,}$/)]],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^[\+]?[1-9][\d]{0,15}$/)]],
       address: this.fb.group({
-        street: ['', Validators.required],
-        city: ['', Validators.required],
+        streetAddress: ['', [Validators.required, Validators.minLength(5)]],
+        city: ['', [Validators.required, Validators.minLength(2)]],
         zipCode: ['', [Validators.required, Validators.pattern(/^\d{5}(-\d{4})?$/)]]
       })
     });
+
+    // Track form changes
+    this.profileForm.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.hasUnsavedChanges = this.hasFormChanged();
+      });
   }
 
-  private loadCustomerProfile(): void {
+  private hasFormChanged(): boolean {
+    if (!this.originalFormData) return false;
+    return JSON.stringify(this.profileForm.value) !== JSON.stringify(this.originalFormData);
+  }
+
+  private loadProfileData(): void {
     this.isLoading = true;
-    this.customerService.getCustomer(this.customerId).subscribe({
-      next: (customer: Customer) => {
-        this.customer = customer;
-        this.originalData = { ...customer };
-        this.populateForm(customer);
-        this.avatarPreview = customer.profilePictureUrl || 'assets/home1.webp';
-        this.isLoading = false;
-      },
-      error: (error: any) => {
-        console.error('Error loading customer profile:', error);
-        this.showErrorMessage('Failed to load profile data');
-        this.avatarPreview = 'assets/home1.webp';
-        this.isLoading = false;
-      }
-    });
-  }
 
-  private populateForm(customer: Customer): void {
-    this.profileForm.patchValue({
-      fullName: customer.fullName,
-      email: customer.email,
-      phoneNumber: customer.phoneNumber,
-      address: {
-        street: customer.address.street,
-        city: customer.address.city,
-        zipCode: customer.address.zipCode
-      }
-    });
-  }
-
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        this.showErrorMessage('File size must be less than 5MB');
-        return;
-      }
-
-      if (!file.type.startsWith('image/')) {
-        this.showErrorMessage('Please select a valid image file');
-        return;
-      }
-
-      this.selectedFile = file;
-      
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.avatarPreview = e.target.result;
+    // Simulate API call - replace with actual service call
+    setTimeout(() => {
+      const mockData: ProfileData = {
+        fullName: 'John Doe',
+        email: 'john.doe@example.com',
+        phoneNumber: '+1234567890',
+        address: {
+          streetAddress: '123 Main Street',
+          city: 'New York',
+          zipCode: '10001'
+        },
+        profilePicture: this.currentProfilePicture
       };
-      reader.readAsDataURL(file);
+
+      this.profileForm.patchValue(mockData);
+      this.originalFormData = this.profileForm.value;
+      this.isLoading = false;
+    }, 1500);
+  }
+
+  onImageSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.selectedImageFile = file;
+      this.generateImagePreview(file);
     }
   }
 
-  uploadProfilePicture(): void {
-    if (!this.selectedFile) return;
+  private generateImagePreview(file: File): void {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.imagePreview = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
 
-    this.isUploading = true;
-    this.customerService.uploadAvatar(this.customerId, this.selectedFile).subscribe({
-      next: (response: any) => {
-        this.avatarPreview = response.profilePictureUrl;
-        this.showSuccessMessage('Profile picture updated successfully');
-        this.selectedFile = null;
-        this.isUploading = false;
-      },
-      error: (error: any) => {
-        console.error('Error uploading avatar:', error);
-        this.showErrorMessage('Failed to upload profile picture');
-        this.isUploading = false;
-      }
-    });
+  confirmImageUpload(): void {
+    if (this.selectedImageFile && this.imagePreview) {
+      this.isUploadingImage = true;
+
+      // Simulate upload - replace with actual upload service
+      setTimeout(() => {
+        this.currentProfilePicture = this.imagePreview ?? this.currentProfilePicture;
+        this.selectedImageFile = null;
+        this.imagePreview = null;
+        this.isUploadingImage = false;
+        this.snackBar.open('Profile picture updated successfully!', 'Close', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      }, 2000);
+    }
+  }
+
+  cancelImageUpload(): void {
+    this.selectedImageFile = null;
+    this.imagePreview = null;
   }
 
   onSave(): void {
-    if (this.profileForm.invalid) {
-      this.markFormGroupTouched(this.profileForm);
-      this.showErrorMessage('Please fix the form errors before saving');
-      return;
+    if (this.profileForm.valid && this.hasUnsavedChanges) {
+      this.isSaving = true;
+
+      const formData = {
+        ...this.profileForm.value,
+        profilePicture: this.currentProfilePicture
+      };
+
+      // Simulate API call - replace with actual service call
+      setTimeout(() => {
+        this.originalFormData = this.profileForm.value;
+        this.hasUnsavedChanges = false;
+        this.isSaving = false;
+
+        this.snackBar.open('Profile updated successfully!', 'Close', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      }, 2000);
     }
-
-    this.isSaving = true;
-    const formData = this.profileForm.value;
-    
-    const updateData: Partial<Customer> = {
-      fullName: formData.fullName,
-      email: formData.email,
-      phoneNumber: formData.phoneNumber,
-      address: {
-        street: formData.address.street,
-        city: formData.address.city,
-        zipCode: formData.address.zipCode
-      }
-    };
-
-    this.customerService.updateCustomer(this.customerId, updateData).subscribe({
-      next: (updatedCustomer: Customer) => {
-        this.customer = updatedCustomer;
-        this.originalData = { ...updatedCustomer };
-        this.showSuccessMessage('Profile updated successfully');
-        this.isSaving = false;
-      },
-      error: (error: any) => {
-        console.error('Error updating profile:', error);
-        this.showErrorMessage('Failed to update profile');
-        this.isSaving = false;
-      }
-    });
   }
 
   onCancel(): void {
-    if (this.originalData) {
-      this.populateForm(this.originalData);
-      this.avatarPreview = this.originalData.profilePictureUrl || null;
-      this.selectedFile = null;
-      this.showSuccessMessage('Changes have been reset');
+    if (this.hasUnsavedChanges) {
+      this.profileForm.patchValue(this.originalFormData);
+      this.hasUnsavedChanges = false;
+      this.snackBar.open('Changes cancelled', 'Close', {
+        duration: 2000,
+        panelClass: ['info-snackbar']
+      });
     }
   }
 
-  triggerFileInput(): void {
-    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
-    fileInput?.click();
-  }
-
-  private markFormGroupTouched(formGroup: FormGroup): void {
-    Object.keys(formGroup.controls).forEach(key => {
-      const control = formGroup.get(key);
-      if (control instanceof FormGroup) {
-        this.markFormGroupTouched(control);
-      } else {
-        control?.markAsTouched();
-      }
-    });
-  }
-
-  private showSuccessMessage(message: string): void {
-    this.snackBar.open(message, 'Close', {
-      duration: 3000,
-      panelClass: ['success-snackbar']
-    });
-  }
-
-  private showErrorMessage(message: string): void {
-    this.snackBar.open(message, 'Close', {
-      duration: 5000,
-      panelClass: ['error-snackbar']
-    });
-  }
-
+  // Validation helper methods
   getFieldError(fieldName: string): string {
-    const field = this.profileForm.get(fieldName);
-    if (field?.errors && field.touched) {
-      if (field.errors['required']) return `${fieldName} is required`;
-      if (field.errors['email']) return 'Please enter a valid email';
-      if (field.errors['pattern']) return `Please enter a valid ${fieldName}`;
-      if (field.errors['minlength']) return `${fieldName} is too short`;
+    if (!fieldName) return '';
+
+    const field = this.getField(fieldName);
+    if (field?.hasError('required')) {
+      return `${this.getFieldLabel(fieldName)} is required`;
+    }
+    if (field?.hasError('email')) {
+      return 'Please enter a valid email address';
+    }
+    if (field?.hasError('minlength')) {
+      const minLength = field.errors?.['minlength']?.requiredLength;
+      return `${this.getFieldLabel(fieldName)} must be at least ${minLength} characters`;
+    }
+    if (field?.hasError('pattern')) {
+      if (fieldName === 'phoneNumber') {
+        return 'Please enter a valid phone number';
+      }
+      if (fieldName === 'zipCode') {
+        return 'Please enter a valid ZIP code';
+      }
     }
     return '';
   }
 
-  getAddressFieldError(fieldName: string): string {
-    const field = this.profileForm.get(`address.${fieldName}`);
-    if (field?.errors && field.touched) {
-      if (field.errors['required']) return `${fieldName} is required`;
-      if (field.errors['pattern']) return `Please enter a valid ${fieldName}`;
+  private getField(fieldName: string): AbstractControl | null {
+    if (fieldName.includes('.')) {
+      return this.profileForm.get(fieldName);
     }
-    return '';
+    return this.profileForm.get(fieldName);
+  }
+
+  private getFieldLabel(fieldName: string | null): string {
+    if (!fieldName) return '';
+
+    const labels: Record<string, string> = {
+      fullName: 'Full Name',
+      email: 'Email Address',
+      phoneNumber: 'Phone Number',
+      'address.streetAddress': 'Street Address',
+      'address.city': 'City',
+      'address.zipCode': 'ZIP Code'
+    };
+
+    if (labels.hasOwnProperty(fieldName)) {
+      return labels[fieldName];
+    }
+
+    // Fallback: capitalize first letter
+    if (fieldName.length === 0) return fieldName;
+    const firstChar = fieldName.charAt(0);
+    const rest = fieldName.slice(1);
+    return firstChar.toUpperCase() + rest;
+  }
+
+  // Template helper methods
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.getField(fieldName);
+    return !!(field && field.invalid && (field.dirty || field.touched));
+  }
+
+  get isFormValid(): boolean {
+    return this.profileForm.valid && this.hasUnsavedChanges;
+  }
+
+  get canCancel(): boolean {
+    return this.hasUnsavedChanges && !this.isSaving;
+  }
+
+  // Helper method to focus fields (for mobile interaction)
+  focusField(fieldName: string): void {
+    // This method can be used to programmatically focus fields
+    // For now, it's a placeholder for future implementation
+    console.log(`Focus field: ${fieldName}`);
   }
 }
