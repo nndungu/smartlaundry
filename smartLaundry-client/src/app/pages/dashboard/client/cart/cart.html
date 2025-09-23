@@ -1,0 +1,73 @@
+<div class="cart-container">
+  <div class="cart-header">
+    <h1 class="cart-title">Your Laundry Cart</h1>
+    <p class="cart-subtitle">Review your items before checkout</p>
+  </div>
+
+  <div class="cart-content" *ngIf="cartItems.length > 0; else emptyCart">
+    <!-- Cart Items -->
+    <div class="cart-items">
+      <div class="cart-item" *ngFor="let item of cartItems">
+        <div class="item-info">
+          <h3 class="item-name">{{ item.name }}</h3>
+          <p class="item-service">{{ item.service }}</p>
+          <p class="item-price">KSh {{ item.price | number }} each</p>
+        </div>
+
+        <div class="item-controls">
+          <div class="quantity-controls">
+            <button class="quantity-btn" (click)="updateQuantity(item, item.quantity - 1)" [disabled]="item.quantity <= 1">-</button>
+            <span class="quantity">{{ item.quantity }}</span>
+            <button class="quantity-btn" (click)="updateQuantity(item, item.quantity + 1)">+</button>
+          </div>
+
+          <div class="item-total">
+            <span class="total-amount">KSh {{ (item.price * item.quantity) | number }}</span>
+          </div>
+
+          <button class="remove-btn" (click)="removeItem(item)" title="Remove item">
+            🗑️
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="cart-summary">
+      <div class="summary-row">
+        <span class="summary-label">Subtotal:</span>
+        <span class="summary-value">KSh {{ cartTotal | number }}</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Delivery Fee:</span>
+        <span class="summary-value">KSh 0</span>
+      </div>
+      <div class="summary-row total-row">
+        <span class="summary-label">Total:</span>
+        <span class="summary-value">KSh {{ cartTotal | number }}</span>
+      </div>
+    </div>
+
+    <!-- Cart Actions -->
+    <div class="cart-actions">
+      <button class="btn-secondary" (click)="continueShopping()">
+        Continue Shopping
+      </button>
+      <button class="btn-primary" (click)="proceedToCheckout()">
+        Proceed to Checkout
+      </button>
+    </div>
+  </div>
+
+  <!-- Empty Cart State -->
+  <ng-template #emptyCart>
+    <div class="empty-cart">
+      <div class="empty-cart-icon">🛒</div>
+      <h2 class="empty-cart-title">Your cart is empty</h2>
+      <p class="empty-cart-message">Add some laundry services to get started!</p>
+      <button class="btn-primary" (click)="continueShopping()">
+        Start Shopping
+      </button>
+    </div>
+  </ng-template>
+</div>
