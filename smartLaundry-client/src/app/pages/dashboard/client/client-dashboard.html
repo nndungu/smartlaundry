@@ -1,181 +1,124 @@
-<div class="dashboard-container">
-    <!-- Sidebar Navigation -->
-    <nav class="sidebar" [class.mobile-open]="isMobileMenuOpen">
-        <div class="logo">SmartLaundry</div>
-        <ul class="nav-menu">
-            <li
-                *ngFor="let item of navItems"
-                class="nav-item"
-                [class.active]="item.active"
-                (click)="navigateToPage(item.id)">
-                <span class="nav-icon">{{ item.icon }}</span>
-                <span class="nav-text">{{ item.text }}</span>
-            </li>
-        </ul>
-    </nav>
-
-    <!-- Main Content Area -->
-    <main class="main-content">
-        <!-- Header -->
-        <header class="dashboard-header">
-            <div class="search-container">
-                <div class="search-bar">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" placeholder="Search orders, services..." class="search-input" (input)="handleSearch($event)">
-                </div>
-            </div>
-            <div class="header-actions">
-                <button class="icon-btn" (click)="openNotifications()" title="Notifications">
-                    🔔
-                    <span class="notification-badge">{{ notificationCount }}</span>
-                </button>
-                <button class="icon-btn" (click)="openProfile()" title="Profile">
-                    👤
-                </button>
-            </div>
-        </header>
-
-        <!-- Welcome Section with Dynamic Name -->
-        <section class="welcome-section">
-            <div class="welcome-content">
-                <h1 class="welcome-title">Welcome Back, {{ userName }} 👋</h1>
-                <p class="welcome-subtitle">Here's an overview of your laundry activity and current orders.</p>
-                
-            </div>
-        </section>
-
-        <!-- Order Tracking Section -->
-        <section class="tracking-section">
-            <div class="section-header">
-                <h2 class="section-title">Current Order Status</h2>
-            </div>
-            <div class="progress-tracker">
-                <div class="progress-step" [class.completed]="currentOrderProgress.placed.completed">
-                    <div class="progress-circle">
-                        <span class="progress-icon">✓</span>
-                    </div>
-                    <div class="progress-line" [class.completed]="currentOrderProgress.placed.completed"></div>
-                    <div class="step-info">
-                        <span class="progress-label">Order Placed</span>
-                        <span class="progress-time">{{ currentOrderProgress.placed.time }}</span>
-                    </div>
-                </div>
-                <div class="progress-step" [class.completed]="currentOrderProgress.pickup.completed">
-                    <div class="progress-circle">
-                        <span class="progress-icon">✓</span>
-                    </div>
-                    <div class="progress-line" [class.completed]="currentOrderProgress.pickup.completed"></div>
-                    <div class="step-info">
-                        <span class="progress-label">Picked Up</span>
-                        <span class="progress-time">{{ currentOrderProgress.pickup.time }}</span>
-                    </div>
-                </div>
-                <div class="progress-step" [class.active]="currentOrderProgress.cleaning.active" [class.completed]="currentOrderProgress.cleaning.completed">
-                    <div class="progress-circle">
-                        <span class="progress-icon">🧽</span>
-                    </div>
-                    <div class="progress-line" [class.completed]="currentOrderProgress.cleaning.completed"></div>
-                    <div class="step-info">
-                        <span class="progress-label">Cleaning</span>
-                        <span class="progress-time">{{ currentOrderProgress.cleaning.time }}</span>
-                    </div>
-                </div>
-                <div class="progress-step" [class.active]="currentOrderProgress.delivery.active" [class.completed]="currentOrderProgress.delivery.completed">
-                    <div class="progress-circle">
-                        <span class="progress-icon">🚚</span>
-                    </div>
-                    <div class="progress-line" [class.completed]="currentOrderProgress.delivery.completed"></div>
-                    <div class="step-info">
-                        <span class="progress-label">Delivery</span>
-                        <span class="progress-time">{{ currentOrderProgress.delivery.time }}</span>
-                    </div>
-                </div>
-                <div class="progress-step" [class.completed]="currentOrderProgress.completed.completed">
-                    <div class="progress-circle">
-                        <span class="progress-icon">✅</span>
-                    </div>
-                    <div class="step-info">
-                        <span class="progress-label">Completed</span>
-                        <span class="progress-time">{{ currentOrderProgress.completed.time }}</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Order History Section -->
-        <section class="history-section">
-            <div class="section-header">
-                <h2 class="section-title">Recent Order History</h2>
-                <button class="btn-secondary" (click)="navigateToPage('order-history')">View All</button>
-            </div>
-            <div class="table-container">
-                <table class="order-table">
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Service Type</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Total Amount</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let order of orderTableData" class="order-row">
-                            <td>{{ order.id }}</td>
-                            <td>{{ order.service }}</td>
-                            <td>{{ order.date }}</td>
-                            <td><span class="status-badge" [class]="order.statusClass">{{ order.status }}</span></td>
-                            <td>{{ order.total }}</td>
-                            <td>
-                                <button class="btn-link" (click)="viewOrderDetails(order.id)">View</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- Quick Actions Section -->
-        <section class="quick-actions-section">
-            <h2 class="section-title">Quick Actions</h2>
-            <div class="quick-actions-grid">
-                <button class="quick-action-btn new-order" (click)="navigateToPage('book-service')">
-                    <span class="action-icon">➕</span>
-                    <span class="action-text">New Order</span>
-                </button>
-                <button class="quick-action-btn track-order" (click)="navigateToPage('order-tracking')">
-                    <span class="action-icon">📱</span>
-                    <span class="action-text">Track Order</span>
-                </button>
-                <button class="quick-action-btn support" (click)="openSupport()">
-                    <span class="action-icon">💬</span>
-                    <span class="action-text">Support</span>
-                </button>
-                <button class="quick-action-btn view-pricing" (click)="navigateToPage('prices')">
-                    <span class="action-icon">💰</span>
-                    <span class="action-text">View Pricing</span>
-                </button>
-            </div>
-        </section>
-    </main>
-</div>
-
-<!-- Loading Overlay -->
-<div class="loading-overlay" *ngIf="isLoading">
-    <div class="loading-spinner"></div>
-    <p>Loading your dashboard...</p>
-</div>
-
-<!-- Order Details Modal -->
-<div class="modal-overlay" id="orderModal" *ngIf="false">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 id="modalTitle">Order Details</h3>
-            <button class="modal-close" (click)="closeModal()">×</button>
-        </div>
-        <div class="modal-body" id="modalBody">
-            <!-- Order details will be populated here -->
-        </div>
+<div class="dashboard-content">
+  <!-- Welcome Section with Dynamic Name -->
+  <section class="welcome-section">
+    <div class="welcome-content">
+      <h1 class="welcome-title">Welcome Back, {{ userName }} 👋</h1>
+      <p class="welcome-subtitle">Here's an overview of your laundry activity and current orders.</p>
     </div>
+  </section>
+
+  <!-- Order Tracking Section -->
+  <section class="tracking-section">
+    <div class="section-header">
+      <h2 class="section-title">Current Order Status</h2>
+    </div>
+    <div class="progress-tracker">
+      <div class="progress-step" [class.completed]="currentOrderProgress.placed.completed">
+        <div class="progress-circle">
+          <span class="progress-icon">✓</span>
+        </div>
+        <div class="progress-line" [class.completed]="currentOrderProgress.placed.completed"></div>
+        <div class="step-info">
+          <span class="progress-label">Order Placed</span>
+          <span class="progress-time">{{ currentOrderProgress.placed.time }}</span>
+        </div>
+      </div>
+      <div class="progress-step" [class.completed]="currentOrderProgress.pickup.completed">
+        <div class="progress-circle">
+          <span class="progress-icon">✓</span>
+        </div>
+        <div class="progress-line" [class.completed]="currentOrderProgress.pickup.completed"></div>
+        <div class="step-info">
+          <span class="progress-label">Picked Up</span>
+          <span class="progress-time">{{ currentOrderProgress.pickup.time }}</span>
+        </div>
+      </div>
+      <div class="progress-step" [class.active]="currentOrderProgress.cleaning.active" [class.completed]="currentOrderProgress.cleaning.completed">
+        <div class="progress-circle">
+          <span class="progress-icon">🧽</span>
+        </div>
+        <div class="progress-line" [class.completed]="currentOrderProgress.cleaning.completed"></div>
+        <div class="step-info">
+          <span class="progress-label">Cleaning</span>
+          <span class="progress-time">{{ currentOrderProgress.cleaning.time }}</span>
+        </div>
+      </div>
+      <div class="progress-step" [class.active]="currentOrderProgress.delivery.active" [class.completed]="currentOrderProgress.delivery.completed">
+        <div class="progress-circle">
+          <span class="progress-icon">🚚</span>
+        </div>
+        <div class="progress-line" [class.completed]="currentOrderProgress.delivery.completed"></div>
+        <div class="step-info">
+          <span class="progress-label">Delivery</span>
+          <span class="progress-time">{{ currentOrderProgress.delivery.time }}</span>
+        </div>
+      </div>
+      <div class="progress-step" [class.completed]="currentOrderProgress.completed.completed">
+        <div class="progress-circle">
+          <span class="progress-icon">✅</span>
+        </div>
+        <div class="step-info">
+          <span class="progress-label">Completed</span>
+          <span class="progress-time">{{ currentOrderProgress.completed.time }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Order History Section -->
+  <section class="history-section">
+    <div class="section-header">
+      <h2 class="section-title">Recent Order History</h2>
+      <button class="btn-secondary">View All</button>
+    </div>
+    <div class="table-container">
+      <table class="order-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Service Type</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Total Amount</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orderTableData" class="order-row">
+            <td>{{ order.id }}</td>
+            <td>{{ order.service }}</td>
+            <td>{{ order.date }}</td>
+            <td><span class="status-badge" [class]="order.statusClass">{{ order.status }}</span></td>
+            <td>{{ order.total }}</td>
+            <td>
+              <button class="btn-link" (click)="viewOrderDetails(order.id)">View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Quick Actions Section -->
+  <section class="quick-actions-section">
+    <h2 class="section-title">Quick Actions</h2>
+    <div class="quick-actions-grid">
+      <button class="quick-action-btn new-order">
+        <span class="action-icon">➕</span>
+        <span class="action-text">New Order</span>
+      </button>
+      <button class="quick-action-btn track-order">
+        <span class="action-icon">📱</span>
+        <span class="action-text">Track Order</span>
+      </button>
+      <button class="quick-action-btn support" (click)="openSupport()">
+        <span class="action-icon">💬</span>
+        <span class="action-text">Support</span>
+      </button>
+      <button class="quick-action-btn view-pricing">
+        <span class="action-icon">💰</span>
+        <span class="action-text">View Pricing</span>
+      </button>
+    </div>
+  </section>
 </div>

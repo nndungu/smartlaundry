@@ -15,15 +15,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   // Hero Slider Properties
   heroImages = [
     {
-      url: '/assets/images/hero.4.jpg',
+      url: '/assets/home1.1.png',
       alt: 'Premium laundry service - Professional cleaning'
     },
     {
-      url: '/assets/images/hero.5.jpg', 
+      url: '/assets/home1.webp',
       alt: 'Pickup and delivery service - Convenient laundry'
     },
     {
-      url: '/assets/images/hero.6.jpg',
+      url: '/assets/home3.jpeg',
       alt: 'Fresh clean clothes - Quality guaranteed'
     }
   ];

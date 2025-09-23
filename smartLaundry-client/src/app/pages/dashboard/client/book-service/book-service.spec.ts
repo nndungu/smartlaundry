@@ -1,28 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { DebugElement } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
 
-import { BookServiceComponent, LaundryPackage, BookingFormData } from './book-service';
+import { BookingServiceComponent } from './booking-service.component';
 
-describe('BookServiceComponent', () => {
-  let component: BookServiceComponent;
-  let fixture: ComponentFixture<BookServiceComponent>;
-  let debugElement: DebugElement;
-  let formBuilder: FormBuilder;
+describe('BookingServiceComponent', () => {
+  let component: BookingServiceComponent;
+  let fixture: ComponentFixture<BookingServiceComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookServiceComponent],
-      imports: [ReactiveFormsModule],
-      providers: [FormBuilder]
+      declarations: [ BookingServiceComponent ],
+      imports: [ ReactiveFormsModule ]
     })
-      .compileComponents();
+    .compileComponents();
 
-    fixture = TestBed.createComponent(BookServiceComponent);
+    fixture = TestBed.createComponent(BookingServiceComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-    formBuilder = TestBed.inject(FormBuilder);
     fixture.detectChanges();
   });
 
@@ -30,536 +25,467 @@ describe('BookServiceComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize with 4 laundry packages', () => {
-    expect(component.laundryPackages).toBeDefined();
-    expect(component.laundryPackages.length).toBe(4);
+  describe('Component Initialization', () => {
+    it('should initialize with default values', () => {
+      expect(component.currentPage).toBe(1);
+      expect(component.itemsPerPage).toBe(16);
+      expect(component.totalItems).toBe(39);
+      expect(component.showBookingForm).toBeFalsy();
+      expect(component.selectedPackage).toBeNull();
+      expect(component.cartItems).toEqual([]);
+    });
+
+    it('should initialize form with proper structure', () => {
+      expect(component.bookingForm).toBeDefined();
+      expect(component.bookingForm.get('customerName')).toBeDefined();
+      expect(component.bookingForm.get('phone')).toBeDefined();
+      expect(component.bookingForm.get('email')).toBeDefined();
+      expect(component.bookingForm.get('address')).toBeDefined();
+      expect(component.bookingForm.get('pickupDate')).toBeDefined();
+      expect(component.bookingForm.get('pickupTime')).toBeDefined();
+      expect(component.bookingForm.get('addons')).toBeDefined();
+      expect(component.bookingForm.get('specialInstructions')).toBeDefined();
+    });
+
+    it('should initialize data arrays', () => {
+      expect(component.laundryPackages.length).toBeGreaterThan(0);
+      expect(component.laundryItems.length).toBeGreaterThan(0);
+      expect(component.addons.length).toBeGreaterThan(0);
+      expect(component.timeSlots.length).toBeGreaterThan(0);
+    });
   });
 
-  it('should have correct package structure', () => {
-    const firstPackage = component.laundryPackages[0];
-    expect(firstPackage).toHaveProperty('id');
-    expect(firstPackage).toHaveProperty('name');
-    expect(firstPackage).toHaveProperty('price');
-    expect(firstPackage).toHaveProperty('features');
-    expect(firstPackage).toHaveProperty('bagCount');
+  describe('Package Selection', () => {
+    it('should select a package', () => {
+      const testPackage = component.laundryPackages[0];
+      component.selectPackage(testPackage);
+
+      expect(component.selectedPackage).toBe(testPackage);
+      expect(component.showBookingForm).toBeTruthy();
+    });
+
+    it('should track packages by id', () => {
+      const testPackage = component.laundryPackages[0];
+      const result = component.trackByPackageId(0, testPackage);
+      expect(result).toBe(testPackage.id);
+    });
   });
 
-  it('should initialize reactive form on ngOnInit', () => {
-    component.ngOnInit();
-    expect(component.bookingForm).toBeDefined();
-    expect(component.bookingForm.get('customerName')).toBeTruthy();
-    expect(component.bookingForm.get('email')).toBeTruthy();
-    expect(component.bookingForm.get('phone')).toBeTruthy();
-    expect(component.bookingForm.get('address')).toBeTruthy();
-  });
+  describe('Pagination', () => {
+    it('should calculate total pages correctly', () => {
+      const expectedPages = Math.ceil(component.totalItems / component.itemsPerPage);
+      expect(component.totalPages).toBe(expectedPages);
+    });
 
-  it('should render page title and subtitle', () => {
-    const titleElement = debugElement.query(By.css('.page-title'));
-    const subtitleElement = debugElement.query(By.css('.page-subtitle'));
-    
-    expect(titleElement).toBeTruthy();
-    expect(titleElement.nativeElement.textContent.trim()).toBe('Book Your Laundry Service');
-    expect(subtitleElement).toBeTruthy();
-  });
+    it('should get current page items', () => {
+      component.currentPage = 1;
+      const items = component.getCurrentPageItems();
+      expect(items.length).toBeLessThanOrEqual(component.itemsPerPage);
+    });
 
-  it('should render all laundry packages', () => {
-    const packageCards = debugElement.queryAll(By.css('.package-card'));
-    expect(packageCards.length).toBe(component.laundryPackages.length);
-  });
-
-  it('should mark popular package correctly', () => {
-    const popularPackages = component.laundryPackages.filter(pkg => pkg.popular);
-    const popularCards = debugElement.queryAll(By.css('.package-card.popular'));
-    
-    expect(popularCards.length).toBe(popularPackages.length);
-    
-    if (popularCards.length > 0) {
-      const popularBadge = popularCards[0].query(By.css('.popular-badge'));
-      expect(popularBadge).toBeTruthy();
-      expect(popularBadge.nativeElement.textContent.trim()).toBe('Most Popular');
-    }
-  });
-
-  it('should display package details correctly', () => {
-    const packageCards = debugElement.queryAll(By.css('.package-card'));
-    
-    packageCards.forEach((card, index) => {
-      const package = component.laundryPackages[index];
+    it('should calculate start index correctly', () => {
+      component.currentPage = 1;
+      expect(component.getStartIndex()).toBe(1);
       
-      const nameElement = card.query(By.css('.package-name'));
-      const priceElement = card.query(By.css('.current-price'));
-      const bagCountElement = card.query(By.css('.bag-count'));
-      
-      expect(nameElement.nativeElement.textContent.trim()).toBe(package.name);
-      expect(priceElement.nativeElement.textContent).toContain(package.price.toString());
-      expect(bagCountElement.nativeElement.textContent.trim()).toBe(package.bagCount.toString());
+      component.currentPage = 2;
+      expect(component.getStartIndex()).toBe(17);
+    });
+
+    it('should calculate end index correctly', () => {
+      component.currentPage = 1;
+      const endIndex = component.getEndIndex();
+      expect(endIndex).toBe(Math.min(16, component.totalItems));
+    });
+
+    it('should navigate to valid pages', () => {
+      component.goToPage(2);
+      expect(component.currentPage).toBe(2);
+
+      // Should not navigate to invalid pages
+      component.goToPage(0);
+      expect(component.currentPage).toBe(2);
+
+      component.goToPage(component.totalPages + 1);
+      expect(component.currentPage).toBe(2);
+    });
+
+    it('should show start ellipsis when needed', () => {
+      component.currentPage = 5;
+      expect(component.showStartEllipsis()).toBeTruthy();
+
+      component.currentPage = 2;
+      expect(component.showStartEllipsis()).toBeFalsy();
+    });
+
+    it('should show end ellipsis when needed', () => {
+      component.currentPage = 1;
+      expect(component.showEndEllipsis()).toBeTruthy();
+
+      component.currentPage = component.totalPages - 1;
+      expect(component.showEndEllipsis()).toBeFalsy();
     });
   });
 
-  it('should select package when clicked', () => {
-    const firstPackageCard = debugElement.query(By.css('.package-card'));
-    const expectedPackage = component.laundryPackages[0];
-    
-    firstPackageCard.nativeElement.click();
-    fixture.detectChanges();
-    
-    expect(component.selectedPackage).toEqual(expectedPackage);
-    expect(component.showBookingForm).toBe(true);
-    expect(component.bookingForm.get('packageId')?.value).toBe(expectedPackage.id);
-  });
+  describe('Cart Management', () => {
+    let testItem: any;
 
-  it('should show booking form when package is selected', () => {
-    // Initially form should be hidden
-    let bookingFormSection = debugElement.query(By.css('.booking-form-section'));
-    expect(bookingFormSection).toBeFalsy();
-    
-    // Select a package
-    component.selectPackage(component.laundryPackages[0]);
-    fixture.detectChanges();
-    
-    bookingFormSection = debugElement.query(By.css('.booking-form-section'));
-    expect(bookingFormSection).toBeTruthy();
-  });
-
-  it('should validate required form fields', () => {
-    component.selectPackage(component.laundryPackages[0]);
-    fixture.detectChanges();
-    
-    // Try to submit empty form
-    component.onSubmit();
-    
-    expect(component.bookingForm.valid).toBe(false);
-    expect(component.bookingForm.get('customerName')?.errors?.['required']).toBe(true);
-    expect(component.bookingForm.get('email')?.errors?.['required']).toBe(true);
-    expect(component.bookingForm.get('phone')?.errors?.['required']).toBe(true);
-    expect(component.bookingForm.get('address')?.errors?.['required']).toBe(true);
-  });
-
-  it('should validate email format', () => {
-    component.selectPackage(component.laundryPackages[0]);
-    
-    const emailControl = component.bookingForm.get('email');
-    emailControl?.setValue('invalid-email');
-    emailControl?.markAsTouched();
-    
-    expect(emailControl?.errors?.['email']).toBe(true);
-    expect(component.isFieldInvalid('email')).toBe(true);
-    
-    emailControl?.setValue('valid@example.com');
-    expect(emailControl?.errors).toBeNull();
-  });
-
-  it('should validate phone number pattern', () => {
-    component.selectPackage(component.laundryPackages[0]);
-    
-    const phoneControl = component.bookingForm.get('phone');
-    phoneControl?.setValue('123');
-    phoneControl?.markAsTouched();
-    
-    expect(phoneControl?.errors?.['pattern']).toBe(true);
-    expect(component.isFieldInvalid('phone')).toBe(true);
-    
-    phoneControl?.setValue('+254700123456');
-    expect(phoneControl?.errors).toBeNull();
-  });
-
-  it('should handle addon selection', () => {
-    component.selectPackage(component.laundryPackages[0]);
-    
-    const mockEvent = {
-      target: { checked: true }
-    } as unknown as Event;
-    
-    component.onAddonChange('express', mockEvent);
-    
-    const addons = component.bookingForm.get('addons')?.value;
-    expect(addons).toContain('express');
-  });
-
-  it('should handle addon deselection', () => {
-    component.selectPackage(component.laundryPackages[0]);
-    
-    // First select addon
-    let mockEvent = {
-      target: { checked: true }
-    } as unknown as Event;
-    
-    component.onAddonChange('express', mockEvent);
-    
-    // Then deselect it
-    mockEvent = {
-      target: { checked: false }
-    } as unknown as Event;
-    
-    component.onAddonChange('express', mockEvent);
-    
-    const addons = component.bookingForm.get('addons')?.value;
-    expect(addons).not.toContain('express');
-  });
-
-  it('should calculate total price correctly', () => {
-    component.selectPackage(component.laundryPackages[0]);
-    const basePrice = component.selectedPackage!.price;
-    
-    // Without addons
-    expect(component.calculateTotal()).toBe(basePrice);
-    
-    // With addons
-    const mockEvent = {
-      target: { checked: true }
-    } as unknown as Event;
-    
-    component.onAddonChange('express', mockEvent);
-    
-    const expressAddon = component.addons.find(a => a.id === 'express');
-    const expectedTotal = basePrice + (expressAddon?.price || 0);
-    
-    expect(component.calculateTotal()).toBe(expectedTotal);
-  });
-
-  it('should return minimum date as tomorrow', () => {
-    const minDate = component.getMinDate();
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const expectedDate = tomorrow.toISOString().split('T')[0];
-    
-    expect(minDate).toBe(expectedDate);
-  });
-
-  it('should reset form and selections', () => {
-    // Select package and fill form
-    component.selectPackage(component.laundryPackages[0]);
-    component.bookingForm.patchValue({
-      customerName: 'John Doe',
-      email: 'john@example.com'
-    });
-    
-    // Reset
-    component.resetForm();
-    
-    expect(component.selectedPackage).toBeNull();
-    expect(component.showBookingForm).toBe(false);
-    expect(component.bookingForm.get('customerName')?.value).toBeNull();
-  });
-
-  it('should process booking with valid form data', () => {
-    spyOn(component, 'processBooking' as any);
-    spyOn(window, 'alert');
-    
-    // Select package and fill valid form data
-    component.selectPackage(component.laundryPackages[0]);
-    component.bookingForm.patchValue({
-      customerName: 'John Doe',
-      email: 'john@example.com',
-      phone: '+254700123456',
-      address: '123 Test Street, Nairobi',
-      pickupDate: '2024-12-25',
-      pickupTime: '10:00 AM - 12:00 PM'
-    });
-    
-    component.onSubmit();
-    
-    expect(component['processBooking']).toHaveBeenCalled();
-  });
-
-  it('should provide correct error messages', () => {
-    component.selectPackage(component.laundryPackages[0]);
-    
-    const customerNameControl = component.bookingForm.get('customerName');
-    customerNameControl?.setValue('');
-    customerNameControl?.markAsTouched();
-    
-    expect(component.getFieldError('customerName')).toBe('customerName is required');
-    
-    const emailControl = component.bookingForm.get('email');
-    emailControl?.setValue('invalid-email');
-    emailControl?.markAsTouched();
-    
-    expect(component.getFieldError('email')).toBe('Please enter a valid email');
-  });
-
-  it('should render time slots correctly', () => {
-    component.selectPackage(component.laundryPackages[0]);
-    fixture.detectChanges();
-    
-    const timeSelect = debugElement.query(By.css('#pickupTime'));
-    const options = timeSelect.queryAll(By.css('option'));
-    
-    // +1 for the default "Select time slot" option
-    expect(options.length).toBe(component.timeSlots.length + 1);
-  });
-
-  it('should render addons correctly', () => {
-    component.selectPackage(component.laundryPackages[0]);
-    fixture.detectChanges();
-    
-    const addonItems = debugElement.queryAll(By.css('.addon-item'));
-    expect(addonItems.length).toBe(component.addons.length);
-    
-    addonItems.forEach((item, index) => {
-      const addon = component.addons[index];
-      const addonName = item.query(By.css('.addon-name'));
-      const addonPrice = item.query(By.css('.addon-price'));
-      
-      expect(addonName.nativeElement.textContent.trim()).toBe(addon.name);
-      expect(addonPrice.nativeElement.textContent).toContain(addon.price.toString());
-    });
-  });
-
-  it('should render benefits section correctly', () => {
-    const benefitsSection = debugElement.query(By.css('.why-choose-us'));
-    expect(benefitsSection).toBeTruthy();
-    
-    const benefitItems = debugElement.queryAll(By.css('.benefit-item'));
-    expect(benefitItems.length).toBe(4); // Should have 4 benefits
-    
-    const expectedBenefits = [
-      'Free Pickup & Delivery',
-      'Same Day Service', 
-      'Eco-Friendly',
-      'Quality Guarantee'
-    ];
-    
-    benefitItems.forEach((item, index) => {
-      const titleElement = item.query(By.css('h3'));
-      expect(titleElement.nativeElement.textContent.trim()).toBe(expectedBenefits[index]);
-    });
-  });
-
-  it('should display selected package summary when booking form is shown', () => {
-    component.selectPackage(component.laundryPackages[1]); // Select couple package
-    fixture.detectChanges();
-    
-    const packageSummary = debugElement.query(By.css('.selected-package-summary'));
-    expect(packageSummary).toBeTruthy();
-    
-    const summaryTitle = packageSummary.query(By.css('h3'));
-    expect(summaryTitle.nativeElement.textContent).toContain('Couple Package');
-    
-    const packagePrice = packageSummary.query(By.css('.package-price'));
-    expect(packagePrice.nativeElement.textContent).toContain('1500');
-  });
-
-  it('should track packages by ID', () => {
-    const testPackage = component.laundryPackages[0];
-    const result = component.trackByPackageId(0, testPackage);
-    expect(result).toBe(testPackage.id);
-  });
-
-  it('should validate minimum length for customer name', () => {
-    component.selectPackage(component.laundryPackages[0]);
-    
-    const nameControl = component.bookingForm.get('customerName');
-    nameControl?.setValue('A'); // Too short
-    nameControl?.markAsTouched();
-    
-    expect(nameControl?.errors?.['minlength']).toBeTruthy();
-    expect(component.isFieldInvalid('customerName')).toBe(true);
-  });
-
-  it('should validate minimum length for address', () => {
-    component.selectPackage(component.laundryPackages[0]);
-    
-    const addressControl = component.bookingForm.get('address');
-    addressControl?.setValue('123'); // Too short
-    addressControl?.markAsTouched();
-    
-    expect(addressControl?.errors?.['minlength']).toBeTruthy();
-    expect(component.isFieldInvalid('address')).toBe(true);
-  });
-
-  it('should show order summary with selected addons', () => {
-    component.selectPackage(component.laundryPackages[0]);
-    fixture.detectChanges();
-    
-    // Add some addons
-    const mockEvent = { target: { checked: true } } as unknown as Event;
-    component.onAddonChange('express', mockEvent);
-    component.onAddonChange('ironing', mockEvent);
-    
-    fixture.detectChanges();
-    
-    const orderSummary = debugElement.query(By.css('.order-summary'));
-    expect(orderSummary).toBeTruthy();
-    
-    const totalElement = orderSummary.query(By.css('.summary-total'));
-    expect(totalElement).toBeTruthy();
-    
-    // Should show base price + addon prices
-    const expectedTotal = component.calculateTotal();
-    expect(totalElement.nativeElement.textContent).toContain(expectedTotal.toString());
-  });
-
-  it('should disable submit button when form is invalid', () => {
-    component.selectPackage(component.laundryPackages[0]);
-    fixture.detectChanges();
-    
-    const submitButton = debugElement.query(By.css('.btn-primary'));
-    expect(submitButton.nativeElement.disabled).toBe(true);
-    
-    // Fill valid form data
-    component.bookingForm.patchValue({
-      customerName: 'John Doe',
-      email: 'john@example.com',
-      phone: '+254700123456',
-      address: '123 Test Street, Nairobi, Kenya',
-      pickupDate: '2024-12-25',
-      pickupTime: '10:00 AM - 12:00 PM'
-    });
-    
-    fixture.detectChanges();
-    expect(submitButton.nativeElement.disabled).toBe(false);
-  });
-
-  it('should show correct pricing with original price strikethrough', () => {
-    const packageWithDiscount = component.laundryPackages.find(pkg => pkg.originalPrice);
-    
-    if (packageWithDiscount) {
-      const packageCards = debugElement.queryAll(By.css('.package-card'));
-      const targetCard = packageCards.find(card => {
-        const nameElement = card.query(By.css('.package-name'));
-        return nameElement.nativeElement.textContent.trim() === packageWithDiscount.name;
-      });
-      
-      expect(targetCard).toBeTruthy();
-      
-      const originalPriceElement = targetCard!.query(By.css('.original-price'));
-      const currentPriceElement = targetCard!.query(By.css('.current-price'));
-      const savingsElement = targetCard!.query(By.css('.savings'));
-      
-      expect(originalPriceElement).toBeTruthy();
-      expect(currentPriceElement).toBeTruthy();
-      expect(savingsElement).toBeTruthy();
-      
-      expect(originalPriceElement.nativeElement.textContent).toContain(packageWithDiscount.originalPrice?.toString());
-      expect(currentPriceElement.nativeElement.textContent).toContain(packageWithDiscount.price.toString());
-    }
-  });
-
-  it('should handle form submission with special instructions', () => {
-    spyOn(console, 'log');
-    
-    component.selectPackage(component.laundryPackages[0]);
-    
-    // Fill form with special instructions
-    component.bookingForm.patchValue({
-      customerName: 'John Doe',
-      email: 'john@example.com',
-      phone: '+254700123456',
-      address: '123 Test Street, Nairobi, Kenya',
-      pickupDate: '2024-12-25',
-      pickupTime: '10:00 AM - 12:00 PM',
-      specialInstructions: 'Please handle delicate items with care'
-    });
-    
-    component.onSubmit();
-    
-    expect(console.log).toHaveBeenCalledWith('Booking submitted:', jasmine.any(Object));
-  });
-
-  it('should mark all form fields as touched when submit is clicked with invalid form', () => {
-    component.selectPackage(component.laundryPackages[0]);
-    
-    // Try to submit empty form
-    component.onSubmit();
-    
-    Object.keys(component.bookingForm.controls).forEach(key => {
-      const control = component.bookingForm.get(key);
-      expect(control?.touched).toBe(true);
-    });
-  });
-
-  describe('Form Field Validation Helpers', () => {
     beforeEach(() => {
-      component.selectPackage(component.laundryPackages[0]);
+      testItem = {
+        id: 'test-1',
+        name: 'Test Item',
+        price: 100,
+        onSale: false
+      };
     });
 
-    it('should correctly identify invalid fields', () => {
-      const nameControl = component.bookingForm.get('customerName');
-      nameControl?.setValue('');
-      nameControl?.markAsTouched();
-      
-      expect(component.isFieldInvalid('customerName')).toBe(true);
-      
-      nameControl?.setValue('John Doe');
-      expect(component.isFieldInvalid('customerName')).toBe(false);
+    it('should add item to basket', () => {
+      component.addToBasket(testItem);
+      expect(component.cartItems.length).toBe(1);
+      expect(component.cartItems[0].quantity).toBe(1);
     });
 
-    it('should return appropriate error messages for different validation errors', () => {
-      // Test required error
-      const nameControl = component.bookingForm.get('customerName');
-      nameControl?.setValue('');
-      nameControl?.markAsTouched();
-      expect(component.getFieldError('customerName')).toBe('customerName is required');
+    it('should increase quantity for existing item', () => {
+      component.addToBasket(testItem);
+      component.addToBasket(testItem);
+      expect(component.cartItems.length).toBe(1);
+      expect(component.cartItems[0].quantity).toBe(2);
+    });
+
+    it('should remove item from cart', () => {
+      component.addToBasket(testItem);
+      component.removeFromCart(0);
+      expect(component.cartItems.length).toBe(0);
+    });
+
+    it('should increase quantity', () => {
+      component.addToBasket(testItem);
+      component.increaseQuantity(0);
+      expect(component.cartItems[0].quantity).toBe(2);
+    });
+
+    it('should decrease quantity', () => {
+      component.addToBasket(testItem);
+      component.addToBasket(testItem); // quantity = 2
+      component.decreaseQuantity(0);
+      expect(component.cartItems[0].quantity).toBe(1);
+    });
+
+    it('should remove item when decreasing quantity to 0', () => {
+      component.addToBasket(testItem);
+      component.decreaseQuantity(0);
+      expect(component.cartItems.length).toBe(0);
+    });
+
+    it('should calculate cart total', () => {
+      component.addToBasket(testItem);
+      component.addToBasket({ ...testItem, id: 'test-2', price: 200 });
+      const total = component.getCartTotal();
+      expect(total).toBe(300);
+    });
+  });
+
+  describe('Form Validation', () => {
+    it('should validate required fields', () => {
+      expect(component.isFieldInvalid('customerName')).toBeFalsy();
       
-      // Test minlength error
-      nameControl?.setValue('A');
-      expect(component.getFieldError('customerName')).toBe('customerName is too short');
-      
-      // Test email error
+      component.bookingForm.get('customerName')?.markAsTouched();
+      expect(component.isFieldInvalid('customerName')).toBeTruthy();
+    });
+
+    it('should validate email format', () => {
       const emailControl = component.bookingForm.get('email');
       emailControl?.setValue('invalid-email');
       emailControl?.markAsTouched();
-      expect(component.getFieldError('email')).toBe('Please enter a valid email');
       
-      // Test pattern error
+      expect(component.isFieldInvalid('email')).toBeTruthy();
+      expect(component.getFieldError('email')).toContain('valid email');
+    });
+
+    it('should validate phone number format', () => {
       const phoneControl = component.bookingForm.get('phone');
-      phoneControl?.setValue('123');
+      phoneControl?.setValue('invalid-phone');
       phoneControl?.markAsTouched();
-      expect(component.getFieldError('phone')).toBe('Please enter a valid phone number');
+      
+      expect(component.isFieldInvalid('phone')).toBeTruthy();
+      expect(component.getFieldError('phone')).toContain('valid phone number');
+
+      phoneControl?.setValue('+254712345678');
+      expect(component.isFieldInvalid('phone')).toBeFalsy();
+    });
+
+    it('should get minimum date for pickup', () => {
+      const minDate = component.getMinDate();
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const expectedDate = tomorrow.toISOString().split('T')[0];
+      
+      expect(minDate).toBe(expectedDate);
     });
   });
 
-  describe('Package Selection UI', () => {
-    it('should add selected class to chosen package card', () => {
-      const firstPackageCard = debugElement.query(By.css('.package-card'));
+  describe('Addon Management', () => {
+    it('should add addon to form', () => {
+      const mockEvent = { target: { checked: true } };
+      component.onAddonChange('express', mockEvent);
       
-      // Initially no package should be selected
-      expect(firstPackageCard.nativeElement.classList.contains('selected')).toBe(false);
-      
-      // Select the package
-      component.selectPackage(component.laundryPackages[0]);
-      fixture.detectChanges();
-      
-      expect(firstPackageCard.nativeElement.classList.contains('selected')).toBe(true);
+      const addons = component.bookingForm.get('addons')?.value;
+      expect(addons).toContain('express');
     });
 
-    it('should update button text when package is selected', () => {
-      const firstPackageCard = debugElement.query(By.css('.package-card'));
-      const selectButton = firstPackageCard.query(By.css('.select-package-btn'));
+    it('should remove addon from form', () => {
+      // First add the addon
+      const addEvent = { target: { checked: true } };
+      component.onAddonChange('express', addEvent);
       
-      // Initially should show "Select Package"
-      expect(selectButton.nativeElement.textContent.trim()).toBe('Select Package');
+      // Then remove it
+      const removeEvent = { target: { checked: false } };
+      component.onAddonChange('express', removeEvent);
       
-      // After selection should show "Selected"
+      const addons = component.bookingForm.get('addons')?.value;
+      expect(addons).not.toContain('express');
+    });
+  });
+
+  describe('Price Calculations', () => {
+    beforeEach(() => {
+      component.selectedPackage = component.laundryPackages[0];
+    });
+
+    it('should calculate total with package price', () => {
+      const total = component.calculateTotal();
+      expect(total).toBe(component.selectedPackage!.price);
+    });
+
+    it('should calculate total with addons', () => {
+      component.bookingForm.patchValue({ addons: ['express'] });
+      const total = component.calculateTotal();
+      const expectedTotal = component.selectedPackage!.price + component.addons[0].price;
+      expect(total).toBe(expectedTotal);
+    });
+
+    it('should calculate grand total with cart items', () => {
+      const testItem = {
+        id: 'test-1',
+        name: 'Test Item',
+        price: 100,
+        onSale: false
+      };
+      component.addToBasket(testItem);
+      
+      const grandTotal = component.calculateGrandTotal();
+      const expectedTotal = component.selectedPackage!.price + 100;
+      expect(grandTotal).toBe(expectedTotal);
+    });
+
+    it('should return 0 for calculations without selected package', () => {
+      component.selectedPackage = null;
+      expect(component.calculateTotal()).toBe(0);
+    });
+  });
+
+  describe('Form Submission', () => {
+    beforeEach(() => {
+      component.selectedPackage = component.laundryPackages[0];
+      component.bookingForm.patchValue({
+        customerName: 'John Doe',
+        phone: '+254712345678',
+        email: 'john@example.com',
+        address: '123 Test Street, Nairobi',
+        pickupDate: '2024-12-25',
+        pickupTime: '8:00 AM - 10:00 AM'
+      });
+    });
+
+    it('should submit valid form', () => {
+      spyOn(console, 'log');
+      spyOn(window, 'alert');
+      
+      component.onSubmit();
+      
+      expect(console.log).toHaveBeenCalled();
+      expect(window.alert).toHaveBeenCalledWith('Booking submitted successfully!');
+    });
+
+    it('should not submit invalid form', () => {
+      component.bookingForm.patchValue({ customerName: '' });
+      spyOn(console, 'log');
+      
+      component.onSubmit();
+      
+      expect(console.log).not.toHaveBeenCalled();
+      expect(component.bookingForm.get('customerName')?.touched).toBeTruthy();
+    });
+
+    it('should not submit without selected package', () => {
+      component.selectedPackage = null;
+      spyOn(console, 'log');
+      
+      component.onSubmit();
+      
+      expect(console.log).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Form Reset', () => {
+    it('should reset all form data and selections', () => {
+      // Set up some data
+      component.selectedPackage = component.laundryPackages[0];
+      component.showBookingForm = true;
+      component.cartItems = [
+        { id: '1', name: 'Test', price: 100, onSale: false, quantity: 1 }
+      ];
+      component.currentPage = 2;
+      component.bookingForm.patchValue({ customerName: 'Test User' });
+
+      // Reset
+      component.resetForm();
+
+      // Verify reset
+      expect(component.selectedPackage).toBeNull();
+      expect(component.showBookingForm).toBeFalsy();
+      expect(component.cartItems).toEqual([]);
+      expect(component.currentPage).toBe(1);
+      expect(component.bookingForm.get('customerName')?.value).toBeNull();
+    });
+  });
+
+  describe('Template Integration', () => {
+    it('should display packages', () => {
+      const packageElements = fixture.debugElement.queryAll(By.css('.package-card'));
+      expect(packageElements.length).toBe(component.laundryPackages.length);
+    });
+
+    it('should display laundry items', () => {
+      const itemElements = fixture.debugElement.queryAll(By.css('.laundry-item-card'));
+      expect(itemElements.length).toBe(component.getCurrentPageItems().length);
+    });
+
+    it('should show booking form when package is selected', () => {
       component.selectPackage(component.laundryPackages[0]);
       fixture.detectChanges();
       
-      expect(selectButton.nativeElement.textContent.trim()).toBe('Selected');
+      const bookingForm = fixture.debugElement.query(By.css('.booking-form-section'));
+      expect(bookingForm).toBeTruthy();
+    });
+
+    it('should hide booking form initially', () => {
+      const bookingForm = fixture.debugElement.query(By.css('.booking-form-section'));
+      expect(bookingForm).toBeFalsy();
+    });
+
+    it('should display cart items when present', () => {
+      component.selectedPackage = component.laundryPackages[0];
+      component.showBookingForm = true;
+      component.addToBasket({
+        id: 'test-1',
+        name: 'Test Item',
+        price: 100,
+        onSale: false
+      });
+      fixture.detectChanges();
+      
+      const cartSummary = fixture.debugElement.query(By.css('.cart-summary'));
+      expect(cartSummary).toBeTruthy();
+    });
+
+    it('should show pagination controls', () => {
+      const pagination = fixture.debugElement.query(By.css('.pagination-container'));
+      expect(pagination).toBeTruthy();
+    });
+  });
+
+  describe('Event Handling', () => {
+    it('should handle package selection click', () => {
+      spyOn(component, 'selectPackage');
+      
+      const packageCard = fixture.debugElement.query(By.css('.package-card'));
+      packageCard.triggerEventHandler('click', null);
+      
+      expect(component.selectPackage).toHaveBeenCalled();
+    });
+
+    it('should handle add to cart click', () => {
+      spyOn(component, 'addToBasket');
+      
+      const addToCartBtn = fixture.debugElement.query(By.css('.add-to-cart-btn'));
+      addToCartBtn.triggerEventHandler('click', null);
+      
+      expect(component.addToBasket).toHaveBeenCalled();
+    });
+
+    it('should handle pagination click', () => {
+      spyOn(component, 'goToPage');
+      
+      const pageButton = fixture.debugElement.query(By.css('.page-number'));
+      if (pageButton) {
+        pageButton.triggerEventHandler('click', null);
+        expect(component.goToPage).toHaveBeenCalled();
+      }
     });
   });
 
   describe('Accessibility', () => {
-    it('should have proper aria labels on package selection buttons', () => {
-      const packageCards = debugElement.queryAll(By.css('.package-card'));
+    it('should have proper aria labels', () => {
+      const selectPackageBtn = fixture.debugElement.query(By.css('.select-package-btn'));
+      expect(selectPackageBtn.attributes['aria-label']).toBeDefined();
+    });
+
+    it('should have navigation aria label', () => {
+      const pagination = fixture.debugElement.query(By.css('.pagination'));
+      expect(pagination.attributes['aria-label']).toBe('Laundry basket pagination');
+    });
+  });
+
+  describe('Error Handling', () => {
+    it('should handle invalid pagination requests', () => {
+      const initialPage = component.currentPage;
       
-      packageCards.forEach((card, index) => {
-        const selectButton = card.query(By.css('.select-package-btn'));
-        const expectedAriaLabel = `Select ${component.laundryPackages[index].name}`;
-        expect(selectButton.nativeElement.getAttribute('aria-label')).toBe(expectedAriaLabel);
+      component.goToPage(-1);
+      expect(component.currentPage).toBe(initialPage);
+      
+      component.goToPage(component.totalPages + 10);
+      expect(component.currentPage).toBe(initialPage);
+    });
+
+    it('should handle empty cart operations', () => {
+      expect(() => component.removeFromCart(0)).not.toThrow();
+      expect(() => component.increaseQuantity(0)).not.toThrow();
+      expect(() => component.decreaseQuantity(0)).not.toThrow();
+    });
+
+    it('should handle invalid addon changes', () => {
+      const invalidEvent = { target: { checked: true } };
+      expect(() => component.onAddonChange('invalid-addon', invalidEvent)).not.toThrow();
+    });
+  });
+
+  describe('Data Validation', () => {
+    it('should have valid laundry package data structure', () => {
+      component.laundryPackages.forEach(pkg => {
+        expect(pkg.id).toBeDefined();
+        expect(pkg.name).toBeDefined();
+        expect(pkg.price).toBeGreaterThan(0);
+        expect(pkg.currency).toBeDefined();
+        expect(pkg.features).toBeDefined();
+        expect(Array.isArray(pkg.features)).toBeTruthy();
       });
     });
 
-    it('should have proper form labels associated with inputs', () => {
-      component.selectPackage(component.laundryPackages[0]);
-      fixture.detectChanges();
-      
-      const nameInput = debugElement.query(By.css('#customerName'));
-      const nameLabel = debugElement.query(By.css('label[for="customerName"]'));
-      
-      expect(nameInput).toBeTruthy();
-      expect(nameLabel).toBeTruthy();
-      expect(nameLabel.nativeElement.getAttribute('for')).toBe('customerName');
+    it('should have valid laundry item data structure', () => {
+      component.laundryItems.forEach(item => {
+        expect(item.id).toBeDefined();
+        expect(item.name).toBeDefined();
+        expect(item.price).toBeGreaterThan(0);
+        expect(typeof item.onSale).toBe('boolean');
+      });
+    });
+
+    it('should have valid addon data structure', () => {
+      component.addons.forEach(addon => {
+        expect(addon.id).toBeDefined();
+        expect(addon.name).toBeDefined();
+        expect(addon.price).toBeGreaterThan(0);
+      });
     });
   });
 });

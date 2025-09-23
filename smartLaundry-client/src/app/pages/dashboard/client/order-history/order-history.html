@@ -1,1 +1,324 @@
-<p>order-history works!</p>
+<div class="order-history-container">
+  <div class="header">
+    <h1 class="page-title">Order History</h1>
+    
+    <!-- Filters and Sorting -->
+    <div class="controls">
+      <div class="filter-group">
+        <label for="statusFilter">Filter by Status:</label>
+        <select id="statusFilter" [(ngModel)]="statusFilter" (change)="onStatusFilterChange(statusFilter)" class="form-select">
+          <option value="all">All Orders</option>
+          <option value="Pending">Pending</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Completed">Completed</option>
+          <option value="Canceled">Canceled</option>
+        </select>
+      </div>
+      
+      <div class="sort-group">
+        <label for="sortBy">Sort by:</label>
+        <select id="sortBy" [(ngModel)]="sortBy" (change)="onSortChange(sortBy)" class="form-select">
+          <option value="dateDesc">Date (Newest First)</option>
+          <option value="dateAsc">Date (Oldest First)</option>
+          <option value="priceDesc">Price (High to Low)</option>
+          <option value="priceAsc">Price (Low to High)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading your orders...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && filteredOrders.length === 0" class="empty-state">
+    <div class="empty-icon">📋</div>
+    <h3>No orders found</h3>
+    <p>You haven't placed any orders yet or no orders match your current filter.</p>
+    <button class="btn-primary">Place Your First Order</button>
+  </div>
+
+  <!-- Orders Grid -->
+  <div *ngIf="!isLoading && filteredOrders.length > 0" class="orders-grid">
+    <div *ngFor="let order of filteredOrders" class="order-card" (click)="openOrderDetail(order)">
+      <div class="order-header">
+        <div class="order-info">
+          <h3 class="order-reference">{{ order.referenceNumber }}</h3>
+          <p class="order-date">{{ order.dateTime | date:'medium' }}</p>
+        </div>
+        <div class="order-status">
+          <span [class]="'status-badge ' + getStatusClass(order.status)">
+            {{ order.status }}
+          </span>
+        </div>
+      </div>
+      
+      <div class="order-body">
+        <div class="service-types">
+          <span *ngFor="let service of order.serviceTypes" class="service-tag">
+            {{ service }}
+          </span>
+        </div>
+        
+        <div class="order-summary">
+          <div class="items-count">{{ order.items.length }} item(s)</div>
+          <div class="total-price">${{ order.totalPrice.toFixed(2) }}</div>
+        </div>
+      </div>
+      
+      <div class="order-actions" (click)="$event.stopPropagation()">
+        <button (click)="reorder(order)" class="btn-secondary btn-sm">
+          <i class="icon-repeat"></i>
+          Reorder
+        </button>
+        <button (click)="downloadInvoice(order)" class="btn-outline btn-sm">
+          <i class="icon-download"></i>
+          Invoice
+        </button>
+        <button *ngIf="order.status === 'Completed'" 
+                (click)="openFeedbackModal(order)" 
+                class="btn-outline btn-sm">
+          <i class="icon-star"></i>
+          Review
+        </button>
+        <button (click)="openReportIssueModal(order)" class="btn-outline btn-sm btn-warning">
+          <i class="icon-alert"></i>
+          Report
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Order Detail Modal -->
+<div *ngIf="showDetailModal && selectedOrder" class="modal-overlay" (click)="closeDetailModal()">
+  <div class="modal-content order-detail-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Order Details</h2>
+      <button class="modal-close" (click)="closeDetailModal()">&times;</button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="detail-section">
+        <h3>Order Information</h3>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>Reference Number:</label>
+            <span>{{ selectedOrder?.referenceNumber }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Date & Time:</label>
+            <span>{{ selectedOrder?.dateTime | date:'full' }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Status:</label>
+            <span [class]="'status-badge ' + getStatusClass(selectedOrder?.status || '')">
+              {{ selectedOrder?.status }}
+            </span>
+          </div>
+          <div class="detail-item">
+            <label>Payment Method:</label>
+            <span>{{ selectedOrder?.paymentMethod }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Items</h3>
+        <div class="items-table">
+          <div class="items-header">
+            <span>Item</span>
+            <span>Service</span>
+            <span>Qty</span>
+            <span>Price</span>
+          </div>
+          <div *ngFor="let item of selectedOrder?.items" class="items-row">
+            <span>{{ item.name }}</span>
+            <span>{{ item.serviceType }}</span>
+            <span>{{ item.quantity }}</span>
+            <span>${{ item.price.toFixed(2) }}</span>
+          </div>
+          <div class="items-total">
+            <span></span>
+            <span></span>
+            <span><strong>Total:</strong></span>
+            <span><strong>${{ selectedOrder?.totalPrice?.toFixed(2) || '0.00' }}</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h3>Timeline</h3>
+        <div class="status-timeline">
+          <div class="timeline-item" [class.completed]="selectedOrder?.statusTimeline?.picked">
+            <div class="timeline-icon">📦</div>
+            <div class="timeline-content">
+              <h4>Picked Up</h4>
+              <p *ngIf="selectedOrder?.statusTimeline?.picked">
+                {{ selectedOrder?.statusTimeline?.picked | date:'medium' }}
+              </p>
+              <p *ngIf="!selectedOrder?.statusTimeline?.picked" class="pending">Scheduled: {{ selectedOrder?.pickupDate | date:'medium' }}</p>
+            </div>
+          </div>
+
+          <div class="timeline-item" [class.completed]="selectedOrder?.statusTimeline?.washing">
+            <div class="timeline-icon">🧺</div>
+            <div class="timeline-content">
+              <h4>Processing</h4>
+              <p *ngIf="selectedOrder?.statusTimeline?.washing">
+                {{ selectedOrder?.statusTimeline?.washing | date:'medium' }}
+              </p>
+              <p *ngIf="!selectedOrder?.statusTimeline?.washing" class="pending">Waiting for pickup</p>
+            </div>
+          </div>
+
+          <div class="timeline-item" [class.completed]="selectedOrder?.statusTimeline?.delivered">
+            <div class="timeline-icon">🚚</div>
+            <div class="timeline-content">
+              <h4>Delivered</h4>
+              <p *ngIf="selectedOrder?.statusTimeline?.delivered">
+                {{ selectedOrder?.statusTimeline?.delivered | date:'medium' }}
+              </p>
+              <p *ngIf="!selectedOrder?.statusTimeline?.delivered" class="pending">
+                <span *ngIf="selectedOrder?.deliveryDate">Scheduled: {{ selectedOrder?.deliveryDate | date:'medium' }}</span>
+                <span *ngIf="!selectedOrder?.deliveryDate">To be scheduled</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="selectedOrder?.feedback" class="detail-section">
+        <h3>Your Feedback</h3>
+        <div class="feedback-display">
+          <div class="rating-display">
+            <span *ngFor="let star of [1,2,3,4,5]"
+                  [class]="star <= (selectedOrder?.feedback?.rating || 0) ? 'star-filled' : 'star-empty'">
+              ★
+            </span>
+          </div>
+          <p>{{ selectedOrder?.feedback?.comment }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button (click)="selectedOrder && reorder(selectedOrder)" class="btn-primary">
+        Reorder
+      </button>
+      <button (click)="selectedOrder && downloadInvoice(selectedOrder)" class="btn-secondary">
+        Download Invoice
+      </button>
+      <button (click)="closeDetailModal()" class="btn-outline">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Feedback Modal -->
+<div *ngIf="showFeedbackModal && selectedOrder" class="modal-overlay" (click)="closeFeedbackModal()">
+  <div class="modal-content feedback-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Rate Your Experience</h2>
+      <button class="modal-close" (click)="closeFeedbackModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="order-ref">Order: {{ selectedOrder?.referenceNumber }}</div>
+      
+      <div class="rating-section">
+        <label>Rating:</label>
+        <div class="rating-stars">
+          <span *ngFor="let star of [1,2,3,4,5]; let i = index" 
+                [class]="getStarClass(i)"
+                (click)="setRating(i + 1)">
+            ★
+          </span>
+        </div>
+      </div>
+      
+      <div class="comment-section">
+        <label for="feedbackComment">Comments (optional):</label>
+        <textarea 
+          id="feedbackComment"
+          [(ngModel)]="feedbackForm.comment" 
+          placeholder="Tell us about your experience..."
+          rows="4"
+          class="form-textarea">
+        </textarea>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button (click)="submitFeedback()" class="btn-primary">
+        Submit Feedback
+      </button>
+      <button (click)="closeFeedbackModal()" class="btn-outline">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Report Issue Modal -->
+<div *ngIf="showReportIssueModal && selectedOrder" class="modal-overlay" (click)="closeReportIssueModal()">
+  <div class="modal-content report-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Report an Issue</h2>
+      <button class="modal-close" (click)="closeReportIssueModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="order-ref">Order: {{ selectedOrder?.referenceNumber }}</div>
+      
+      <div class="form-group">
+        <label for="issueType">Issue Type:</label>
+        <select id="issueType" [(ngModel)]="reportIssueForm.issueType" class="form-select">
+          <option value="">Select an issue</option>
+          <option value="missing-items">Missing Items</option>
+          <option value="damaged-items">Damaged Items</option>
+          <option value="poor-quality">Poor Service Quality</option>
+          <option value="delivery-delay">Delivery Delay</option>
+          <option value="billing-error">Billing Error</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="priority">Priority:</label>
+        <select id="priority" [(ngModel)]="reportIssueForm.priority" class="form-select">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+          <option value="urgent">Urgent</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea 
+          id="description"
+          [(ngModel)]="reportIssueForm.description" 
+          placeholder="Please describe the issue in detail..."
+          rows="4"
+          class="form-textarea">
+        </textarea>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button (click)="submitReportIssue()" 
+              class="btn-primary"
+              [disabled]="!reportIssueForm.issueType || !reportIssueForm.description">
+        Submit Report
+      </button>
+      <button (click)="closeReportIssueModal()" class="btn-outline">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>

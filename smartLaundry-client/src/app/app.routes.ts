@@ -32,34 +32,44 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/auth/forgot-password/forgot-password').then(m => m.ForgotPasswordComponent)
   },
 
-  // CLIENT DASHBOARD ROUTES
+  // CLIENT DASHBOARD ROUTES with shared layout
   {
     path: 'client-dashboard',
-    loadComponent: () => import('./pages/dashboard/client/client-dashboard').then(m => m.ClientDashboardComponent)
-  },
-  {
-    path: 'client-dashboard/book-service',
-    loadComponent: () => import('./pages/dashboard/client/book-service/book-service').then(m => m.BookServiceComponent)
-  },
-  {
-    path: 'client-dashboard/order-tracking',
-    loadComponent: () => import('./pages/dashboard/client/order-tracking/order-tracking').then(m => m.OrderTrackingComponent)
-  },
-  {
-    path: 'client-dashboard/order-history',
-    loadComponent: () => import('./pages/dashboard/client/order-history/order-history').then(m => m.OrderHistoryComponent)
-  },
-  {
-    path: 'client-dashboard/payment-checkout',
-    loadComponent: () => import('./pages/dashboard/client/payment-checkout/payment-checkout').then(m => m.PaymentCheckoutComponent)
-  },
-  {
-    path: 'client-dashboard/notifications',
-    loadComponent: () => import('./pages/dashboard/client/notifications/notifications').then(m => m.NotificationsComponent)
-  },
-  {
-    path: 'client-dashboard/profile-update',
-    loadComponent: () => import('./pages/dashboard/client/profile-update/profile-update').then(m => m.ProfileUpdateComponent)
+    loadComponent: () => import('./shared/components/dashboard-layout/dashboard-layout').then(m => m.DashboardLayoutComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/dashboard/client/client-dashboard').then(m => m.ClientDashboardComponent)
+      },
+      {
+        path: 'book-service',
+        loadComponent: () => import('./pages/dashboard/client/book-service/book-service').then(m => m.BookingServiceComponent)
+      },
+      {
+        path: 'cart',
+        loadComponent: () => import('./pages/dashboard/client/cart/cart').then(m => m.CartComponent)
+      },
+      {
+        path: 'order-tracking',
+        loadComponent: () => import('./pages/dashboard/client/order-tracking/order-tracking').then(m => m.OrderTrackingComponent)
+      },
+      {
+        path: 'order-history',
+        loadComponent: () => import('./pages/dashboard/client/order-history/order-history').then(m => m.OrderHistoryComponent)
+      },
+      {
+        path: 'payment-checkout',
+        loadComponent: () => import('./pages/dashboard/client/payment-checkout/payment-checkout').then(m => m.PaymentCheckoutComponent)
+      },
+      {
+        path: 'notifications',
+        loadComponent: () => import('./pages/dashboard/client/notifications/notifications').then(m => m.NotificationsComponent)
+      },
+      {
+        path: 'profile-update',
+        loadComponent: () => import('./pages/dashboard/client/profile-update/profile-update').then(m => m.ProfileUpdateComponent)
+      }
+    ]
   },
   {
     path: 'client',
