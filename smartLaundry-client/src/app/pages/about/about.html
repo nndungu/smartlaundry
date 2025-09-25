@@ -32,10 +32,12 @@
       </div>
       <div class="stats-card fade-in">
         <div class="stats-grid">
-          <div class="stat-item" *ngFor="let stat of stats">
-            <span class="stat-number">{{ stat.number }}</span>
-            <span class="stat-label">{{ stat.label }}</span>
-          </div>
+          @for (stat of stats; track $index) {
+            <div class="stat-item">
+              <span class="stat-number">{{ stat.number }}</span>
+              <span class="stat-label">{{ stat.label }}</span>
+            </div>
+          }
         </div>
       </div>
     </div>
@@ -51,13 +53,15 @@
     </div>
 
     <div class="values-grid">
-      <div class="value-card fade-in" *ngFor="let value of values">
-        <div class="value-icon">
-          <i [class]="value.icon"></i>
+      @for (value of values; track $index) {
+        <div class="value-card fade-in">
+          <div class="value-icon">
+            <i [class]="value.icon"></i>
+          </div>
+          <h3>{{ value.title }}</h3>
+          <p>{{ value.description }}</p>
         </div>
-        <h3>{{ value.title }}</h3>
-        <p>{{ value.description }}</p>
-      </div>
+      }
     </div>
   </div>
 </section>
