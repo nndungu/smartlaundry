@@ -1,12 +1,14 @@
-<!-- home.component.html -->
+ <!-- home.component.html -->
 <!-- Hero Section -->
 <!-- Hero Section with Slider -->
 <section class="hero">
   <!-- Image Slider Background -->
   <div class="hero-slider">
-    <div class="slide" *ngFor="let image of heroImages; let i = index" [class.active]="isSlideActive(i)">
-      <img [src]="image.url" [alt]="image.alt" class="hero-bg" />
-    </div>
+    @for (image of heroImages; track image; let i = $index) {
+      <div class="slide" [class.active]="isSlideActive(i)">
+        <img [src]="image.url" [alt]="image.alt" class="hero-bg" />
+      </div>
+    }
   </div>
 
   <!-- Arrow Navigation -->
@@ -54,14 +56,17 @@
       <p>We combine convenience, quality, and reliability to provide the best laundry experience in the city.</p>
     </div>
     <div class="features-grid">
-      <div class="feature-card fade-in" *ngFor="let feature of features">
-        <div class="feature-icon">
-          <i [class]="feature.icon"></i>
+      @for (feature of features; track $index) {
+        <div class="feature-card fade-in">
+          <div class="feature-icon">
+            <i [class]="feature.icon"></i>
+          </div>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
         </div>
-        <h3>{{ feature.title }}</h3>
-        <p>{{ feature.description }}</p>
-      </div>
+      }
     </div>
+
   </div>
 </section>
 
@@ -73,11 +78,13 @@
       <p>Getting your laundry done has never been easier. Just follow these simple steps.</p>
     </div>
     <div class="steps-grid">
-      <div class="step-card fade-in" *ngFor="let step of steps">
-        <div class="step-number">{{ step.number }}</div>
-        <h3>{{ step.title }}</h3>
-        <p>{{ step.description }}</p>
-      </div>
+      @for (step of steps; track $index) {
+        <div class="step-card fade-in">
+          <div class="step-number">{{ step.number }}</div>
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.description }}</p>
+        </div>
+      }
     </div>
   </div>
 </section>
@@ -91,12 +98,14 @@
     </div>
 
     <div class="team-grid">
-      <div class="team-card fade-in" *ngFor="let member of team">
-        <div class="team-avatar">{{ member.initials }}</div>
-        <h3><strong>{{ member.name }}</strong></h3>
-        <p class="team-role">{{ member.role }}</p>
-        <p class="team-bio">{{ member.bio }}</p>
-      </div>
+      @for (member of team; track $index) {
+        <div class="team-card fade-in">
+          <div class="team-avatar">{{ member.initials }}</div>
+          <h3><strong>{{ member.name }}</strong></h3>
+          <p class="team-role">{{ member.role }}</p>
+          <p class="team-bio">{{ member.bio }}</p>
+        </div>
+      }
     </div>
   </div>
 </section>
@@ -108,16 +117,18 @@
       <h2>What Our Customers Say</h2>
       <p>Join thousands of satisfied customers who trust Laundry Smart with their laundry needs.</p>
     </div>
-    <div class="testimonials-grid">
-    <div class="testimonial-card fade-in" *ngFor="let testimonial of testimonials">
-      <div class="stars">
-        <i class="fas fa-star" *ngFor="let star of getStarArray(testimonial.rating)"></i>
-      </div>
-      <p class="testimonial-text">"{{ testimonial.comment }}"</p>
-      <p class="testimonial-author">{{ testimonial.name }}</p>
-    </div>
-    </div>
   </div>
+    @for (testimonial of testimonials; track $index) {
+      <div class="testimonial-card fade-in">
+        <div class="stars">
+          @for (star of getStarArray(testimonial.rating); track $index) {
+            <i class="fas fa-star"></i>
+          }
+        </div>
+        <p class="testimonial-text">"{{ testimonial.comment }}"</p>
+        <p class="testimonial-author">{{ testimonial.name }}</p>
+      </div>
+    }
 </section>
 
 <!-- Call to Action Section -->
