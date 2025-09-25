@@ -3,14 +3,15 @@
     <nav class="sidebar" [class.mobile-open]="isMobileMenuOpen">
         <div class="logo">SmartLaundry</div>
         <ul class="nav-menu">
-            <li
-                *ngFor="let item of navItems"
-                class="nav-item"
-                [class.active]="item.active"
-                (click)="navigateToPage(item.id)">
-                <span class="nav-icon">{{ item.icon }}</span>
-                <span class="nav-text">{{ item.text }}</span>
-            </li>
+            @for (item of navItems; track $index) {
+                <li
+                    class="nav-item"
+                    [class.active]="item.active"
+                    (click)="navigateToPage(item.id)">
+                    <span class="nav-icon">{{ item.icon }}</span>
+                    <span class="nav-text">{{ item.text }}</span>
+                </li>
+            }
         </ul>
     </nav>
 
@@ -27,7 +28,9 @@
             <div class="header-actions">
                 <button class="icon-btn" (click)="openCart()" title="Cart">
                     🛒
-                    <span class="notification-badge" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
+                    @if (cartItemCount > 0) {
+                        <span class="notification-badge">{{ cartItemCount }}</span>
+                    }
                 </button>
                 <button class="icon-btn" (click)="openNotifications()" title="Notifications">
                     🔔
@@ -47,7 +50,9 @@
 </div>
 
 <!-- Loading Overlay -->
-<div class="loading-overlay" *ngIf="isLoading">
-    <div class="loading-spinner"></div>
-    <p>Loading your dashboard...</p>
-</div>
+@if (isLoading) {
+    <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Loading your dashboard...</p>
+    </div>
+}
