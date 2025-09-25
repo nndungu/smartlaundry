@@ -6,13 +6,15 @@
     </div>
 
     <div class="services-grid">
-      <div
-        class="service-card"
-        *ngFor="let service of services; trackBy: trackByFn"
-        [class.featured]="service.featured"
-        (click)="onServiceClick(service)">
+      @for (service of services; track $index) {
+        <div
+          class="service-card"
+          [class.featured]="service.featured"
+          (click)="onServiceClick(service)">
 
-        <img *ngIf="service.imageUrl" [src]="service.imageUrl" alt="{{service.title}}" class="service-image" />
+          @if (service.imageUrl) {
+            <img [src]="service.imageUrl" alt="{{service.title}}" class="service-image" />
+          }
 
         <div class="service-card-content">
           <h3 class="service-title">{{ service.title }}</h3>
@@ -21,6 +23,7 @@
 
         <div class="service-card-overlay"></div>
       </div>
+      }
     </div>
 
     <div class="services-footer">
