@@ -11,33 +11,36 @@
 
       <!-- Desktop Navigation -->
       <div class="navbar-nav">
-        <ng-container *ngFor="let item of navigationItems">
-          <a
-            *ngIf="!item.isButton"
-            [routerLink]="item.route"
-            (click)="handleNavClick(item)"
-            class="nav-link"
-            [class.active]="activeItem === item.name"
-          >
-            {{ item.name }}
-          </a>
-          <a
-            *ngIf="item.isButton && item.name === 'Sign In'"
-            [routerLink]="item.route"
-            (click)="handleNavClick(item)"
-            class="nav-button signin-btn"
-          >
-            {{ item.name }}
-          </a>
-          <a
-            *ngIf="item.isButton && item.name === 'Get Started'"
-            [routerLink]="item.route"
-            (click)="handleNavClick(item)"
-            class="nav-button getstarted-btn"
-          >
-            {{ item.name }}
-          </a>
-        </ng-container>
+        @for (item of navigationItems; track $index) {
+          @if (!item.isButton) {
+            <a
+              [routerLink]="item.route"
+              (click)="handleNavClick(item)"
+              class="nav-link"
+              [class.active]="activeItem === item.name"
+            >
+              {{ item.name }}
+            </a>
+          }
+          @if (item.isButton && item.name === 'Sign In') {
+            <a
+              [routerLink]="item.route"
+              (click)="handleNavClick(item)"
+              class="nav-button signin-btn"
+            >
+              {{ item.name }}
+            </a>
+          }
+          @if (item.isButton && item.name === 'Get Started') {
+            <a
+              [routerLink]="item.route"
+              (click)="handleNavClick(item)"
+              class="nav-button getstarted-btn"
+            >
+              {{ item.name }}
+            </a>
+          }
+        }
       </div>
 
       <!-- Mobile menu button -->
@@ -60,32 +63,35 @@
   </div>
 
   <!-- Mobile Navigation Menu -->
-  <div
-    *ngIf="isMobileMenuOpen"
-    class="mobile-menu"
-    id="mobile-menu"
-  >
-    <div class="mobile-menu-content">
-      <ng-container *ngFor="let item of navigationItems">
-        <a
-          *ngIf="!item.isButton"
-          [routerLink]="item.route"
-          (click)="handleNavClick(item)"
-          class="mobile-nav-link"
-          [class.active]="activeItem === item.name"
-        >
-          {{ item.name }}
-        </a>
-        <a
-          *ngIf="item.isButton"
-          [routerLink]="item.route"
-          (click)="handleNavClick(item)"
-          class="mobile-nav-button"
-          [class.getstarted-btn]="item.name === 'Get Started'"
-        >
-          {{ item.name }}
-        </a>
-      </ng-container>
+  @if (isMobileMenuOpen) {
+    <div
+      class="mobile-menu"
+      id="mobile-menu"
+    >
+      <div class="mobile-menu-content">
+        @for (item of navigationItems; track $index) {
+          @if (!item.isButton) {
+            <a
+              [routerLink]="item.route"
+              (click)="handleNavClick(item)"
+              class="mobile-nav-link"
+              [class.active]="activeItem === item.name"
+            >
+              {{ item.name }}
+            </a>
+          }
+          @if (item.isButton) {
+            <a
+              [routerLink]="item.route"
+              (click)="handleNavClick(item)"
+              class="mobile-nav-button"
+              [class.getstarted-btn]="item.name === 'Get Started'"
+            >
+              {{ item.name }}
+            </a>
+          }
+        }
+      </div>
     </div>
-  </div>
+  }
 </nav>
