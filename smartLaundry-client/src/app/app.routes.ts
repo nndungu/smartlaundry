@@ -65,10 +65,7 @@ export const routes: Routes = [
         path: 'notifications',
         loadComponent: () => import('./pages/dashboard/client/notifications/notifications').then(m => m.NotificationsComponent)
       },
-      {
-        path: 'profile-update',
-        loadComponent: () => import('./pages/dashboard/client/profile-update/profile-update').then(m => m.ProfileUpdateComponent)
-      }
+      
     ]
   },
   {
