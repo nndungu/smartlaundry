@@ -33,9 +33,11 @@
               [ngClass]="{'border-red-500': validationErrors['role']}"
             >
               <div class="flex items-center space-x-2">
-                <span *ngIf="selectedRole" class="h-4 w-4">
-                  {{ getRoleIcon(selectedRole) }}
-                </span>
+                @if (selectedRole) {
+                  <span class="h-4 w-4">
+                    {{ getRoleIcon(selectedRole) }}
+                  </span>
+                }
                 <span [class.text-gray-900]="selectedRole" [class.text-gray-500]="!selectedRole">
                   {{ selectedRole ? getRoleLabel(selectedRole) : 'Select your role' }}
                 </span>
@@ -45,34 +47,43 @@
               </svg>
             </button>
 
-            <div *ngIf="showRoleDropdown" class="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50">
-              <button
-                *ngFor="let role of roles"
-                type="button"
-                (click)="selectRole(role)"
-                class="w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center space-x-2 first:rounded-t-md last:rounded-b-md text-gray-900"
-              >
-                <span class="h-4 w-4">{{ role.icon }}</span>
-                <span>{{ role.label }}</span>
-              </button>
-            </div>
+            @if (showRoleDropdown) {
+              <div class="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50">
+                @for (role of roles; track $index) {
+                  <button
+                    type="button"
+                    (click)="selectRole(role)"
+                    class="w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center space-x-2 first:rounded-t-md last:rounded-b-md text-gray-900"
+                  >
+                    <span class="h-4 w-4">{{ role.icon }}</span>
+                    <span>{{ role.label }}</span>
+                  </button>
+                }
+              </div>
+            }
           </div>
-          <p *ngIf="validationErrors['role']" class="text-red-600 text-sm mt-1">{{ validationErrors['role'] }}</p>
+          @if (validationErrors['role']) {
+            <p class="text-red-600 text-sm mt-1">{{ validationErrors['role'] }}</p>
+          }
         </div>
 
         <!-- Conditional Admin Passcode Field -->
-        <div *ngIf="selectedRole === 'admin'" class="space-y-2">
-          <label class="text-sm font-medium text-gray-900" [ngClass]="{'border border-red-500 rounded px-1': validationErrors['adminPasscode']}">Admin Passcode</label>
-          <input
-            type="password"
-            [(ngModel)]="formData.adminPasscode"
-            class="w-full px-3 py-2 border border-red-200 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
-            [ngClass]="{'border-red-500': validationErrors['adminPasscode']}"
-            placeholder="Enter admin passcode"
-          />
-          <p class="text-xs text-red-600">Special passcode required for administrator access</p>
-          <p *ngIf="validationErrors['adminPasscode']" class="text-red-600 text-sm mt-1">{{ validationErrors['adminPasscode'] }}</p>
-        </div>
+        @if (selectedRole === 'admin') {
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-900" [ngClass]="{'border border-red-500 rounded px-1': validationErrors['adminPasscode']}">Admin Passcode</label>
+            <input
+              type="password"
+              [(ngModel)]="formData.adminPasscode"
+              class="w-full px-3 py-2 border border-red-200 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              [ngClass]="{'border-red-500': validationErrors['adminPasscode']}"
+              placeholder="Enter admin passcode"
+            />
+            <p class="text-xs text-red-600">Special passcode required for administrator access</p>
+            @if (validationErrors['adminPasscode']) {
+              <p class="text-red-600 text-sm mt-1">{{ validationErrors['adminPasscode'] }}</p>
+            }
+          </div>
+        }
 
         <!-- Two-column grid for First/Last Name -->
         <div class="grid grid-cols-2 gap-4">
@@ -85,7 +96,9 @@
               [ngClass]="{'border-red-500': validationErrors['firstName']}"
               placeholder="John"
             />
-            <p *ngIf="validationErrors['firstName']" class="text-red-600 text-sm mt-1">{{ validationErrors['firstName'] }}</p>
+            @if (validationErrors['firstName']) {
+              <p class="text-red-600 text-sm mt-1">{{ validationErrors['firstName'] }}</p>
+            }
           </div>
           <div class="space-y-2">
             <label class="text-sm font-medium text-gray-900" [ngClass]="{'border border-red-500 rounded px-1': validationErrors['lastName']}">Last Name</label>
@@ -96,7 +109,9 @@
               [ngClass]="{'border-red-500': validationErrors['lastName']}"
               placeholder="Doe"
             />
-            <p *ngIf="validationErrors['lastName']" class="text-red-600 text-sm mt-1">{{ validationErrors['lastName'] }}</p>
+            @if (validationErrors['lastName']) {
+              <p class="text-red-600 text-sm mt-1">{{ validationErrors['lastName'] }}</p>
+            }
           </div>
         </div>
 
@@ -110,7 +125,9 @@
             [ngClass]="{'border-red-500': validationErrors['email']}"
             placeholder="john.doe@example.com"
           />
-          <p *ngIf="validationErrors['email']" class="text-red-600 text-sm mt-1">{{ validationErrors['email'] }}</p>
+          @if (validationErrors['email']) {
+            <p class="text-red-600 text-sm mt-1">{{ validationErrors['email'] }}</p>
+          }
         </div>
 
         <!-- Phone Field -->
@@ -123,7 +140,9 @@
             [ngClass]="{'border-red-500': validationErrors['phone']}"
             placeholder="+1 (555) 123-4567"
           />
-          <p *ngIf="validationErrors['phone']" class="text-red-600 text-sm mt-1">{{ validationErrors['phone'] }}</p>
+          @if (validationErrors['phone']) {
+            <p class="text-red-600 text-sm mt-1">{{ validationErrors['phone'] }}</p>
+          }
         </div>
 
         <!-- Password Field -->
@@ -142,16 +161,22 @@
               (click)="togglePasswordVisibility('password')"
               class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
             >
-              <svg *ngIf="!showPassword" class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-              </svg>
-              <svg *ngIf="showPassword" class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
-              </svg>
+              @if (!showPassword) {
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+              }
+              @if (showPassword) {
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                </svg>
+              }
             </button>
           </div>
-          <p *ngIf="validationErrors['password']" class="text-red-600 text-sm mt-1">{{ validationErrors['password'] }}</p>
+          @if (validationErrors['password']) {
+            <p class="text-red-600 text-sm mt-1">{{ validationErrors['password'] }}</p>
+          }
         </div>
 
         <!-- Confirm Password Field -->
@@ -170,16 +195,22 @@
               (click)="togglePasswordVisibility('confirmPassword')"
               class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
             >
-              <svg *ngIf="!showConfirmPassword" class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-              </svg>
-              <svg *ngIf="showConfirmPassword" class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
-              </svg>
+              @if (!showConfirmPassword) {
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+              }
+              @if (showConfirmPassword) {
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                </svg>
+              }
             </button>
           </div>
-          <p *ngIf="validationErrors['confirmPassword']" class="text-red-600 text-sm mt-1">{{ validationErrors['confirmPassword'] }}</p>
+          @if (validationErrors['confirmPassword']) {
+            <p class="text-red-600 text-sm mt-1">{{ validationErrors['confirmPassword'] }}</p>
+          }
         </div>
 
         <!-- Terms Checkbox -->
@@ -197,7 +228,9 @@
             <a href="#" class="text-blue-600 hover:text-blue-800 underline">Privacy Policy</a>
           </label>
         </div>
-        <p *ngIf="validationErrors['terms']" class="text-red-600 text-sm mt-1">{{ validationErrors['terms'] }}</p>
+        @if (validationErrors['terms']) {
+          <p class="text-red-600 text-sm mt-1">{{ validationErrors['terms'] }}</p>
+        }
 
         <!-- Create Account Button -->
         <button
