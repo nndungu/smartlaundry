@@ -84,16 +84,18 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let order of orderTableData" class="order-row">
-            <td>{{ order.id }}</td>
-            <td>{{ order.service }}</td>
-            <td>{{ order.date }}</td>
-            <td><span class="status-badge" [class]="order.statusClass">{{ order.status }}</span></td>
-            <td>{{ order.total }}</td>
-            <td>
-              <button class="btn-link" (click)="viewOrderDetails(order.id)">View</button>
-            </td>
-          </tr>
+          @for (order of orderTableData; track $index) {
+            <tr class="order-row">
+              <td>{{ order.id }}</td>
+              <td>{{ order.service }}</td>
+              <td>{{ order.date }}</td>
+              <td><span class="status-badge" [class]="order.statusClass">{{ order.status }}</span></td>
+              <td>{{ order.total }}</td>
+              <td>
+                <button class="btn-link" (click)="viewOrderDetails(order.id)">View</button>
+              </td>
+            </tr>
+          }
         </tbody>
       </table>
     </div>
