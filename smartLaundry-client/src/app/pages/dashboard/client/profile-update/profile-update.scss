@@ -1,0 +1,52 @@
+// Additional custom styles (Tailwind handles most styling)
+.profile-container {
+  // Any custom styles beyond Tailwind can go here
+}
+
+// Custom focus states for better accessibility
+input:focus, 
+textarea:focus {
+  @apply ring-2 ring-blue-500 ring-offset-2;
+}
+
+// Smooth transitions for mode switching
+.form-field {
+  transition: all 0.2s ease-in-out;
+}
+
+// Custom file upload button styling
+input[type="file"] {
+  &:focus + label {
+    @apply ring-2 ring-blue-500 ring-offset-2;
+  }
+}
+
+// Mobile responsive adjustments
+@media (max-width: 640px) {
+  .max-w-2xl {
+    margin: 0 1rem;
+  }
+  
+  .flex {
+    &.justify-end {
+      flex-direction: column;
+      gap: 0.75rem;
+      
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Animation for smooth transitions
+.ng-enter {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.ng-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.2s ease-in-out;
+}

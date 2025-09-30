@@ -1,8 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DecimalPipe } from '@angular/common';
-import { DashboardLayoutComponent, CartItem } from '../../../../shared/components/dashboard-layout/dashboard-layout';
+import { CartService, CartItem } from '../../../../services/cart.service';
 
 interface LaundryPackage {
   id: string;
@@ -70,12 +70,11 @@ export class BookingServiceComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    @Inject(DashboardLayoutComponent) private dashboardLayout: DashboardLayoutComponent
+    private cartService: CartService
   ) {
     this.initializeForm();
     this.initializeData();
   }
-
   ngOnInit(): void {
     // Component initialization
   }
@@ -270,7 +269,7 @@ export class BookingServiceComponent implements OnInit {
     return this.currentPage < this.totalPages - 3;
   }
 
-  // Cart management methods - now using shared cart
+  // Cart management methods - now using CartService
   addToBasket(item: LaundryItem): void {
     const cartItem: CartItem = {
       id: item.id,
@@ -280,23 +279,23 @@ export class BookingServiceComponent implements OnInit {
       service: 'Laundry Service'
     };
 
-    this.dashboardLayout.addToCart(cartItem);
+    this.cartService.addToCart(cartItem);
   }
 
   getCartItems(): CartItem[] {
-    return this.dashboardLayout.cartItems;
+    return this.cartService.getCartItems();
   }
 
   getCartTotal(): number {
-    return this.dashboardLayout.getCartTotal();
+    return this.cartService.getCartTotal();
   }
 
   removeFromCart(itemId: string): void {
-    this.dashboardLayout.removeFromCart(itemId);
+    this.cartService.removeFromCart(itemId);
   }
 
   updateCartItemQuantity(itemId: string, quantity: number): void {
-    this.dashboardLayout.updateCartItemQuantity(itemId, quantity);
+    this.cartService.updateQuantity(itemId, quantity);
   }
 
   // Form validation methods

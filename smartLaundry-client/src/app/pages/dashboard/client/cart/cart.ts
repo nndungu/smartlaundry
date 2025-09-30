@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DashboardLayoutComponent, CartItem } from '../../../../shared/components/dashboard-layout/dashboard-layout';
+import { CartService, CartItem } from '../../../../services/cart.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -9,48 +10,57 @@ import { DashboardLayoutComponent, CartItem } from '../../../../shared/component
   templateUrl: './cart.html',
   styleUrls: ['./cart.scss']
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
   cartItems: CartItem[] = [];
   cartTotal = 0;
+  private cartSubscription: Subscription = new Subscription();
 
-  constructor(@Inject(DashboardLayoutComponent) private dashboardLayout: DashboardLayoutComponent) {}
+  constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    this.loadCart();
+    // Subscribe to cart changes for reactive updates
+    this.cartSubscription.add(
+      this.cartService.cartItems$.subscribe(items => {
+        this.cartItems = items;
+      })
+    );
+
+    this.cartSubscription.add(
+      this.cartService.cartTotal$.subscribe(total => {
+        this.cartTotal = total;
+      })
+    );
   }
 
-  private loadCart(): void {
-    // Get cart items from the dashboard layout component
-    this.cartItems = this.dashboardLayout.cartItems;
-    this.cartTotal = this.dashboardLayout.getCartTotal();
+  ngOnDestroy(): void {
+    this.cartSubscription.unsubscribe();
   }
 
   updateQuantity(item: CartItem, newQuantity: number): void {
     if (newQuantity <= 0) {
       this.removeItem(item);
     } else {
-      this.dashboardLayout.updateCartItemQuantity(item.id, newQuantity);
-      this.loadCart(); // Refresh cart data
+      this.cartService.updateQuantity(item.id, newQuantity);
     }
   }
 
   removeItem(item: CartItem): void {
-    this.dashboardLayout.removeFromCart(item.id);
-    this.loadCart(); // Refresh cart data
+    this.cartService.removeFromCart(item.id);
   }
 
   clearCart(): void {
-    this.dashboardLayout.clearCart();
-    this.loadCart(); // Refresh cart data
+    this.cartService.clearCart();
   }
 
   proceedToCheckout(): void {
-    // Navigate to payment checkout
-    this.dashboardLayout.navigateToPage('payment-checkout');
+    // Open checkout modal instead of navigating
+    // This will be implemented when we create the CheckoutModalComponent
+    console.log('Opening checkout modal');
   }
 
   continueShopping(): void {
     // Navigate to book service
-    this.dashboardLayout.navigateToPage('book-service');
+    // This will be implemented when we integrate with DashboardLayoutComponent
+    console.log('Navigating to book service');
   }
 }

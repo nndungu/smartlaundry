@@ -11,66 +11,77 @@
       <h2 class="section-title">Choose Your Package</h2>
 
       <div class="packages-grid">
-        <div
-          class="package-card"
-          *ngFor="let package of laundryPackages; trackBy: trackByPackageId"
-          [class.popular]="package.popular"
-          [class.selected]="selectedPackage?.id === package.id"
-          (click)="selectPackage(package)">
+        @for (package of laundryPackages; track package.id) {
+          <div
+            class="package-card"
+            [class.popular]="package.popular"
+            [class.selected]="selectedPackage?.id === package.id"
+            (click)="selectPackage(package)">
 
-          <!-- Popular Badge -->
-          <div class="popular-badge" *ngIf="package.popular">
-            <span>Most Popular</span>
-          </div>
+            <!-- Popular Badge -->
+            @if (package.popular) {
+              <div class="popular-badge">
+                <span>Most Popular</span>
+              </div>
+            }
 
-          <!-- Package Image -->
-          <div class="package-image" *ngIf="package.image">
-            <img [src]="package.image" [alt]="package.name" loading="lazy">
-          </div>
+            <!-- Package Image -->
+            @if (package.image) {
+              <div class="package-image">
+                <img [src]="package.image" [alt]="package.name" loading="lazy">
+              </div>
+            }
 
-          <!-- Package Content -->
-          <div class="package-content">
-            <div class="package-header">
-              <h3 class="package-name">{{ package.name }}</h3>
-              <p class="package-size">{{ package.size }} Package</p>
-            </div>
-
-            <div class="package-details">
-              <div class="bag-info">
-                <span class="bag-count">{{ package.bagCount }}</span>
-                <span class="bag-text">{{ package.bagSize }} laundry bag{{ package.bagCount > 1 ? 's' : '' }}</span>
+            <!-- Package Content -->
+            <div class="package-content">
+              <div class="package-header">
+                <h3 class="package-name">{{ package.name }}</h3>
+                <p class="package-size">{{ package.size }} Package</p>
               </div>
 
-              <p class="ideal-for">Perfect for {{ package.idealFor }}</p>
-              <p class="time-saved">{{ package.timesSaved }}</p>
-              <p class="includes-delivery">Free Delivery</p>
-            </div>
+              <div class="package-details">
+                <div class="bag-info">
+                  <span class="bag-count">{{ package.bagCount }}</span>
+                  <span class="bag-text">{{ package.bagSize }} laundry bag{{ package.bagCount > 1 ? 's' : '' }}</span>
+                </div>
 
-            <div class="package-pricing">
-              <div class="price-container">
-                <span class="original-price" *ngIf="package.originalPrice">{{ package.currency }} {{ package.originalPrice | number }}</span>
-                <span class="current-price">{{ package.currency }} {{ package.price | number }}</span>
+                <p class="ideal-for">Perfect for {{ package.idealFor }}</p>
+                <p class="time-saved">{{ package.timesSaved }}</p>
+                <p class="includes-delivery">Free Delivery</p>
               </div>
-              <div class="savings" *ngIf="package.originalPrice">
-                Save {{ package.currency }} {{ (package.originalPrice - package.price) | number }}
+
+              <div class="package-pricing">
+                <div class="price-container">
+                  @if (package.originalPrice) {
+                    <span class="original-price">{{ package.currency }} {{ package.originalPrice | number }}</span>
+                  }
+                  <span class="current-price">{{ package.currency }} {{ package.price | number }}</span>
+                </div>
+                @if (package.originalPrice) {
+                  <div class="savings">
+                    Save {{ package.currency }} {{ (package.originalPrice - package.price) | number }}
+                  </div>
+                }
               </div>
-            </div>
 
-            <div class="package-features">
-              <h4>What's Included:</h4>
-              <ul>
-                <li *ngFor="let feature of package.features">
-                  <i class="check-icon" aria-hidden="true">✓</i>
-                  {{ feature }}
-                </li>
-              </ul>
-            </div>
+              <div class="package-features">
+                <h4>What's Included:</h4>
+                <ul>
+                  @for (feature of package.features; track feature) {
+                    <li>
+                      <i class="check-icon" aria-hidden="true">✓</i>
+                      {{ feature }}
+                    </li>
+                  }
+                </ul>
+              </div>
 
-            <button class="select-package-btn" [attr.aria-label]="'Select ' + package.name">
-              {{ selectedPackage?.id === package.id ? 'Selected' : 'Select Package' }}
-            </button>
+              <button class="select-package-btn" [attr.aria-label]="'Select ' + package.name">
+                {{ selectedPackage?.id === package.id ? 'Selected' : 'Select Package' }}
+              </button>
+            </div>
           </div>
-        </div>
+        }
       </div>
     </section>
 
@@ -87,97 +98,111 @@
 
       <!-- Laundry Items Grid -->
       <div class="laundry-items-grid">
-        <div
-          class="laundry-item-card"
-          *ngFor="let item of getCurrentPageItems()"
-          [class.sale-item]="item.onSale">
+        @for (item of getCurrentPageItems(); track item.id) {
+          <div
+            class="laundry-item-card"
+            [class.sale-item]="item.onSale">
 
-          <!-- Sale Badge -->
-          <div class="sale-badge" *ngIf="item.onSale">
-            <span>Sale!</span>
-          </div>
+            <!-- Sale Badge -->
+            @if (item.onSale) {
+              <div class="sale-badge">
+                <span>Sale!</span>
+              </div>
+            }
 
-          <!-- Item Content -->
-          <div class="item-content">
-            <h3 class="item-name">{{ item.name }}</h3>
-            <div class="item-price">
-              <span class="original-price" *ngIf="item.originalPrice">
-                KSh{{ item.originalPrice | number }}
-              </span>
-              <span class="current-price">KSh{{ item.price | number }}</span>
+            <!-- Item Content -->
+            <div class="item-content">
+              <h3 class="item-name">{{ item.name }}</h3>
+              <div class="item-price">
+                @if (item.originalPrice) {
+                  <span class="original-price">
+                    KSh{{ item.originalPrice | number }}
+                  </span>
+                }
+                <span class="current-price">KSh{{ item.price | number }}</span>
+              </div>
+              <button
+                class="add-to-cart-btn"
+                (click)="addToBasket(item)"
+                [attr.aria-label]="'Add ' + item.name + ' to cart'">
+                Add to cart
+              </button>
             </div>
-            <button
-              class="add-to-cart-btn"
-              (click)="addToBasket(item)"
-              [attr.aria-label]="'Add ' + item.name + ' to cart'">
-              Add to cart
-            </button>
           </div>
-        </div>
+        }
       </div>
 
       <!-- Pagination -->
-      <div class="pagination-container" *ngIf="totalPages > 1">
-        <nav class="pagination" aria-label="Laundry basket pagination">
+      @if (totalPages > 1) {
+        <div class="pagination-container">
+          <nav class="pagination" aria-label="Laundry basket pagination">
 
-          <!-- Previous Button -->
-          <button
-            class="pagination-btn prev-btn"
-            [disabled]="currentPage === 1"
-            (click)="goToPage(currentPage - 1)"
-            aria-label="Go to previous page">
-            ‹ Previous
-          </button>
-
-          <!-- Page Numbers -->
-          <div class="page-numbers">
-            <!-- First page -->
+            <!-- Previous Button -->
             <button
-              class="page-number"
-              [class.active]="currentPage === 1"
-              (click)="goToPage(1)">
-              1
+              class="pagination-btn prev-btn"
+              [disabled]="currentPage === 1"
+              (click)="goToPage(currentPage - 1)"
+              aria-label="Go to previous page">
+              ‹ Previous
             </button>
 
-            <!-- Ellipsis before current range -->
-            <span class="ellipsis" *ngIf="showStartEllipsis()">...</span>
+            <!-- Page Numbers -->
+            <div class="page-numbers">
+              <!-- First page -->
+              <button
+                class="page-number"
+                [class.active]="currentPage === 1"
+                (click)="goToPage(1)">
+                1
+              </button>
 
-            <!-- Page range around current page -->
+              <!-- Ellipsis before current range -->
+              @if (showStartEllipsis()) {
+                <span class="ellipsis">...</span>
+              }
+
+              <!-- Page range around current page -->
+              @for (page of getVisiblePages(); track page) {
+                <button
+                  class="page-number"
+                  [class.active]="currentPage === page"
+                  (click)="goToPage(page)">
+                  {{ page }}
+                </button>
+              }
+
+              <!-- Ellipsis after current range -->
+              @if (showEndEllipsis()) {
+                <span class="ellipsis">...</span>
+              }
+
+              <!-- Last page -->
+              @if (totalPages > 1) {
+                <button
+                  class="page-number"
+                  [class.active]="currentPage === totalPages"
+                  (click)="goToPage(totalPages)">
+                  {{ totalPages }}
+                </button>
+              }
+            </div>
+
+            <!-- Next Button -->
             <button
-              *ngFor="let page of getVisiblePages()"
-              class="page-number"
-              [class.active]="currentPage === page"
-              (click)="goToPage(page)">
-              {{ page }}
+              class="pagination-btn next-btn"
+              [disabled]="currentPage === totalPages"
+              (click)="goToPage(currentPage + 1)"
+              aria-label="Go to next page">
+              Next ›
             </button>
-
-            <!-- Ellipsis after current range -->
-            <span class="ellipsis" *ngIf="showEndEllipsis()">...</span>
-
-            <!-- Last page -->
-            <button
-              *ngIf="totalPages > 1"
-              class="page-number"
-              [class.active]="currentPage === totalPages"
-              (click)="goToPage(totalPages)">
-              {{ totalPages }}
-            </button>
-          </div>
-
-          <!-- Next Button -->
-          <button
-            class="pagination-btn next-btn"
-            [disabled]="currentPage === totalPages"
-            (click)="goToPage(currentPage + 1)"
-            aria-label="Go to next page">
-            Next ›
-          </button>
-        </nav>
-      </div>
+          </nav>
+        </div>
+      }
     </section>
 
     <!-- Booking Form Section -->
-    <section id="booking-form" class="booking-form-section" *ngIf="showBookingForm && selectedPackage">
+    @if (showBookingForm && selectedPackage) {
+      <section id="booking-form" class="booking-form-section">
       <div class="form-container">
         <h2 class="section-title">Complete Your Booking</h2>
 
@@ -191,24 +216,28 @@
         </div>
 
         <!-- Cart Items (if any) -->
-        <div class="cart-summary" *ngIf="getCartItems().length > 0">
-          <h4>Additional Items</h4>
-          <div class="cart-items">
-            <div class="cart-item" *ngFor="let item of getCartItems()">
-              <span class="item-name">{{ item.name }}</span>
-              <div class="item-controls">
-                <button class="qty-btn" (click)="updateCartItemQuantity(item.id, item.quantity - 1)">-</button>
-                <span class="quantity">{{ item.quantity }}</span>
-                <button class="qty-btn" (click)="updateCartItemQuantity(item.id, item.quantity + 1)">+</button>
-                <span class="item-total">KSh{{ (item.price * item.quantity) | number }}</span>
-                <button class="remove-btn" (click)="removeFromCart(item.id)">×</button>
-              </div>
+        @if (getCartItems().length > 0) {
+          <div class="cart-summary">
+            <h4>Additional Items</h4>
+            <div class="cart-items">
+              @for (item of getCartItems(); track item.id) {
+                <div class="cart-item">
+                  <span class="item-name">{{ item.name }}</span>
+                  <div class="item-controls">
+                    <button class="qty-btn" (click)="updateCartItemQuantity(item.id, item.quantity - 1)">-</button>
+                    <span class="quantity">{{ item.quantity }}</span>
+                    <button class="qty-btn" (click)="updateCartItemQuantity(item.id, item.quantity + 1)">+</button>
+                    <span class="item-total">KSh{{ (item.price * item.quantity) | number }}</span>
+                    <button class="remove-btn" (click)="removeFromCart(item.id)">×</button>
+                  </div>
+                </div>
+              }
+            </div>
+            <div class="cart-total">
+              <strong>Additional Items Total: KSh{{ getCartTotal() | number }}</strong>
             </div>
           </div>
-          <div class="cart-total">
-            <strong>Additional Items Total: KSh{{ getCartTotal() | number }}</strong>
-          </div>
-        </div>
+        }
 
         <!-- Booking Form -->
         <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-form">
@@ -226,9 +255,11 @@
                   formControlName="customerName"
                   [class.error]="isFieldInvalid('customerName')"
                   placeholder="Enter your full name">
-                <div class="error-message" *ngIf="isFieldInvalid('customerName')">
-                  {{ getFieldError('customerName') }}
-                </div>
+                @if (isFieldInvalid('customerName')) {
+                  <div class="error-message">
+                    {{ getFieldError('customerName') }}
+                  </div>
+                }
               </div>
 
               <div class="form-group">
@@ -239,24 +270,28 @@
                   formControlName="phone"
                   [class.error]="isFieldInvalid('phone')"
                   placeholder="+254 700 000 000">
-                <div class="error-message" *ngIf="isFieldInvalid('phone')">
-                  {{ getFieldError('phone') }}
-                </div>
+                @if (isFieldInvalid('phone')) {
+                  <div class="error-message">
+                    {{ getFieldError('phone') }}
+                  </div>
+                }
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="email">Email Address *</label>
-              <input
-                type="email"
-                id="email"
-                formControlName="email"
-                [class.error]="isFieldInvalid('email')"
-                placeholder="your.email@example.com">
-              <div class="error-message" *ngIf="isFieldInvalid('email')">
-                {{ getFieldError('email') }}
+              <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input
+                  type="email"
+                  id="email"
+                  formControlName="email"
+                  [class.error]="isFieldInvalid('email')"
+                  placeholder="your.email@example.com">
+                @if (isFieldInvalid('email')) {
+                  <div class="error-message">
+                    {{ getFieldError('email') }}
+                  </div>
+                }
               </div>
-            </div>
 
             <div class="form-group">
               <label for="address">Pickup Address *</label>
@@ -266,9 +301,11 @@
                 [class.error]="isFieldInvalid('address')"
                 placeholder="Enter your complete pickup address including building name, floor, and any special directions"
                 rows="3"></textarea>
-              <div class="error-message" *ngIf="isFieldInvalid('address')">
-                {{ getFieldError('address') }}
-              </div>
+              @if (isFieldInvalid('address')) {
+                <div class="error-message">
+                  {{ getFieldError('address') }}
+                </div>
+              }
             </div>
           </div>
 
@@ -285,9 +322,11 @@
                   formControlName="pickupDate"
                   [min]="getMinDate()"
                   [class.error]="isFieldInvalid('pickupDate')">
-                <div class="error-message" *ngIf="isFieldInvalid('pickupDate')">
-                  Please select a valid pickup date
-                </div>
+                @if (isFieldInvalid('pickupDate')) {
+                  <div class="error-message">
+                    Please select a valid pickup date
+                  </div>
+                }
               </div>
 
               <div class="form-group">
@@ -297,11 +336,15 @@
                   formControlName="pickupTime"
                   [class.error]="isFieldInvalid('pickupTime')">
                   <option value="">Select time slot</option>
-                  <option *ngFor="let slot of timeSlots" [value]="slot">{{ slot }}</option>
+                  @for (slot of timeSlots; track slot) {
+                    <option [value]="slot">{{ slot }}</option>
+                  }
                 </select>
-                <div class="error-message" *ngIf="isFieldInvalid('pickupTime')">
-                  Please select a pickup time
-                </div>
+                @if (isFieldInvalid('pickupTime')) {
+                  <div class="error-message">
+                    Please select a pickup time
+                  </div>
+                }
               </div>
             </div>
           </div>
@@ -311,20 +354,22 @@
             <h4>Additional Services (Optional)</h4>
 
             <div class="addons-grid">
-              <div class="addon-item" *ngFor="let addon of addons">
-                <label class="addon-checkbox">
-                  <input
-                    type="checkbox"
-                    [value]="addon.id"
-                    [checked]="bookingForm.get('addons')?.value?.includes(addon.id)"
-                    (change)="onAddonChange(addon.id, $event)">
-                  <span class="checkmark"></span>
-                  <div class="addon-details">
-                    <span class="addon-name">{{ addon.name }}</span>
-                    <span class="addon-price">+{{ selectedPackage?.currency }} {{ addon.price | number }}</span>
-                  </div>
-                </label>
-              </div>
+              @for (addon of addons; track addon.id) {
+                <div class="addon-item">
+                  <label class="addon-checkbox">
+                    <input
+                      type="checkbox"
+                      [value]="addon.id"
+                      [checked]="bookingForm.get('addons')?.value?.includes(addon.id)"
+                      (change)="onAddonChange(addon.id, $event)">
+                    <span class="checkmark"></span>
+                    <div class="addon-details">
+                      <span class="addon-name">{{ addon.name }}</span>
+                      <span class="addon-price">+{{ selectedPackage?.currency }} {{ addon.price | number }}</span>
+                    </div>
+                  </label>
+                </div>
+              }
             </div>
           </div>
 
@@ -349,19 +394,23 @@
             </div>
 
             <!-- Cart items in summary -->
-            <div class="summary-item" *ngFor="let item of getCartItems()">
-              <span>{{ item.name }} ({{ item.quantity }}x)</span>
-              <span>KSh{{ (item.price * item.quantity) | number }}</span>
-            </div>
+            @for (item of getCartItems(); track item.id) {
+              <div class="summary-item">
+                <span>{{ item.name }} ({{ item.quantity }}x)</span>
+                <span>KSh{{ (item.price * item.quantity) | number }}</span>
+              </div>
+            }
 
-            <div class="summary-item" *ngFor="let addonId of bookingForm.get('addons')?.value">
-              <ng-container *ngFor="let addon of addons">
-                <ng-container *ngIf="addon.id === addonId">
-                  <span>{{ addon.name }}</span>
-                  <span>{{ selectedPackage?.currency }} {{ addon.price | number }}</span>
-                </ng-container>
-              </ng-container>
-            </div>
+            @for (addonId of bookingForm.get('addons')?.value; track addonId) {
+              @for (addon of addons; track addon.id) {
+                @if (addon.id === addonId) {
+                  <div class="summary-item">
+                    <span>{{ addon.name }}</span>
+                    <span>{{ selectedPackage?.currency }} {{ addon.price | number }}</span>
+                  </div>
+                }
+              }
+            }
 
             <div class="summary-total">
               <span>Total Amount:</span>
@@ -381,6 +430,7 @@
         </form>
       </div>
     </section>
+  }
 
     <!-- Why Choose Us Section -->
     <section class="why-choose-us">

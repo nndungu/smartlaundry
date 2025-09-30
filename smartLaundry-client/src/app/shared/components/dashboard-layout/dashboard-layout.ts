@@ -3,15 +3,8 @@ import { Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth';
+import { CartService, CartItem } from '../../../services/cart.service';
 import { Subscription, filter } from 'rxjs';
-
-export interface CartItem {
-  id: string;
-  name: string;
-  quantity: number;
-  price: number;
-  service: string;
-}
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -27,6 +20,7 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
   userName = 'User';
   private userSubscription: Subscription = new Subscription();
   private routerSubscription: Subscription = new Subscription();
+  private cartSubscription: Subscription = new Subscription();
 
   navItems = [
     { id: 'dashboard', text: 'Dashboard', icon: '📊', active: false, route: '/client-dashboard' },
@@ -39,9 +33,7 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
     { id: 'profile', text: 'Profile', icon: '👤', active: false, route: '/client-dashboard/profile-update' }
   ];
 
-  cartItems: CartItem[] = [];
-
-  constructor(@Inject(Router) private router: Router, private authService: AuthService) {}
+  constructor(@Inject(Router) private router: Router, private authService: AuthService, private cartService: CartService) {}
 
   ngOnInit(): void {
     // Subscribe to user data
@@ -60,16 +52,19 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
       this.updateActiveNavItem(event.urlAfterRedirects);
     });
 
+    // Subscribe to cart changes for reactive cart count
+    this.cartSubscription = this.cartService.cartItems$.subscribe(items => {
+      this.cartItemCount = this.cartService.getCartItemCount();
+    });
+
     // Set initial active item
     this.updateActiveNavItem(this.router.url);
-
-    // Load cart from localStorage
-    this.loadCart();
   }
 
   ngOnDestroy(): void {
     this.userSubscription.unsubscribe();
     this.routerSubscription.unsubscribe();
+    this.cartSubscription.unsubscribe();
   }
 
   toggleMobileMenu(): void {
@@ -112,63 +107,31 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Cart functionality
-  private loadCart(): void {
-    const savedCart = localStorage.getItem('laundryCart');
-    if (savedCart) {
-      this.cartItems = JSON.parse(savedCart);
-      this.updateCartCount();
-    }
-  }
-
+  // Cart functionality - now delegates to CartService
   addToCart(item: CartItem): void {
-    const existingItem = this.cartItems.find(cartItem => cartItem.id === item.id);
-
-    if (existingItem) {
-      existingItem.quantity += item.quantity;
-    } else {
-      this.cartItems.push(item);
-    }
-
-    this.saveCart();
-    this.updateCartCount();
+    this.cartService.addToCart(item);
   }
 
   removeFromCart(itemId: string): void {
-    this.cartItems = this.cartItems.filter(item => item.id !== itemId);
-    this.saveCart();
-    this.updateCartCount();
+    this.cartService.removeFromCart(itemId);
   }
 
   updateCartItemQuantity(itemId: string, quantity: number): void {
-    const item = this.cartItems.find(cartItem => cartItem.id === itemId);
-    if (item) {
-      item.quantity = quantity;
-      if (quantity <= 0) {
-        this.removeFromCart(itemId);
-      } else {
-        this.saveCart();
-        this.updateCartCount();
-      }
-    }
-  }
-
-  private saveCart(): void {
-    localStorage.setItem('laundryCart', JSON.stringify(this.cartItems));
-  }
-
-  private updateCartCount(): void {
-    this.cartItemCount = this.cartItems.reduce((total, item) => total + item.quantity, 0);
+    this.cartService.updateQuantity(itemId, quantity);
   }
 
   getCartTotal(): number {
-    return this.cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return this.cartService.getCartTotal();
   }
 
   clearCart(): void {
-    this.cartItems = [];
-    this.cartItemCount = 0;
-    localStorage.removeItem('laundryCart');
+    this.cartService.clearCart();
+  }
+
+  // Modal functionality for checkout
+  openCheckoutModal(): void {
+    // This will be implemented when we create the CheckoutModalComponent
+    console.log('Checkout modal opened');
   }
 
   // Loading state management
