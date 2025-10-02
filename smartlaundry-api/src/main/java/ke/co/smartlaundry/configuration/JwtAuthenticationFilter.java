@@ -31,6 +31,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        String path = request.getServletPath();
+
+        // 🚨 Skip JWT validation for public endpoints
+        if (path.startsWith("/api/auth/") || path.startsWith("/h2-console/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         final String authHeader = request.getHeader("Authorization");
         String email = null;
         String token = null;
@@ -39,15 +47,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
             try {
-                if (jwtUtil.validateToken(token)) {  // ✅ validate before parsing
-                    email = jwtUtil.getEmailFromToken(token);  // ✅ extract email
+                if (jwtUtil.validateToken(token)) {  // validate token first
+                    email = jwtUtil.getEmailFromToken(token);  // extract email
                 }
             } catch (Exception e) {
                 request.setAttribute("jwt_error", e.getMessage());
             }
         }
 
-        // Authenticate user if token is valid and no authentication set
+        // Authenticate user if token is valid and no authentication is set
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 

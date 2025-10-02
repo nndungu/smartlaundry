@@ -12,7 +12,6 @@ public class LoginRequestDTO {
     @NotBlank
     private String password;
 
-    // Getters & Setters
     public String getEmail() {
         return email;
     }

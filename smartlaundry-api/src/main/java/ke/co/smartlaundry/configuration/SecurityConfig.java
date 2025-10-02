@@ -31,6 +31,12 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // --- Utility bean for generating password hashes ---
+    @Bean
+    public PasswordHashGenerator passwordHashGenerator(PasswordEncoder passwordEncoder) {
+        return new PasswordHashGenerator(passwordEncoder);
+    }
+
     // --- Expose CustomUserDetailsService as UserDetailsService ---
     @Bean
     public UserDetailsService userDetailsService(CustomUserDetailsService customUserDetailsService) {
@@ -57,14 +63,24 @@ public class SecurityConfig {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-                // Disable sessions, use JWT instead
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Add JWT filter before Spring’s UsernamePasswordAuthenticationFilter
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // Needed for H2 console access
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
+    }
+
+    // --- Inner utility class ---
+    public static class PasswordHashGenerator {
+        private final PasswordEncoder passwordEncoder;
+
+        public PasswordHashGenerator(PasswordEncoder passwordEncoder) {
+            this.passwordEncoder = passwordEncoder;
+        }
+
+        public String encode(String rawPassword) {
+            return passwordEncoder.encode(rawPassword);
+        }
     }
 }

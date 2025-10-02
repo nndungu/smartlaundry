@@ -5,13 +5,14 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "users") // safer than "user"
+@Table(name = "app_user") // safer than "user"
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "full_name", nullable = false)
+    @Column(name = "username", nullable = false)
     private String fullName;
 
     @Column(nullable = false, unique = true)
@@ -27,12 +28,22 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @Column(name = "is_active")
-    private Boolean isActive = true;
-
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private Timestamp createdAt;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Status status; // ACTIVE, SUSPENDED
+
+    public boolean getIsActive() {
+        return status != null && status == Status.ACTIVE;
+    }
+
+    public enum Status {
+        ACTIVE,
+        SUSPENDED
+    }
 
     // getters and setters
     public Long getId() { return id; }
@@ -53,9 +64,7 @@ public class User {
     public Role getRole() { return role; }
     public void setRole(Role roleName) { this.role = roleName; }
 
-    public Boolean getIsActive() { return isActive; }
-    public void setIsActive(Boolean isActive) { this.isActive = isActive; }
-
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+
 }
