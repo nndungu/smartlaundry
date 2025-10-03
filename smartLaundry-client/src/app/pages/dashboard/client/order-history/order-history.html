@@ -63,10 +63,10 @@
           </span>
         </div>
         
-        <div class="order-summary">
-          <div class="items-count">{{ order.items.length }} item(s)</div>
-          <div class="total-price">${{ order.totalPrice.toFixed(2) }}</div>
-        </div>
+          <div class="order-summary">
+            <div class="items-count">{{ order.items.length }} item(s)</div>
+            <div class="total-price">{{ order.currency }} {{ order.totalPrice.toFixed(2) }}</div>
+          </div>
       </div>
       
       <div class="order-actions" (click)="$event.stopPropagation()">

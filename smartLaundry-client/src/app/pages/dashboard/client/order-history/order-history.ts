@@ -20,6 +20,7 @@ export interface Order {
   serviceTypes: string[];
   status: 'Pending' | 'In Progress' | 'Completed' | 'Canceled';
   totalPrice: number;
+  currency?: string;  // Made optional
   items: OrderItem[];
   pickupDate?: Date;
   deliveryDate?: Date;
@@ -37,9 +38,10 @@ export interface Order {
 
 @Component({
   selector: 'app-order-history',
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DatePipe],
   templateUrl: './order-history.html',
-  styleUrls: ['./order-history.scss'],
-  imports: [CommonModule, FormsModule, DatePipe]
+  styleUrls: ['./order-history.scss']
 })
 export class OrderHistoryComponent implements OnInit, OnDestroy {
   orders: Order[] = [];
@@ -101,8 +103,17 @@ export class OrderHistoryComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (orders: Order[]) => {
-          this.orders = orders;
-          this.filteredOrders = [...orders];
+          // Add default currency and fix referenceNumber prefix
+          this.orders = orders.map(order => {
+            if (!order.currency) {
+              order.currency = 'KSh';
+            }
+            if (order.referenceNumber.startsWith('LND-')) {
+              order.referenceNumber = order.referenceNumber.replace('LND-', 'SL-');
+            }
+            return order;
+          });
+          this.filteredOrders = [...this.orders];
           this.applyFilters();
         },
         error: (error: any) => {
