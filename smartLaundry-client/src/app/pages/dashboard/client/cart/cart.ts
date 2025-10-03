@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { CartService, CartItem } from '../../../../services/cart.service';
 import { Subscription } from 'rxjs';
 
@@ -15,7 +16,7 @@ export class CartComponent implements OnInit, OnDestroy {
   cartTotal = 0;
   private cartSubscription: Subscription = new Subscription();
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private router: Router) {}
 
   ngOnInit(): void {
     // Subscribe to cart changes for reactive updates
@@ -53,14 +54,12 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   proceedToCheckout(): void {
-    // Open checkout modal instead of navigating
-    // This will be implemented when we create the CheckoutModalComponent
-    console.log('Opening checkout modal');
+    // Navigate to payment checkout
+    this.router.navigate(['/client-dashboard/payment-checkout']);
   }
 
   continueShopping(): void {
     // Navigate to book service
-    // This will be implemented when we integrate with DashboardLayoutComponent
-    console.log('Navigating to book service');
+    this.router.navigate(['/client-dashboard/book-service']);
   }
 }
