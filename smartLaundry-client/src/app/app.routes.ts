@@ -59,13 +59,16 @@ export const routes: Routes = [
       },
       {
         path: 'payment-checkout',
-        loadComponent: () => import('./pages/dashboard/client/payment-checkout/payment-checkout').then(m => m.PaymentCheckoutComponent)
+        loadComponent: () => import('./pages/dashboard/client/payment-checkout/payment-checkout').then(m => m.CheckoutPaymentComponent)
       },
       {
         path: 'notifications',
         loadComponent: () => import('./pages/dashboard/client/notifications/notifications').then(m => m.NotificationsComponent)
       },
-      
+      {
+        path: 'profile-update',
+        loadComponent: () => import('./pages/dashboard/client/profile-update/profile-update').then(m => m.ProfileUpdateComponent)
+      }
     ]
   },
   {
