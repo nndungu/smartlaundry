@@ -35,19 +35,19 @@ export class RegisterComponent {
   validationErrors: {[key: string]: string} = {};
 
   roles = [
-    { 
-      value: 'customer', 
-      label: 'Customer', 
+    {
+      value: 'customer',
+      label: 'Customer',
       icon: '👥'
     },
-    { 
-      value: 'provider', 
-      label: 'Laundry Service Provider', 
+    {
+      value: 'driver',
+      label: 'Driver',
       icon: '🏪'
     },
-    { 
-      value: 'admin', 
-      label: 'Administrator', 
+    {
+      value: 'admin',
+      label: 'Administrator',
       icon: '🛡️'
     }
   ];
@@ -68,6 +68,15 @@ export class RegisterComponent {
   selectRole(role: any): void {
     this.selectedRole = role.value;
     this.showRoleDropdown = false;
+  }
+
+  getRoleId(role: string): number {
+    switch (role) {
+      case 'customer': return 1;
+      case 'driver': return 2;
+      case 'admin': return 3;
+      default: return 1;
+    }
   }
 
   getRoleLabel(value: string): string {
@@ -142,27 +151,26 @@ export class RegisterComponent {
 
     // Prepare form data
     const registrationData = {
-      firstName: this.formData.firstName.trim(),
-      lastName: this.formData.lastName.trim(),
+      fullName: `${this.formData.firstName.trim()} ${this.formData.lastName.trim()}`,
       email: this.formData.email.trim().toLowerCase(),
       phone: this.formData.phone.trim(),
-      password: this.formData.password,
-      role: this.selectedRole,
-    ...(this.selectedRole === 'admin' && { adminPasscode: this.formData.adminPasscode })
+      passwordHash: this.formData.password,
+      role: { id: this.getRoleId(this.selectedRole) },
+      isActive: true
     };
 
     console.log('Registration data:', registrationData);
 
-    // Use AuthService to register user with Firebase
-    this.authService.register(registrationData.email, registrationData.password)
+    // Use AuthService to register user with API
+    this.authService.register(registrationData)
       .pipe(
         catchError(error => {
           alert('Registration failed: ' + (error.message || 'Unknown error'));
           return of(null);
         })
       )
-      .subscribe((userCredential: UserCredential) => { // Typed userCredential
-        if (userCredential) {
+      .subscribe((response) => {
+        if (response) {
           alert('Registration successful! Please check your email for verification.');
           this.router.navigate(['/login']);
         }

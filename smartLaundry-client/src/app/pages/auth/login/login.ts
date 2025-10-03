@@ -1,13 +1,13 @@
 // src/app/pages/auth/login/login.ts
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormsModule } from '@angular/forms';        
-import { CommonModule } from '@angular/common';      
-import { RouterModule } from '@angular/router';      
-import { AuthService } from '../../../services/auth/auth'; // Fixed import path
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../services/auth/auth';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { UserCredential } from '@angular/fire/auth'; // Added UserCredential import
+import { AuthResponse } from '../../../models/auth/auth-response.model';
 
 @Component({
   selector: 'app-login',
@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
     this.generalError = '';
     this.successMessage = '';
 
-    // Use AuthService to perform login with Firebase
+    // Use AuthService to perform login with API
     this.authService.login(this.formData.email.trim().toLowerCase(), this.formData.password)
       .pipe(
         catchError(error => {
@@ -80,13 +80,13 @@ export class LoginComponent implements OnInit {
           return of(null);
         })
       )
-      .subscribe((userCredential: UserCredential) => { // Typed userCredential
-        if (userCredential) {
+      .subscribe((response: AuthResponse | null) => {
+        if (response) {
           this.isLoading = false;
           this.successMessage = 'Login successful! Redirecting to dashboard...';
 
           if (this.rememberMe) {
-            localStorage.setItem('rememberMe', 'true'); // Added rememberMe localStorage
+            localStorage.setItem('rememberMe', 'true');
           }
 
           setTimeout(() => {
@@ -97,21 +97,20 @@ export class LoginComponent implements OnInit {
   }
 
   private getErrorMessage(error: any): string {
-    // Map Firebase auth errors to user-friendly messages
-    if (!error || !error.code) {
+    // Map API errors to user-friendly messages
+    if (!error) {
       return 'An unknown error occurred. Please try again.';
     }
-    switch (error.code) {
-      case 'auth/user-not-found':
-      case 'auth/wrong-password':
-        return 'Invalid email or password. Please try again.';
-      case 'auth/user-disabled':
-        return 'Your account has been temporarily locked. Please contact support.';
-      case 'auth/email-not-verified':
-        return 'Please verify your email address before signing in.';
-      default:
-        return error.message || 'An error occurred during login.';
+    if (error.status === 401) {
+      return 'Invalid email or password. Please try again.';
     }
+    if (error.status === 400) {
+      return 'Invalid request. Please check your input.';
+    }
+    if (error.status === 500) {
+      return 'Server error. Please try again later.';
+    }
+    return error.error?.message || error.message || 'An error occurred during login.';
   }
 
   signInWithGoogle(): void {
