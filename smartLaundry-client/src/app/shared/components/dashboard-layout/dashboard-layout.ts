@@ -92,6 +92,12 @@ export class DashboardLayoutComponent implements OnInit, OnDestroy {
     console.log('Profile opened');
   }
 
+  logout(): void {
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/login']);
+    });
+  }
+
   navigateToPage(pageId: string): void {
     const navItem = this.navItems.find(item => item.id === pageId);
     if (navItem) {
