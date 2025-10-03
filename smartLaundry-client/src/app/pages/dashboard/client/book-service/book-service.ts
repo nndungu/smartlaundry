@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DecimalPipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { CartService, CartItem } from '../../../../services/cart.service';
 
 interface LaundryPackage {
@@ -70,7 +71,8 @@ export class BookingServiceComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router
   ) {
     this.initializeForm();
     this.initializeData();
@@ -158,8 +160,7 @@ export class BookingServiceComponent implements OnInit {
       { id: '12', name: 'Duvet (Medium)', price: 600, originalPrice: 650, onSale: true },
       { id: '13', name: 'Duvet (Small)', price: 600, originalPrice: 650, onSale: true },
       { id: '14', name: 'Formal Trouser', price: 400, originalPrice: 430, onSale: true },
-      { id: '15', name: 'Graduation Gown', price: 900, originalPrice: 950, onSale: true },
-      { id: '16', name: 'Hand Towel', price: 200, originalPrice: 250, onSale: true },
+      { id: '15', name: 'Graduation Gown', price: 900, originalPrice: 950, onSale: true },      { id: '16', name: 'Hand Towel', price: 200, originalPrice: 250, onSale: true },
 
       { id: '17', name: 'Shirt (Cotton)', price: 250, onSale: false },
       { id: '18', name: 'Blouse', price: 300, originalPrice: 350, onSale: true },
@@ -364,20 +365,8 @@ export class BookingServiceComponent implements OnInit {
   // Form submission
   onSubmit(): void {
     if (this.bookingForm.valid && this.selectedPackage) {
-      const bookingData = {
-        package: this.selectedPackage,
-        customerInfo: this.bookingForm.value,
-        cartItems: this.getCartItems(),
-        addons: this.bookingForm.get('addons')?.value || [],
-        totalAmount: this.calculateGrandTotal()
-      };
-
-      console.log('Booking Data:', bookingData);
-
-      // Here you would typically send the data to your backend service
-      // this.bookingService.createBooking(bookingData).subscribe(...)
-
-      alert('Booking submitted successfully!');
+      // Navigate to payment checkout
+      this.router.navigate(['/client-dashboard/payment-checkout']);
     } else {
       // Mark all fields as touched to show validation errors
       Object.keys(this.bookingForm.controls).forEach(key => {
