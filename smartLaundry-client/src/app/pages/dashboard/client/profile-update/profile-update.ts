@@ -1,96 +1,121 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+interface UserProfile {
+  location: string;
+  streetNumber: string;
+  houseNumber?: string;
+  apartment?: string;
+}
 
 @Component({
   selector: 'app-profile-update',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './profile-update.html',
   styleUrls: ['./profile-update.scss']
 })
 export class ProfileUpdateComponent implements OnInit {
-  isEditing = false;
   profileForm: FormGroup;
-  selectedFile: File | null = null;
-  imagePreview: string | ArrayBuffer | null = null;
+  userProfile: UserProfile | null = null;
+  isLoading = false;
+  successMessage = '';
+  errorMessage = '';
 
-  // Sample user data - replace with actual data from service
-  userData = {
-    fullName: 'John Doe',
-    email: 'johndoe@email.com',
-    phone: '+254 712 345 678',
-    address: 'Nairobi, Kenya',
-    profileImage: 'assets/images/default-avatar.jpg'
+  // Mock initial user data - in real app, this would come from a service
+  private initialProfile: UserProfile = {
+    location: 'Nairobi',
+    streetNumber: '123',
+    houseNumber: '45',
+    apartment: 'Green Valley Apartments'
   };
 
   constructor(private fb: FormBuilder) {
     this.profileForm = this.fb.group({
-      fullName: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required]],
-      address: ['', [Validators.required]]
+      location: ['', [Validators.required, Validators.minLength(2)]],
+      streetNumber: ['', [Validators.required]],
+      houseNumber: [''],
+      apartment: ['']
     });
   }
 
   ngOnInit(): void {
-    this.loadUserData();
+    // Simulate loading user profile data
+    this.loadUserProfile();
   }
 
-  loadUserData(): void {
-    this.profileForm.patchValue(this.userData);
-    this.imagePreview = this.userData.profileImage;
+  loadUserProfile(): void {
+    // In a real application, this would be an API call
+    setTimeout(() => {
+      this.userProfile = { ...this.initialProfile };
+      this.profileForm.patchValue(this.initialProfile);
+      this.profileForm.markAsPristine();
+    }, 500);
   }
 
-  toggleEditMode(): void {
-    this.isEditing = !this.isEditing;
-    if (!this.isEditing) {
-      this.loadUserData(); // Reset form if canceling
-      this.selectedFile = null;
+  get location() {
+    return this.profileForm.get('location');
+  }
+
+  get streetNumber() {
+    return this.profileForm.get('streetNumber');
+  }
+
+  onSubmit(): void {
+    if (this.profileForm.invalid) {
+      this.markAllFieldsAsTouched();
+      return;
     }
+
+    this.isLoading = true;
+    this.successMessage = '';
+    this.errorMessage = '';
+
+    // Simulate API call to update profile
+    setTimeout(() => {
+      this.isLoading = false;
+      
+      // Simulate random success/failure for demo purposes
+      const isSuccess = Math.random() > 0.2; // 80% success rate for demo
+      
+      if (isSuccess) {
+        this.userProfile = { ...this.profileForm.value };
+        this.successMessage = 'Profile updated successfully!';
+        this.profileForm.markAsPristine();
+        
+        // Clear success message after 5 seconds
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 5000);
+      } else {
+        this.errorMessage = 'Failed to update profile. Please try again.';
+        
+        // Clear error message after 5 seconds
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
+      }
+    }, 1500);
   }
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      this.selectedFile = input.files[0];
-      
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.imagePreview = e.target?.result || null;
-      };
-      reader.readAsDataURL(this.selectedFile);
-    }
-  }
-
-  saveChanges(): void {
-    if (this.profileForm.valid) {
-      // Update userData with form values
-      this.userData = { ...this.userData, ...this.profileForm.value };
-      
-      // TODO: Send data to backend service
-      console.log('Saving profile:', this.userData);
-      console.log('Profile image file:', this.selectedFile);
-      
-      this.isEditing = false;
-      
-      // Show success message (implement toast/notification service)
-      alert('Profile updated successfully!');
+  onCancel(): void {
+    if (this.userProfile) {
+      this.profileForm.patchValue(this.userProfile);
+      this.profileForm.markAsPristine();
     } else {
-      // Mark all fields as touched to show validation errors
-      Object.keys(this.profileForm.controls).forEach(key => {
-        this.profileForm.get(key)?.markAsTouched();
-      });
+      this.profileForm.reset();
     }
+    this.successMessage = '';
+    this.errorMessage = '';
   }
 
-  getFieldError(fieldName: string): string {
-    const field = this.profileForm.get(fieldName);
-    if (field?.errors && field.touched) {
-      if (field.errors['required']) return `${fieldName} is required`;
-      if (field.errors['email']) return 'Please enter a valid email';
-      if (field.errors['minlength']) return `${fieldName} is too short`;
-    }
-    return '';
+  private markAllFieldsAsTouched(): void {
+    Object.keys(this.profileForm.controls).forEach(key => {
+      const control = this.profileForm.get(key);
+      control?.markAsTouched();
+    });
+  }
+
+  // Helper method to check if form has unsaved changes
+  hasUnsavedChanges(): boolean {
+    return this.profileForm.dirty && !this.isLoading;
   }
 }

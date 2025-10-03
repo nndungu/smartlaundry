@@ -1,52 +1,127 @@
-// Additional custom styles (Tailwind handles most styling)
-.profile-container {
-  // Any custom styles beyond Tailwind can go here
+:host {
+  display: block;
 }
 
-// Custom focus states for better accessibility
-input:focus, 
-textarea:focus {
-  @apply ring-2 ring-blue-500 ring-offset-2;
+// Custom animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-// Smooth transitions for mode switching
-.form-field {
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Form animations
+.form-section {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.success-message {
+  animation: slideIn 0.3s ease-out;
+}
+
+// Enhanced focus styles
+input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #3b82f6;
+}
+
+// Custom transitions
+button, input {
   transition: all 0.2s ease-in-out;
 }
 
-// Custom file upload button styling
-input[type="file"] {
-  &:focus + label {
-    @apply ring-2 ring-blue-500 ring-offset-2;
+// Loading animation
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-// Mobile responsive adjustments
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+// Error state enhancements
+.border-red-300 {
+  border-color: #fca5a5;
+  &:focus {
+    border-color: #fca5a5;
+    box-shadow: 0 0 0 3px rgba(252, 165, 165, 0.1);
+  }
+}
+
+// Success state enhancements
+.bg-green-50 {
+  background-color: #f0fdf4;
+}
+
+// Responsive design improvements
 @media (max-width: 640px) {
   .max-w-2xl {
-    margin: 0 1rem;
+    margin: 0 0.5rem;
   }
   
-  .flex {
-    &.justify-end {
+  .flex-col {
+    .sm\:flex-row {
       flex-direction: column;
-      gap: 0.75rem;
-      
-      button {
-        width: 100%;
-      }
+    }
+    
+    .sm\:w-auto {
+      width: 100%;
     }
   }
 }
 
-// Animation for smooth transitions
-.ng-enter {
-  opacity: 0;
-  transform: translateY(-10px);
+// Button hover effects
+.btn-primary {
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
 }
 
-.ng-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: all 0.2s ease-in-out;
+.btn-secondary {
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Form field enhancements
+.form-group {
+  position: relative;
+  
+  label {
+    transition: all 0.2s ease;
+  }
+  
+  input:focus + label,
+  input:not(:placeholder-shown) + label {
+    color: #3b82f6;
+  }
+}
+
+// Current address preview styling
+.current-address {
+  background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+  border-left: 4px solid #3b82f6;
 }
