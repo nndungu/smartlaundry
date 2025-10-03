@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 interface UserProfile {
@@ -11,7 +13,9 @@ interface UserProfile {
 @Component({
   selector: 'app-profile-update',
   templateUrl: './profile-update.html',
-  styleUrls: ['./profile-update.scss']
+  styleUrls: ['./profile-update.scss'],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class ProfileUpdateComponent implements OnInit {
   profileForm: FormGroup;
