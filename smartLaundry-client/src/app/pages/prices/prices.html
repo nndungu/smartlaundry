@@ -1,1 +1,128 @@
-<p>prices works!</p>
+<div class="pricing-container">
+  <div class="container">
+    <!-- Header Section -->
+    <div class="page-header">
+      <h1 class="page-title">Our Pricing</h1>
+      <p class="page-subtitle">Transparent pricing for all our laundry services</p>
+    </div>
+
+    <!-- Laundry Packages Section -->
+    <section class="pricing-section">
+      <h2 class="section-title">Laundry Packages</h2>
+
+      <div class="pricing-grid">
+        @for (pkg of laundryPackages; track pkg.id) {
+          <div class="pricing-card" [class.popular]="pkg.popular">
+            @if (pkg.popular) {
+              <div class="popular-badge">
+                <span>Most Popular</span>
+              </div>
+            }
+
+            <div class="card-header">
+              <h3 class="card-title">{{ pkg.name }}</h3>
+              <p class="card-subtitle">{{ pkg.description }}</p>
+            </div>
+
+            <div class="pricing-display">
+              <div class="current-price">
+                <span class="price-amount">{{ pkg.price }}</span>
+                <span class="price-currency">{{ pkg.currency }}</span>
+              </div>
+              @if (pkg.originalPrice) {
+                <div class="original-price">
+                  <span class="original-amount">{{ pkg.originalPrice }}</span>
+                  <span class="original-currency">{{ pkg.currency }}</span>
+                </div>
+              }
+            </div>
+
+            <div class="package-details">
+              <p><strong>Size:</strong> {{ pkg.size }}</p>
+              <p><strong>Bag Count:</strong> {{ pkg.bagCount }}</p>
+              <p><strong>Ideal for:</strong> {{ pkg.idealFor }}</p>
+              <p><strong>{{ pkg.timesSaved }}</strong></p>
+            </div>
+
+            <div class="features-list">
+              <h4>Included Services:</h4>
+              <ul>
+                @for (feature of pkg.features; track feature) {
+                  <li>{{ feature }}</li>
+                }
+              </ul>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Laundry Items Section -->
+    <section class="pricing-section">
+      <h2 class="section-title">Laundry Items</h2>
+
+      <div class="pricing-grid items-grid">
+        @for (item of laundryItems; track item.id) {
+          <div class="pricing-card item-card" [class.on-sale]="item.onSale">
+            @if (item.onSale) {
+              <div class="sale-badge">
+                <span>Sale!</span>
+              </div>
+            }
+
+            <div class="card-header">
+              <h3 class="card-title">{{ item.name }}</h3>
+            </div>
+
+            <div class="pricing-display">
+              <div class="current-price">
+                <span class="price-amount">{{ item.price }}</span>
+                <span class="price-currency">KSh</span>
+              </div>
+              @if (item.originalPrice) {
+                <div class="original-price">
+                  <span class="original-amount">{{ item.originalPrice }}</span>
+                  <span class="original-currency">KSh</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Addon Services Section -->
+    <section class="pricing-section">
+      <h2 class="section-title">Addon Services</h2>
+
+      <div class="pricing-grid addons-grid">
+        @for (addon of addons; track addon.id) {
+          <div class="pricing-card addon-card">
+            <div class="card-header">
+              <h3 class="card-title">{{ addon.name }}</h3>
+              @if (addon.description) {
+                <p class="card-subtitle">{{ addon.description }}</p>
+              }
+            </div>
+
+            <div class="pricing-display">
+              <div class="current-price">
+                <span class="price-amount">{{ addon.price }}</span>
+                <span class="price-currency">KSh</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <div class="cta-section">
+      <div class="cta-content">
+        <h3>Ready to get your laundry done?</h3>
+        <p>Book your service today and enjoy our professional laundry services.</p>
+        <a routerLink="/auth/login" class="cta-button">Book Now</a>
+      </div>
+    </div>
+  </div>
+</div>
