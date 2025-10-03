@@ -1,147 +1,87 @@
-<div class="vendor-container">
-    <!-- Sidebar Navigation -->
-    <nav class="sidebar" [class.open]="sidebarOpen" id="sidebar" role="navigation" aria-label="Main navigation">
-        <div class="logo">SmartLaundry</div>
-        <ul class="nav-menu">
-            <li class="nav-item" [class.active]="activeSection === 'dashboard'" data-page="dashboard" (click)="navigateToSection('dashboard')" tabindex="0" role="menuitem" (keydown.enter)="navigateToSection('dashboard')" (keydown.space)="navigateToSection('dashboard')" aria-current="page">
-                <span class="nav-icon">📊</span>
-                <span class="nav-text">Dashboard</span>
-            </li>
-            <li class="nav-item" [class.active]="activeSection === 'orders'" data-page="orders" (click)="navigateToSection('orders')" tabindex="0" role="menuitem" (keydown.enter)="navigateToSection('orders')" (keydown.space)="navigateToSection('orders')">
-                <span class="nav-icon">📋</span>
-                <span class="nav-text">Orders</span>
-            </li>
-            <li class="nav-item" [class.active]="activeSection === 'profile'" data-page="profile" (click)="navigateToSection('profile')" tabindex="0" role="menuitem" (keydown.enter)="navigateToSection('profile')" (keydown.space)="navigateToSection('profile')">
-                <span class="nav-icon">👤</span>
-                <span class="nav-text">Profile</span>
-            </li>
-            <li class="nav-item" [class.active]="activeSection === 'payments'" data-page="payments" (click)="navigateToSection('payments')" tabindex="0" role="menuitem" (keydown.enter)="navigateToSection('payments')" (keydown.space)="navigateToSection('payments')">
-                <span class="nav-icon">💳</span>
-                <span class="nav-text">Payments</span>
-            </li>
-        </ul>
+<div class="flex h-screen bg-gray-100">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-blue-600 text-white flex flex-col">
+    <div class="p-6 text-2xl font-bold border-b border-blue-700">
+      SmartLaundry
+    </div>
+    <nav class="flex-1 px-4 py-6 space-y-2">
+      <a href="#" class="flex items-center px-4 py-2 rounded bg-blue-700">
+        <svg class="sidebar-icon mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        Dashboard
+      </a>
+      <a href="#" class="flex items-center px-4 py-2 rounded hover:bg-blue-700">
+        <svg class="sidebar-icon mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"></path></svg>
+        Orders
+      </a>
+      <a href="#" class="flex items-center px-4 py-2 rounded hover:bg-blue-700">
+        <svg class="sidebar-icon mr-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"></circle><path d="M5.5 21a8.38 8.38 0 0113 0"></path></svg>
+        Profile
+      </a>
     </nav>
+  </aside>
 
-    <!-- Main Content -->
-    <main class="main-content" tabindex="0">
-        <!-- Header -->
-        <header class="page-header">
-            <button class="hamburger-btn" aria-label="Toggle sidebar" aria-expanded="false" aria-controls="sidebar" (click)="toggleSidebar()">
-                ☰
-            </button>
-            <div class="search-container">
-                <div class="search-bar">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" placeholder="Search..." id="searchInput" class="search-input" />
-                </div>
-            </div>
-            <div class="header-actions">
-                <button class="icon-btn" id="notificationBtn">🔔</button>
-                <button class="icon-btn" id="profileBtn">👤</button>
-            </div>
-        </header>
+  <!-- Main content -->
+  <div class="flex-1 p-8 overflow-auto">
+    <h1 class="text-3xl font-bold mb-6">Vendor Dashboard</h1>
 
-        <router-outlet></router-outlet>
-    </main>
-</div>
-
-<!-- Order Details Modal -->
-<div class="modal-overlay" id="orderDetailsModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3>Order Details</h3>
-            <button class="modal-close" id="modalClose">&times;</button>
-        </div>
-        <div class="modal-body" id="orderDetailsBody">
-            <!-- Order details will be populated here -->
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" id="closeModalBtn">Close</button>
-            <button class="btn btn-danger" id="rejectOrderBtn">❌ Reject</button>
-            <button class="btn btn-success" id="acceptOrderBtn">✅ Accept</button>
-        </div>
+    <!-- Orders Table -->
+    <div class="bg-white rounded-lg shadow p-6 mb-8">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr>
+            <th class="border-b border-gray-200 py-2 px-4">Order ID</th>
+            <th class="border-b border-gray-200 py-2 px-4">Status</th>
+            <th class="border-b border-gray-200 py-2 px-4">Status</th>
+            <th class="border-b border-gray-200 py-2 px-4">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border-b border-gray-200 py-2 px-4">#1234</td>
+            <td class="border-b border-gray-200 py-2 px-4">Picked</td>
+            <td class="border-b border-gray-200 py-2 px-4">
+              <span class="inline-block bg-green-200 text-green-800 rounded px-2 py-1 text-sm">Picked</span>
+            </td>
+            <td class="border-b border-gray-200 py-2 px-4">KES 500</td>
+          </tr>
+          <tr>
+            <td class="border-b border-gray-200 py-2 px-4">#1235</td>
+            <td class="border-b border-gray-200 py-2 px-4">Janess</td>
+            <td class="border-b border-gray-200 py-2 px-4"></td>
+            <td class="border-b border-gray-200 py-2 px-4">KES 800</td>
+          </tr>
+          <tr>
+            <td class="border-b border-gray-200 py-2 px-4">#1236</td>
+            <td class="border-b border-gray-200 py-2 px-4">Bob Johnson</td>
+            <td class="border-b border-gray-200 py-2 px-4"></td>
+            <td class="border-b border-gray-200 py-2 px-4">KES 600</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-</div>
 
-<!-- Status Update Modal -->
-<div class="modal-overlay" id="statusUpdateModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3>Update Order Status</h3>
-            <button class="modal-close" id="statusModalClose">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="current-status" id="currentStatusDisplay">
-                <!-- Current status will be shown here -->
-            </div>
-            <div class="form-group">
-                <label for="newStatus">Update Status To:</label>
-                <select id="newStatus" class="form-select">
-                    <option value="">Select New Status</option>
-                    <option value="accepted">Accepted</option>
-                    <option value="picked">Picked Up</option>
-                    <option value="in-transit">In Transit</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="completed">Completed</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="statusNotes">Notes (Optional)</label>
-                <textarea id="statusNotes" placeholder="Add any notes about this status update..." rows="3"></textarea>
-            </div>
-            <div class="form-group" id="deliveryPhotoSection" style="display: none;">
-                <label for="deliveryPhoto">Delivery Photo</label>
-                <input type="file" id="deliveryPhoto" accept="image/*">
-                <small>Upload a photo as proof of delivery</small>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" id="cancelStatusBtn">Cancel</button>
-            <button class="btn btn-primary" id="confirmStatusBtn">Update Status</button>
-        </div>
+    <!-- Earnings Chart -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">Earnings</h2>
+      <svg viewBox="0 0 400 150" class="w-full h-40">
+        <defs>
+          <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stop-color="#3b82f6" stop-opacity="0.4"/>
+            <stop offset="95%" stop-color="#3b82f6" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#gradient)" d="M0 125 L50 100 L100 110 L150 70 L200 130 L250 100 L300 120 L350 110 L400 80 L400 150 L0 150 Z" />
+        <path stroke="#3b82f6" stroke-width="3" fill="none" d="M0 125 L50 100 L100 110 L150 70 L200 130 L250 100 L300 120 L350 110 L400 80" />
+        <text x="0" y="145" class="text-xs fill-gray-600">Jan</text>
+        <text x="50" y="145" class="text-xs fill-gray-600">Feb</text>
+        <text x="100" y="145" class="text-xs fill-gray-600">Mar</text>
+        <text x="150" y="145" class="text-xs fill-gray-600">Apr</text>
+        <text x="200" y="145" class="text-xs fill-gray-600">May</text>
+        <text x="250" y="145" class="text-xs fill-gray-600">Jun</text>
+        <text x="300" y="145" class="text-xs fill-gray-600">Jul</text>
+        <text x="350" y="145" class="text-xs fill-gray-600">Aug</text>
+        <text x="400" y="145" class="text-xs fill-gray-600">Sep</text>
+      </svg>
     </div>
-</div>
-
-<!-- Rejection Reason Modal -->
-<div class="modal-overlay" id="rejectionModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3>Reject Order</h3>
-            <button class="modal-close" id="rejectionModalClose">&times;</button>
-        </div>
-        <div class="modal-body">
-            <p>Please provide a reason for rejecting this order:</p>
-            <div class="form-group">
-                <label for="rejectionReason">Rejection Reason</label>
-                <select id="rejectionReason" class="form-select">
-                    <option value="">Select a reason</option>
-                    <option value="vehicle-breakdown">Vehicle Breakdown</option>
-                    <option value="too-far">Location Too Far</option>
-                    <option value="time-conflict">Time Conflict</option>
-                    <option value="overbooked">Already Overbooked</option>
-                    <option value="weather">Bad Weather Conditions</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="rejectionNotes">Additional Notes</label>
-                <textarea id="rejectionNotes" placeholder="Provide additional details..." rows="3"></textarea>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" id="cancelRejectionBtn">Cancel</button>
-            <button class="btn btn-danger" id="confirmRejectionBtn">Confirm Rejection</button>
-        </div>
-    </div>
-</div>
-
-<!-- Success/Error Toast -->
-<div class="toast-container" id="toastContainer">
-    <!-- Toast messages will appear here -->
-</div>
-
-<!-- Loading Overlay -->
-<div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-spinner"></div>
-    <p>Processing...</p>
+  </div>
 </div>
