@@ -21,9 +21,6 @@ export const routes: Routes = [
   {path: 'services',
      loadComponent: () => import('./pages/services/services').then(m => m.ServicesComponent)},
 
-  {path: 'pricing',
-     loadComponent: () => import('./pages/prices/prices').then(m => m.PricingComponent)},
-
   {path: 'contact',
      loadComponent: () => import('./pages/contact/contact').then(m => m.ContactComponent)},
 
@@ -83,9 +80,9 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/dashboard/vendor/vendor-dashboard').then(m => m.VendorDashboardComponent),
     children: [
       { path: 'orders', loadComponent: () => import('./pages/dashboard/vendor/order-status/order-status').then(m => m.OrderStatusComponent) },
-      { path: 'profile', loadComponent: () => import('./pages/dashboard/vendor/profile/profile').then(m => m.ProfileComponent) },
+      { path: 'profile', loadComponent: () => import('./pages/dashboard/vendor/profile/profile').then(m => m.ProfileUpdateComponent) },
       { path: 'payments', loadComponent: () => import('./pages/dashboard/vendor/payments/payments').then(m => m.PaymentsComponent) },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+      { path: '', redirectTo: 'orders', pathMatch: 'full' }
     ]
   },
   {
