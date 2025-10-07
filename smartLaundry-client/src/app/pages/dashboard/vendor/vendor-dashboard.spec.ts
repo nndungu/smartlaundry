@@ -1,288 +1,148 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { DebugElement } from '@angular/core';
-import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { Router } from '@angular/router';
+import { VendorDashboardComponent } from './vendor-dashboard';
 
-import { OrderStatusComponent } from './order-status';
+describe('VendorDashboardComponent', () => {
+  let component: VendorDashboardComponent;
+  let fixture: ComponentFixture<VendorDashboardComponent>;
+  let httpMock: HttpTestingController;
+  let router: Router;
 
-describe('OrderStatusComponent', () => {
-  let component: OrderStatusComponent;
-  let fixture: ComponentFixture<OrderStatusComponent>;
-  let compiled: HTMLElement;
+  const mockUserProfile = {
+    id: '123',
+    name: 'John Doe',
+    email: 'john@smartlaundry.com',
+    role: 'Vendor'
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ OrderStatusComponent ]
-    })
-    .compileComponents();
+      declarations: [VendorDashboardComponent],
+      imports: [
+        RouterTestingModule.withRoutes([
+          { path: 'dashboard', component: {} as any },
+          { path: 'orders', component: {} as any },
+          { path: 'profile', component: {} as any },
+          { path: 'login', component: {} as any }
+        ]),
+        HttpClientTestingModule
+      ]
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(OrderStatusComponent);
+    fixture = TestBed.createComponent(VendorDashboardComponent);
     component = fixture.componentInstance;
-    compiled = fixture.nativeElement as HTMLElement;
-    fixture.detectChanges();
+    httpMock = TestBed.inject(HttpTestingController);
+    router = TestBed.inject(Router);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize with mock orders', () => {
-    expect(component.orders).toBeDefined();
-    expect(component.orders.length).toBeGreaterThan(0);
-  });
+  it('should load user profile on init', fakeAsync(() => {
+    component.ngOnInit();
 
-  it('should calculate new orders count correctly', () => {
-    component.orders = [
-      { id: 1, customer: 'Test 1', service: 'Wash', pickup: '2025-09-12 09:30', status: 'Pending', isNew: true },
-      { id: 2, customer: 'Test 2', service: 'Dry Clean', pickup: '2025-09-12 13:00', status: 'Accepted', isNew: false },
-      { id: 3, customer: 'Test 3', service: 'Iron', pickup: '2025-09-12 15:45', status: 'Pending', isNew: true }
-    ];
-    
-    component.updateNewOrdersCount();
-    expect(component.newOrdersCount).toBe(2);
-  });
+    const req = httpMock.expectOne('/api/auth/profile');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockUserProfile);
 
-  it('should display notification badge when there are new orders', () => {
-    component.newOrdersCount = 3;
-    fixture.detectChanges();
-    
-    const badge = compiled.querySelector('.animate-pulse');
-    expect(badge).toBeTruthy();
-    expect(badge?.textContent?.trim()).toBe('3');
-  });
+    tick();
 
-  it('should not display notification badge when no new orders', () => {
-    component.newOrdersCount = 0;
-    fixture.detectChanges();
-    
-    const badge = compiled.querySelector('.animate-pulse');
-    expect(badge).toBeFalsy();
-  });
-
-  it('should toggle notifications dropdown', () => {
-    expect(component.showNotifications).toBeFalsy();
-    
-    component.toggleNotifications();
-    expect(component.showNotifications).toBeTruthy();
-    
-    component.toggleNotifications();
-    expect(component.showNotifications).toBeFalsy();
-  });
-
-  it('should return correct CSS class for order status', () => {
-    expect(component.getStatusClass('Pending')).toBe('bg-orange-100 text-orange-800');
-    expect(component.getStatusClass('Accepted')).toBe('bg-blue-100 text-blue-800');
-    expect(component.getStatusClass('Rejected')).toBe('bg-red-100 text-red-800');
-    expect(component.getStatusClass('In Progress')).toBe('bg-yellow-100 text-yellow-800');
-    expect(component.getStatusClass('Delivered')).toBe('bg-green-100 text-green-800');
-    expect(component.getStatusClass('Completed')).toBe('bg-gray-100 text-gray-800');
-  });
-
-  it('should show confirmation modal for accept action', () => {
-    component.showConfirmation('accept', 101);
-    
-    expect(component.showConfirmModal).toBeTruthy();
-    expect(component.confirmAction).toBe('accept');
-    expect(component.selectedOrderId).toBe(101);
-  });
-
-  it('should show confirmation modal for reject action', () => {
-    component.showConfirmation('reject', 102);
-    
-    expect(component.showConfirmModal).toBeTruthy();
-    expect(component.confirmAction).toBe('reject');
-    expect(component.selectedOrderId).toBe(102);
-  });
-
-  it('should close confirmation modal', () => {
-    component.showConfirmModal = true;
-    component.confirmAction = 'accept';
-    component.selectedOrderId = 101;
-    
-    component.closeModal();
-    
-    expect(component.showConfirmModal).toBeFalsy();
-    expect(component.confirmAction).toBeNull();
-    expect(component.selectedOrderId).toBeNull();
-  });
-
-  it('should confirm accept decision and update order status', () => {
-    component.orders = [
-      { id: 101, customer: 'Test User', service: 'Wash', pickup: '2025-09-12 09:30', status: 'Pending' }
-    ];
-    component.confirmAction = 'accept';
-    component.selectedOrderId = 101;
-    
-    spyOn(component, 'showToastMessage');
-    
-    component.confirmDecision();
-    
-    const updatedOrder = component.orders.find(o => o.id === 101);
-    expect(updatedOrder?.status).toBe('Accepted');
-    expect(component.showToastMessage).toHaveBeenCalledWith('Order accepted successfully');
-    expect(component.showConfirmModal).toBeFalsy();
-  });
-
-  it('should confirm reject decision and update order status', () => {
-    component.orders = [
-      { id: 102, customer: 'Test User', service: 'Wash', pickup: '2025-09-12 09:30', status: 'Pending' }
-    ];
-    component.confirmAction = 'reject';
-    component.selectedOrderId = 102;
-    
-    spyOn(component, 'showToastMessage');
-    
-    component.confirmDecision();
-    
-    const updatedOrder = component.orders.find(o => o.id === 102);
-    expect(updatedOrder?.status).toBe('Rejected');
-    expect(component.showToastMessage).toHaveBeenCalledWith('Order rejected successfully');
-    expect(component.showConfirmModal).toBeFalsy();
-  });
-
-  it('should update order status', () => {
-    component.orders = [
-      { id: 101, customer: 'Test User', service: 'Wash', pickup: '2025-09-12 09:30', status: 'Accepted' }
-    ];
-    
-    spyOn(component, 'showToastMessage');
-    
-    const mockEvent = {
-      target: { value: 'In Progress' }
-    } as any;
-    
-    component.updateOrderStatus(101, mockEvent);
-    
-    const updatedOrder = component.orders.find(o => o.id === 101);
-    expect(updatedOrder?.status).toBe('In Progress');
-    expect(component.showToastMessage).toHaveBeenCalledWith('Order status updated to In Progress');
-  });
-
-  it('should show toast message', fakeAsync(() => {
-    component.showToastMessage('Test message');
-    
-    expect(component.showToast).toBeTruthy();
-    expect(component.toastMessage).toBe('Test message');
-    
-    tick(3000);
-    
-    expect(component.showToast).toBeFalsy();
+    expect(component.userProfile).toEqual(mockUserProfile);
+    expect(component.userName).toBe('John Doe');
+    expect(component.userRole).toBe('Vendor');
   }));
 
-  it('should format date time correctly', () => {
-    const testDate = '2025-09-12T09:30:00';
-    const formatted = component.formatDateTime(testDate);
-    
-    expect(formatted).toContain('9/12/2025');
-    expect(formatted).toContain('09:30');
-  });
+  it('should handle user profile loading error', fakeAsync(() => {
+    component.ngOnInit();
 
-  it('should identify pending orders correctly', () => {
-    expect(component.isPending('Pending')).toBeTruthy();
-    expect(component.isPending('Accepted')).toBeFalsy();
-    expect(component.isPending('Rejected')).toBeFalsy();
-  });
+    const req = httpMock.expectOne('/api/auth/profile');
+    req.error(new ErrorEvent('Network error'));
 
-  it('should identify accepted orders correctly', () => {
-    expect(component.isAccepted('Accepted')).toBeTruthy();
-    expect(component.isAccepted('Pending')).toBeFalsy();
-    expect(component.isAccepted('Completed')).toBeFalsy();
-  });
+    tick();
 
-  it('should identify orders that can change status', () => {
-    expect(component.canChangeStatus('Accepted')).toBeTruthy();
-    expect(component.canChangeStatus('Picked')).toBeTruthy();
-    expect(component.canChangeStatus('In Progress')).toBeTruthy();
-    expect(component.canChangeStatus('Delivered')).toBeTruthy();
-    expect(component.canChangeStatus('Pending')).toBeFalsy();
-    expect(component.canChangeStatus('Rejected')).toBeFalsy();
-    expect(component.canChangeStatus('Completed')).toBeFalsy();
-  });
-
-  it('should render orders in desktop table view', () => {
-    const tableRows = compiled.querySelectorAll('tbody tr');
-    expect(tableRows.length).toBe(component.orders.length);
-  });
-
-  it('should render orders in mobile card view', () => {
-    const cards = compiled.querySelectorAll('.lg\\:hidden .bg-white');
-    expect(cards.length).toBe(component.orders.length);
-  });
-
-  it('should display accept and reject buttons for pending orders', () => {
-    fixture.detectChanges();
-    
-    const pendingOrderRow = compiled.querySelector('tbody tr');
-    const acceptButton = pendingOrderRow?.querySelector('.bg-green-600');
-    const rejectButton = pendingOrderRow?.querySelector('.bg-red-600');
-    
-    expect(acceptButton).toBeTruthy();
-    expect(rejectButton).toBeTruthy();
-    expect(acceptButton?.textContent).toContain('Accept');
-    expect(rejectButton?.textContent).toContain('Reject');
-  });
-
-  it('should display status dropdown for accepted orders', () => {
-    // Find an accepted order in the test data
-    const acceptedOrder = component.orders.find(o => o.status === 'Accepted');
-    if (acceptedOrder) {
-      fixture.detectChanges();
-      const statusSelect = compiled.querySelector('select');
-      expect(statusSelect).toBeTruthy();
-    }
-  });
-
-  it('should handle click events on accept button', () => {
-    spyOn(component, 'showConfirmation');
-    
-    const acceptButton = compiled.querySelector('.bg-green-600') as HTMLButtonElement;
-    acceptButton?.click();
-    
-    expect(component.showConfirmation).toHaveBeenCalled();
-  });
-
-  it('should handle click events on reject button', () => {
-    spyOn(component, 'showConfirmation');
-    
-    const rejectButton = compiled.querySelector('.bg-red-600') as HTMLButtonElement;
-    rejectButton?.click();
-    
-    expect(component.showConfirmation).toHaveBeenCalled();
-  });
-
-  it('should handle notification bell click', () => {
-    spyOn(component, 'toggleNotifications');
-    
-    const notificationButton = compiled.querySelector('button svg')?.parentElement as HTMLButtonElement;
-    notificationButton?.click();
-    
-    expect(component.toggleNotifications).toHaveBeenCalled();
-  });
-
-  it('should track orders by ID for ngFor performance', () => {
-    const mockOrder = { id: 123, customer: 'Test', service: 'Wash', pickup: '2025-09-12 09:30', status: 'Pending' as const };
-    const result = component.trackByOrderId(0, mockOrder);
-    expect(result).toBe(123);
-  });
-
-  // Integration test for new order simulation
-  it('should simulate new order arrival', fakeAsync(() => {
-    const initialOrderCount = component.orders.length;
-    
-    component.simulateNewOrders();
-    tick(10000); // Wait for the timeout
-    
-    expect(component.orders.length).toBe(initialOrderCount + 1);
-    expect(component.newOrdersCount).toBeGreaterThan(0);
+    expect(component.userName).toBe('Vendor User');
+    expect(component.userRole).toBe('Vendor');
   }));
 
-  // Accessibility tests
-  it('should have proper text content for buttons', () => {
-    fixture.detectChanges();
+  it('should generate correct user initials', () => {
+    // Single name
+    component.userName = 'John';
+    expect(component.getUserInitials()).toBe('J');
+
+    // Two names
+    component.userName = 'John Doe';
+    expect(component.getUserInitials()).toBe('JD');
+
+    // Three names
+    component.userName = 'John Michael Doe';
+    expect(component.getUserInitials()).toBe('JD');
+
+    // Empty name
+    component.userName = '';
+    expect(component.getUserInitials()).toBe('U');
+
+    // Loading state
+    component.userName = 'Loading...';
+    expect(component.getUserInitials()).toBe('U');
+  });
+
+  it('should logout successfully', fakeAsync(() => {
+    spyOn(router, 'navigate');
+    spyOn(localStorage, 'removeItem');
+    spyOn(sessionStorage, 'removeItem');
+
+    component.logout();
+
+    const req = httpMock.expectOne('/api/auth/logout');
+    expect(req.request.method).toBe('POST');
+    req.flush({});
+
+    tick();
+
+    expect(localStorage.removeItem).toHaveBeenCalledWith('auth_token');
+    expect(sessionStorage.removeItem).toHaveBeenCalledWith('auth_token');
+    expect(router.navigate).toHaveBeenCalledWith(['/login']);
+  }));
+
+  it('should handle logout error and still redirect', fakeAsync(() => {
+    spyOn(router, 'navigate');
+    spyOn(console, 'error');
+
+    component.logout();
+
+    const req = httpMock.expectOne('/api/auth/logout');
+    req.error(new ErrorEvent('Network error'));
+
+    tick();
+
+    expect(console.error).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalledWith(['/login']);
+  }));
+
+  it('should check active route correctly', () => {
+    spyOnProperty(router, 'url', 'get').and.returnValue('/dashboard');
     
-    const acceptButton = compiled.querySelector('.bg-green-600') as HTMLButtonElement;
-    const rejectButton = compiled.querySelector('.bg-red-600') as HTMLButtonElement;
-    
-    expect(acceptButton?.textContent).toContain('Accept');
-    expect(rejectButton?.textContent).toContain('Reject');
+    expect(component.isActiveRoute('/dashboard')).toBeTrue();
+    expect(component.isActiveRoute('/orders')).toBeFalse();
+  });
+
+  it('should navigate to different routes', () => {
+    const navigateSpy = spyOn(router, 'navigate');
+
+    component.navigateToDashboard();
+    expect(navigateSpy).toHaveBeenCalledWith(['/dashboard']);
+
+    component.navigateToOrders();
+    expect(navigateSpy).toHaveBeenCalledWith(['/orders']);
+
+    component.navigateToProfile();
+    expect(navigateSpy).toHaveBeenCalledWith(['/profile']);
   });
 });
