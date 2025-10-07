@@ -1,159 +1,224 @@
-import { Component, OnInit } from '@angular/core';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { OrderStatusComponent, Order } from './order-status.component';
 
-interface Order {
-  id: number;
-  customer: string;
-  service: string;
-  pickup: string;
-  status: 'Pending' | 'Accepted' | 'Rejected' | 'Picked' | 'In Progress' | 'Delivered' | 'Completed';
-  isNew?: boolean;
-}
+describe('OrderStatusComponent', () => {
+  let component: OrderStatusComponent;
+  let fixture: ComponentFixture<OrderStatusComponent>;
+  let httpMock: HttpTestingController;
 
-@Component({
-  selector: 'app-order-status',
-  templateUrl: './order-status.html',
-  styleUrls: ['./order-status.scss']
-})
-export class OrderStatusComponent implements OnInit {
-  orders: Order[] = [
-    { id: 101, customer: 'Alice Johnson', service: 'Wash & Fold', pickup: '2025-09-12 09:30', status: 'Pending', isNew: true },
-    { id: 102, customer: 'Brian Smith', service: 'Dry Cleaning', pickup: '2025-09-12 13:00', status: 'Accepted' },
-    { id: 103, customer: 'Carol Davis', service: 'Iron Only', pickup: '2025-09-12 15:45', status: 'In Progress' },
-    { id: 104, customer: 'David Wilson', service: 'Wash & Iron', pickup: '2025-09-11 14:20', status: 'Delivered' },
-    { id: 105, customer: 'Emma Brown', service: 'Dry Cleaning', pickup: '2025-09-11 11:00', status: 'Completed' },
-    { id: 106, customer: 'Frank Miller', service: 'Wash & Fold', pickup: '2025-09-12 16:30', status: 'Pending', isNew: true }
+  const mockOrders: Order[] = [
+    {
+      id: '1',
+      customerName: 'John Doe',
+      pickupAddress: '123 Main St, Nairobi',
+      deliveryAddress: '456 Elm St, Nairobi',
+      serviceType: 'Wash & Fold',
+      requestDateTime: '2024-01-15T10:30:00Z',
+      status: 'Pending',
+      driverId: 'driver-123'
+    },
+    {
+      id: '2',
+      customerName: 'Jane Smith',
+      pickupAddress: '789 Oak St, Nairobi',
+      deliveryAddress: '321 Pine St, Nairobi',
+      serviceType: 'Wash, Iron & Fold',
+      requestDateTime: '2024-01-15T14:45:00Z',
+      status: 'Confirmed',
+      driverId: 'driver-123'
+    }
   ];
 
-  showConfirmModal = false;
-  confirmAction: 'accept' | 'reject' | null = null;
-  selectedOrderId: number | null = null;
-  showToast = false;
-  toastMessage = '';
-  newOrdersCount = 0;
-  showNotifications = false;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [OrderStatusComponent],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule
+      ]
+    }).compileComponents();
 
-  statusOptions = ['Picked', 'In Progress', 'Delivered', 'Completed'];
+    fixture = TestBed.createComponent(OrderStatusComponent);
+    component = fixture.componentInstance;
+    httpMock = TestBed.inject(HttpTestingController);
+    
+    // Mock localStorage
+    spyOn(localStorage, 'getItem').and.returnValue('driver-123');
+  });
 
-  ngOnInit() {
-    this.updateNewOrdersCount();
-    // Simulate new orders coming in
-    this.simulateNewOrders();
-  }
+  afterEach(() => {
+    httpMock.verify();
+  });
 
-  updateNewOrdersCount() {
-    this.newOrdersCount = this.orders.filter(order => order.isNew).length;
-  }
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-  simulateNewOrders() {
-    // Simulate a new order arriving after 10 seconds
-    setTimeout(() => {
-      const newOrder: Order = {
-        id: 107,
-        customer: 'Grace Wilson',
-        service: 'Express Wash',
-        pickup: '2025-09-12 18:00',
-        status: 'Pending',
-        isNew: true
-      };
-      this.orders.unshift(newOrder);
-      this.updateNewOrdersCount();
-      this.showToastMessage('New order received!');
-    }, 10000);
-  }
+  it('should load orders on init', fakeAsync(() => {
+    component.ngOnInit();
 
-  toggleNotifications() {
-    this.showNotifications = !this.showNotifications;
-    if (this.showNotifications) {
-      // Mark notifications as viewed
-      setTimeout(() => {
-        this.orders.forEach(order => {
-          if (order.isNew) order.isNew = false;
-        });
-        this.updateNewOrdersCount();
-      }, 2000);
-    }
-  }
+    const req = httpMock.expectOne('/api/orders?driverId=driver-123');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockOrders);
 
-  getStatusClass(status: string): string {
-    const statusClasses: { [key: string]: string } = {
-      'Pending': 'bg-orange-100 text-orange-800',
-      'Accepted': 'bg-blue-100 text-blue-800',
-      'Rejected': 'bg-red-100 text-red-800',
-      'Picked': 'bg-purple-100 text-purple-800',
-      'In Progress': 'bg-yellow-100 text-yellow-800',
-      'Delivered': 'bg-green-100 text-green-800',
-      'Completed': 'bg-gray-100 text-gray-800'
-    };
-    return statusClasses[status] || 'bg-gray-100 text-gray-800';
-  }
+    tick();
 
-  showConfirmation(action: 'accept' | 'reject', orderId: number) {
-    this.confirmAction = action;
-    this.selectedOrderId = orderId;
-    this.showConfirmModal = true;
-  }
+    expect(component.orders).toEqual(mockOrders);
+    expect(component.filteredOrders).toEqual(mockOrders);
+    expect(component.loading).toBeFalse();
+  }));
 
-  confirmDecision() {
-    if (this.selectedOrderId && this.confirmAction) {
-      const order = this.orders.find(o => o.id === this.selectedOrderId);
-      if (order) {
-        order.status = this.confirmAction === 'accept' ? 'Accepted' : 'Rejected';
-        order.isNew = false;
-        this.showToastMessage(`Order ${this.confirmAction === 'accept' ? 'accepted' : 'rejected'} successfully`);
-      }
-      // TODO: API call to update order status
-      // this.orderService.updateOrderStatus(this.selectedOrderId, order.status)
-    }
-    this.closeModal();
-    this.updateNewOrdersCount();
-  }
+  it('should handle order loading error', fakeAsync(() => {
+    component.ngOnInit();
 
-  closeModal() {
-    this.showConfirmModal = false;
-    this.confirmAction = null;
-    this.selectedOrderId = null;
-  }
+    const req = httpMock.expectOne('/api/orders?driverId=driver-123');
+    req.error(new ErrorEvent('Network error'));
 
-  updateOrderStatus(orderId: number, event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    if (target && target.value) {
-      const newStatus = target.value;
-      const order = this.orders.find(o => o.id === orderId);
-      if (order) {
-        order.status = newStatus as Order['status'];
-        this.showToastMessage(`Order status updated to ${newStatus}`);
-      }
-      // TODO: API call to update order status
-      // this.orderService.updateOrderStatus(orderId, newStatus)
-    }
-  }
+    tick();
 
-  showToastMessage(message: string) {
-    this.toastMessage = message;
-    this.showToast = true;
-    setTimeout(() => {
-      this.showToast = false;
-    }, 3000);
-  }
+    expect(component.error).toBe('Failed to load orders. Please try again.');
+    expect(component.loading).toBeFalse();
+  }));
 
-  formatDateTime(dateTime: string): string {
-    const date = new Date(dateTime);
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-  }
+  it('should filter orders correctly', () => {
+    component.orders = mockOrders;
 
-  isPending(status: string): boolean {
-    return status === 'Pending';
-  }
+    component.applyFilter('pending');
+    expect(component.filteredOrders.length).toBe(1);
+    expect(component.filteredOrders[0].status).toBe('Pending');
 
-  isAccepted(status: string): boolean {
-    return status === 'Accepted';
-  }
+    component.applyFilter('active');
+    expect(component.filteredOrders.length).toBe(1);
+    expect(component.filteredOrders[0].status).toBe('Confirmed');
 
-  canChangeStatus(status: string): boolean {
-    return ['Accepted', 'Picked', 'In Progress', 'Delivered'].includes(status);
-  }
+    component.applyFilter('completed');
+    expect(component.filteredOrders.length).toBe(0);
 
-  trackByOrderId(index: number, order: Order): number {
-    return order.id;
-  }
-}
+    component.applyFilter('all');
+    expect(component.filteredOrders.length).toBe(2);
+  });
+
+  it('should confirm order successfully', fakeAsync(() => {
+    component.orders = mockOrders;
+    const orderId = '1';
+
+    component.confirmOrder(orderId);
+
+    const req = httpMock.expectOne(`/api/orders/${orderId}`);
+    expect(req.request.method).toBe('PATCH');
+    expect(req.request.body).toEqual({ status: 'Confirmed' });
+
+    const updatedOrder = { ...mockOrders[0], status: 'Confirmed' as const };
+    req.flush(updatedOrder);
+
+    tick();
+
+    expect(component.orders[0].status).toBe('Confirmed');
+    expect(component.showToast).toBeTrue();
+    expect(component.toastMessage).toBe('Order confirmed successfully!');
+  }));
+
+  it('should reject order successfully', fakeAsync(() => {
+    component.orders = mockOrders;
+    const orderId = '1';
+
+    component.rejectOrder(orderId);
+
+    const req = httpMock.expectOne(`/api/orders/${orderId}`);
+    expect(req.request.method).toBe('PATCH');
+    expect(req.request.body).toEqual({ status: 'Rejected' });
+
+    const updatedOrder = { ...mockOrders[0], status: 'Rejected' as const };
+    req.flush(updatedOrder);
+
+    tick();
+
+    expect(component.orders[0].status).toBe('Rejected');
+    expect(component.showToast).toBeTrue();
+    expect(component.toastMessage).toBe('Order rejected successfully!');
+  }));
+
+  it('should complete order successfully', fakeAsync(() => {
+    component.orders = [mockOrders[1]]; // Start with confirmed order
+    const orderId = '2';
+
+    component.completeOrder(orderId);
+
+    const req = httpMock.expectOne(`/api/orders/${orderId}`);
+    expect(req.request.method).toBe('PATCH');
+    expect(req.request.body).toEqual({ status: 'Completed' });
+
+    const updatedOrder = { ...mockOrders[1], status: 'Completed' as const };
+    req.flush(updatedOrder);
+
+    tick();
+
+    expect(component.orders[0].status).toBe('Completed');
+    expect(component.showToast).toBeTrue();
+    expect(component.toastMessage).toBe('Order marked as completed!');
+  }));
+
+  it('should handle order update error', fakeAsync(() => {
+    component.orders = mockOrders;
+    const orderId = '1';
+
+    component.confirmOrder(orderId);
+
+    const req = httpMock.expectOne(`/api/orders/${orderId}`);
+    req.error(new ErrorEvent('Update failed'));
+
+    tick();
+
+    expect(component.showToast).toBeTrue();
+    expect(component.toastType).toBe('error');
+    expect(component.toastMessage).toBe('Failed to update order. Please try again.');
+  }));
+
+  it('should return correct status colors', () => {
+    expect(component.getStatusColor('Pending')).toContain('yellow');
+    expect(component.getStatusColor('Confirmed')).toContain('blue');
+    expect(component.getStatusColor('Completed')).toContain('green');
+    expect(component.getStatusColor('Rejected')).toContain('red');
+  });
+
+  it('should return correct status icons', () => {
+    expect(component.getStatusIcon('Pending')).toBe('⏳');
+    expect(component.getStatusIcon('Confirmed')).toBe('✅');
+    expect(component.getStatusIcon('Completed')).toBe('🎉');
+    expect(component.getStatusIcon('Rejected')).toBe('❌');
+  });
+
+  it('should check action permissions correctly', () => {
+    const pendingOrder = mockOrders[0]; // Pending
+    const confirmedOrder = mockOrders[1]; // Confirmed
+
+    expect(component.canConfirm(pendingOrder)).toBeTrue();
+    expect(component.canReject(pendingOrder)).toBeTrue();
+    expect(component.canComplete(pendingOrder)).toBeFalse();
+
+    expect(component.canConfirm(confirmedOrder)).toBeFalse();
+    expect(component.canReject(confirmedOrder)).toBeFalse();
+    expect(component.canComplete(confirmedOrder)).toBeTrue();
+  });
+
+  it('should format date time correctly', () => {
+    const dateTime = '2024-01-15T10:30:00Z';
+    const formatted = component.formatDateTime(dateTime);
+    expect(formatted).toContain('2024');
+    expect(formatted).toContain('Jan');
+  });
+
+  it('should show toast message and auto hide', fakeAsync(() => {
+    component.showToastMessage('Test message', 'success');
+    
+    expect(component.showToast).toBeTrue();
+    expect(component.toastMessage).toBe('Test message');
+    expect(component.toastType).toBe('success');
+
+    tick(3000);
+
+    expect(component.showToast).toBeFalse();
+  }));
+});

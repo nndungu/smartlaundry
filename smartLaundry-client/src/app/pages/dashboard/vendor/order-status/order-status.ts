@@ -1,159 +1,343 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgFor } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
-interface Order {
-  id: number;
-  customer: string;
+export interface Order {
+  id: string;
+  customerName: string;
+  customerPhone: string;
+  pickupAddress: string;
+  deliveryAddress: string;
+  serviceType: string;
+  items: OrderItem[];
+  totalAmount: number;
+  requestDateTime: string;
+  pickupDateTime?: string;
+  deliveryDateTime?: string;
+  status: 'Pending' | 'Assigned' | 'Picked Up' | 'In Progress' | 'Out for Delivery' | 'Delivered' | 'Cancelled';
+  driverId: string;
+  driverName?: string;
+  specialInstructions?: string;
+  estimatedDelivery?: string;
+}
+
+export interface OrderItem {
+  name: string;
+  quantity: number;
+  price: number;
   service: string;
-  pickup: string;
-  status: 'Pending' | 'Accepted' | 'Rejected' | 'Picked' | 'In Progress' | 'Delivered' | 'Completed';
-  isNew?: boolean;
 }
 
 @Component({
   selector: 'app-order-status',
-  imports: [CommonModule, NgFor],
   templateUrl: './order-status.html',
   styleUrls: ['./order-status.scss']
 })
 export class OrderStatusComponent implements OnInit {
-  orders: Order[] = [
-    { id: 101, customer: 'Alice Johnson', service: 'Wash & Fold', pickup: '2025-09-12 09:30', status: 'Pending', isNew: true },
-    { id: 102, customer: 'Brian Smith', service: 'Dry Cleaning', pickup: '2025-09-12 13:00', status: 'Accepted' },
-    { id: 103, customer: 'Carol Davis', service: 'Iron Only', pickup: '2025-09-12 15:45', status: 'In Progress' },
-    { id: 104, customer: 'David Wilson', service: 'Wash & Iron', pickup: '2025-09-11 14:20', status: 'Delivered' },
-    { id: 105, customer: 'Emma Brown', service: 'Dry Cleaning', pickup: '2025-09-11 11:00', status: 'Completed' },
-    { id: 106, customer: 'Frank Miller', service: 'Wash & Fold', pickup: '2025-09-12 16:30', status: 'Pending', isNew: true }
-  ];
+  orders: Order[] = [];
+  filteredOrders: Order[] = [];
+  loading = true;
+  error = '';
+  activeFilter: 'all' | 'active' | 'completed' | 'pending' = 'all';
 
-  showConfirmModal = false;
-  confirmAction: 'accept' | 'reject' | null = null;
-  selectedOrderId: number | null = null;
+  // Toast notifications
   showToast = false;
   toastMessage = '';
-  newOrdersCount = 0;
-  showNotifications = false;
+  toastType: 'success' | 'error' = 'success';
 
-  statusOptions = ['Picked', 'In Progress', 'Delivered', 'Completed'];
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
-  ngOnInit() {
-    this.updateNewOrdersCount();
-    // Simulate new orders coming in
-    this.simulateNewOrders();
+  ngOnInit(): void {
+    this.loadDriverOrders();
   }
 
-  updateNewOrdersCount() {
-    this.newOrdersCount = this.orders.filter(order => order.isNew).length;
-  }
+  async loadDriverOrders(): Promise<void> {
+    try {
+      this.loading = true;
+      const driverId = localStorage.getItem('driverId') || 'current-driver';
 
-  simulateNewOrders() {
-    // Simulate a new order arriving after 10 seconds
-    setTimeout(() => {
-      const newOrder: Order = {
-        id: 107,
-        customer: 'Grace Wilson',
-        service: 'Express Wash',
-        pickup: '2025-09-12 18:00',
-        status: 'Pending',
-        isNew: true
-      };
-      this.orders.unshift(newOrder);
-      this.updateNewOrdersCount();
-      this.showToastMessage('New order received!');
-    }, 10000);
-  }
-
-  toggleNotifications() {
-    this.showNotifications = !this.showNotifications;
-    if (this.showNotifications) {
-      // Mark notifications as viewed
-      setTimeout(() => {
-        this.orders.forEach(order => {
-          if (order.isNew) order.isNew = false;
-        });
-        this.updateNewOrdersCount();
-      }, 2000);
+      // Mock data with realistic order flow
+      this.orders = [
+        {
+          id: 'ORD001',
+          customerName: 'John Kamau',
+          customerPhone: '+254712345678',
+          pickupAddress: '123 Main Street, Westlands, Nairobi',
+          deliveryAddress: '456 Riverside Drive, Nairobi',
+          serviceType: 'Premium Wash',
+          items: [
+            { name: 'Shirts', quantity: 5, price: 400, service: 'Wash & Iron' },
+            { name: 'Trousers', quantity: 3, price: 300, service: 'Wash & Iron' }
+          ],
+          totalAmount: 700,
+          requestDateTime: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
+          status: 'Assigned',
+          driverId: driverId,
+          driverName: 'You',
+          specialInstructions: 'Call before pickup',
+          estimatedDelivery: new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'ORD002',
+          customerName: 'Sarah Mwangi',
+          customerPhone: '+254723456789',
+          pickupAddress: '789 Thika Road, Kasarani, Nairobi',
+          deliveryAddress: '321 Mombasa Road, Nairobi',
+          serviceType: 'Express Dry Cleaning',
+          items: [
+            { name: 'Winter Jacket', quantity: 1, price: 450, service: 'Dry Clean' },
+            { name: 'Office Suit', quantity: 1, price: 600, service: 'Dry Clean' }
+          ],
+          totalAmount: 1050,
+          requestDateTime: new Date(Date.now() - 30 * 60 * 1000).toISOString(), // 30 mins ago
+          pickupDateTime: new Date().toISOString(),
+          status: 'Picked Up',
+          driverId: driverId,
+          driverName: 'You',
+          estimatedDelivery: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'ORD003',
+          customerName: 'Mike Ochieng',
+          customerPhone: '+254734567890',
+          pickupAddress: '555 Langata Road, Nairobi',
+          deliveryAddress: '777 Ngong Road, Nairobi',
+          serviceType: 'Standard Wash',
+          items: [
+            { name: 'Bed Sheets', quantity: 2, price: 300, service: 'Wash & Fold' },
+            { name: 'Towels', quantity: 4, price: 400, service: 'Wash & Fold' }
+          ],
+          totalAmount: 700,
+          requestDateTime: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
+          pickupDateTime: new Date(Date.now() - 20 * 60 * 60 * 1000).toISOString(),
+          deliveryDateTime: new Date().toISOString(),
+          status: 'Delivered',
+          driverId: driverId,
+          driverName: 'You'
+        },
+        {
+          id: 'ORD004',
+          customerName: 'Grace Wanjiku',
+          customerPhone: '+254745678901',
+          pickupAddress: '888 Kileleshwa, Nairobi',
+          deliveryAddress: '999 Lavington, Nairobi',
+          serviceType: 'Ironing Only',
+          items: [
+            { name: 'Dresses', quantity: 3, price: 450, service: 'Ironing' },
+            { name: 'Blouses', quantity: 4, price: 400, service: 'Ironing' }
+          ],
+          totalAmount: 850,
+          requestDateTime: new Date().toISOString(),
+          status: 'Pending',
+          driverId: driverId
+        }
+      ];
+      this.applyFilter(this.activeFilter);
+    } catch (error) {
+      console.error('Error loading orders:', error);
+      this.error = 'Failed to load orders. Please try again.';
+      this.showToastMessage('Failed to load orders', 'error');
+    } finally {
+      this.loading = false;
     }
   }
 
-  getStatusClass(status: string): string {
-    const statusClasses: { [key: string]: string } = {
-      'Pending': 'bg-orange-100 text-orange-800',
-      'Accepted': 'bg-blue-100 text-blue-800',
-      'Rejected': 'bg-red-100 text-red-800',
-      'Picked': 'bg-purple-100 text-purple-800',
-      'In Progress': 'bg-yellow-100 text-yellow-800',
-      'Delivered': 'bg-green-100 text-green-800',
-      'Completed': 'bg-gray-100 text-gray-800'
-    };
-    return statusClasses[status] || 'bg-gray-100 text-gray-800';
-  }
+  applyFilter(filter: 'all' | 'active' | 'completed' | 'pending'): void {
+    this.activeFilter = filter;
 
-  showConfirmation(action: 'accept' | 'reject', orderId: number) {
-    this.confirmAction = action;
-    this.selectedOrderId = orderId;
-    this.showConfirmModal = true;
-  }
-
-  confirmDecision() {
-    if (this.selectedOrderId && this.confirmAction) {
-      const order = this.orders.find(o => o.id === this.selectedOrderId);
-      if (order) {
-        order.status = this.confirmAction === 'accept' ? 'Accepted' : 'Rejected';
-        order.isNew = false;
-        this.showToastMessage(`Order ${this.confirmAction === 'accept' ? 'accepted' : 'rejected'} successfully`);
-      }
-      // TODO: API call to update order status
-      // this.orderService.updateOrderStatus(this.selectedOrderId, order.status)
+    switch (filter) {
+      case 'pending':
+        this.filteredOrders = this.orders.filter(order => order.status === 'Pending');
+        break;
+      case 'active':
+        this.filteredOrders = this.orders.filter(order => 
+          ['Assigned', 'Picked Up', 'In Progress', 'Out for Delivery'].includes(order.status)
+        );
+        break;
+      case 'completed':
+        this.filteredOrders = this.orders.filter(order => order.status === 'Delivered');
+        break;
+      default:
+        this.filteredOrders = [...this.orders];
     }
-    this.closeModal();
-    this.updateNewOrdersCount();
   }
 
-  closeModal() {
-    this.showConfirmModal = false;
-    this.confirmAction = null;
-    this.selectedOrderId = null;
+  // Driver Actions
+  async acceptOrder(orderId: string): Promise<void> {
+    await this.updateOrderStatus(orderId, 'Assigned', 'Order accepted successfully!');
   }
 
-  updateOrderStatus(orderId: number, event: Event) {
-    const target = event.target as HTMLSelectElement;
-    const newStatus = target.value;
+  async markAsPickedUp(orderId: string): Promise<void> {
     const order = this.orders.find(o => o.id === orderId);
     if (order) {
-      order.status = newStatus as Order['status'];
-      this.showToastMessage(`Order status updated to ${newStatus}`);
+      order.pickupDateTime = new Date().toISOString();
     }
-    // TODO: API call to update order status
-    // this.orderService.updateOrderStatus(orderId, newStatus)
+    await this.updateOrderStatus(orderId, 'Picked Up', 'Order marked as picked up!');
   }
 
-  showToastMessage(message: string) {
+  async markAsInProgress(orderId: string): Promise<void> {
+    await this.updateOrderStatus(orderId, 'In Progress', 'Order marked as in progress!');
+  }
+
+  async markAsOutForDelivery(orderId: string): Promise<void> {
+    await this.updateOrderStatus(orderId, 'Out for Delivery', 'Order is out for delivery!');
+  }
+
+  async markAsDelivered(orderId: string): Promise<void> {
+    const order = this.orders.find(o => o.id === orderId);
+    if (order) {
+      order.deliveryDateTime = new Date().toISOString();
+    }
+    await this.updateOrderStatus(orderId, 'Delivered', 'Order delivered successfully!');
+  }
+
+  async rejectOrder(orderId: string): Promise<void> {
+    await this.updateOrderStatus(orderId, 'Cancelled', 'Order has been cancelled');
+  }
+
+  private async updateOrderStatus(orderId: string, status: Order['status'], successMessage: string): Promise<void> {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      const orderIndex = this.orders.findIndex(order => order.id === orderId);
+      if (orderIndex !== -1) {
+        this.orders[orderIndex].status = status;
+        this.applyFilter(this.activeFilter);
+      }
+
+      this.showToastMessage(successMessage, 'success');
+    } catch (error) {
+      console.error(`Error updating order ${orderId}:`, error);
+      this.showToastMessage('Failed to update order. Please try again.', 'error');
+    }
+  }
+
+  private showToastMessage(message: string, type: 'success' | 'error'): void {
     this.toastMessage = message;
+    this.toastType = type;
     this.showToast = true;
+
     setTimeout(() => {
       this.showToast = false;
     }, 3000);
   }
 
+  getStatusColor(status: Order['status']): string {
+    const colors = {
+      'Pending': 'bg-gray-100 text-gray-800 border-gray-300',
+      'Assigned': 'bg-blue-100 text-blue-800 border-blue-300',
+      'Picked Up': 'bg-purple-100 text-purple-800 border-purple-300',
+      'In Progress': 'bg-yellow-100 text-yellow-800 border-yellow-300',
+      'Out for Delivery': 'bg-orange-100 text-orange-800 border-orange-300',
+      'Delivered': 'bg-green-100 text-green-800 border-green-300',
+      'Cancelled': 'bg-red-100 text-red-800 border-red-300'
+    };
+    return colors[status];
+  }
+
+  getStatusIcon(status: Order['status']): string {
+    const icons = {
+      'Pending': '⏳',
+      'Assigned': '📋',
+      'Picked Up': '📦',
+      'In Progress': '🧺',
+      'Out for Delivery': '🚚',
+      'Delivered': '✅',
+      'Cancelled': '❌'
+    };
+    return icons[status];
+  }
+
+  // Action permissions
+  canAccept(order: Order): boolean {
+    return order.status === 'Pending';
+  }
+
+  canPickUp(order: Order): boolean {
+    return order.status === 'Assigned';
+  }
+
+  canStartProgress(order: Order): boolean {
+    return order.status === 'Picked Up';
+  }
+
+  canMarkForDelivery(order: Order): boolean {
+    return order.status === 'In Progress';
+  }
+
+  canDeliver(order: Order): boolean {
+    return order.status === 'Out for Delivery';
+  }
+
+  canReject(order: Order): boolean {
+    return ['Pending', 'Assigned'].includes(order.status);
+  }
+
   formatDateTime(dateTime: string): string {
-    const date = new Date(dateTime);
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    return new Date(dateTime).toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   }
 
-  isPending(status: string): boolean {
-    return status === 'Pending';
+  formatTime(dateTime: string): string {
+    return new Date(dateTime).toLocaleString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   }
 
-  isAccepted(status: string): boolean {
-    return status === 'Accepted';
+  getTimeAgo(dateTime: string): string {
+    const now = new Date();
+    const time = new Date(dateTime);
+    const diffMs = now.getTime() - time.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return `${diffDays}d ago`;
   }
 
-  canChangeStatus(status: string): boolean {
-    return ['Accepted', 'Picked', 'In Progress', 'Delivered'].includes(status);
+  getOrderCount(filter: string): number {
+    switch (filter) {
+      case 'pending':
+        return this.orders.filter(order => order.status === 'Pending').length;
+      case 'active':
+        return this.orders.filter(order => 
+          ['Assigned', 'Picked Up', 'In Progress', 'Out for Delivery'].includes(order.status)
+        ).length;
+      case 'completed':
+        return this.orders.filter(order => order.status === 'Delivered').length;
+      default:
+        return this.orders.length;
+    }
   }
 
-  trackByOrderId(index: number, order: Order): number {
-    return order.id;
+  // Get next available action for an order
+  getNextAction(order: Order): string {
+    switch (order.status) {
+      case 'Pending': return 'Accept Order';
+      case 'Assigned': return 'Mark as Picked Up';
+      case 'Picked Up': return 'Start Processing';
+      case 'In Progress': return 'Mark for Delivery';
+      case 'Out for Delivery': return 'Mark as Delivered';
+      default: return 'Completed';
+    }
+  }
+
+  // Calculate progress percentage for order timeline
+  getOrderProgress(order: Order): number {
+    const steps = ['Pending', 'Assigned', 'Picked Up', 'In Progress', 'Out for Delivery', 'Delivered'];
+    const currentStep = steps.indexOf(order.status);
+    return (currentStep / (steps.length - 1)) * 100;
   }
 }

@@ -1,238 +1,151 @@
-/* Order Status Component Styles */
-.vendor-orders-dashboard {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 100% !important;
-  box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:host {
+  display: block;
+  font-family: 'Inter', sans-serif;
 }
-.vendor-orders-dashboard {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  /* Custom animations */
-  @keyframes slideInRight {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
 
-  @keyframes slideOutRight {
-    from {
-      transform: translateX(0);
-      opacity: 1;
-    }
-    to {
-      transform: translateX(100%);
-      opacity: 0;
-    }
+// Custom animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
+}
 
-  /* Custom component styles */
-  .order-card-new {
-    animation: fadeIn 0.5s ease-in-out;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-  }
+.animate-fade-in-up {
+  animation: fadeInUp 0.3s ease-out;
+}
 
-  .status-transition {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
 
-  /* Toast notification styles */
-  .toast-enter {
-    animation: slideInRight 0.3s ease-out;
-  }
+// Custom scrollbar
+::-webkit-scrollbar {
+  width: 6px;
+}
 
-  .toast-leave {
-    animation: slideOutRight 0.3s ease-in;
-  }
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
 
-  /* Notification bell pulse effect */
-  .notification-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
+::-webkit-scrollbar-thumb {
+  background: #0B4F8A;
+  border-radius: 3px;
+}
 
-  /* Table hover effects */
-  .table-row-hover {
-    transition: background-color 0.15s ease-in-out;
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: #1E90FF;
+}
+
+// Status badge animations
+.status-badge {
+  transition: all 0.3s ease;
   
-  .table-row-hover:hover {
-    background-color: #f9fafb;
-  }
-
-  /* Button hover effects */
-  .btn-accept {
-    background: linear-gradient(135deg, #10b981, #059669);
-    transform: scale(1);
-    transition: all 0.2s ease-in-out;
-  }
-  
-  .btn-accept:hover {
+  &:hover {
     transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
   }
-  
-  .btn-accept:active {
-    transform: scale(0.98);
-  }
+}
 
-  .btn-reject {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-    transform: scale(1);
-    transition: all 0.2s ease-in-out;
-  }
+// Card hover effects
+.order-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   
-  .btn-reject:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-  }
-  
-  .btn-reject:active {
-    transform: scale(0.98);
-  }
-
-  /* Modal animations */
-  .modal-backdrop {
-    animation: fadeIn 0.2s ease-out;
-  }
-
-  .modal-content {
-    animation: modalSlideIn 0.3s ease-out;
-  }
-
-  @keyframes modalSlideIn {
-    from {
-      opacity: 0;
-      transform: scale(0.9) translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
-  }
-
-  /* Notification dropdown styles */
-  .notification-dropdown {
-    animation: dropdownSlideIn 0.2s ease-out;
-    max-height: 400px;
-  }
-  
-  .notification-dropdown::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  .notification-dropdown::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 3px;
-  }
-  
-  .notification-dropdown::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 3px;
-  }
-  
-  .notification-dropdown::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-  }
-
-  @keyframes dropdownSlideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Card shadow effects */
-  .order-card {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  }
-  
-  .order-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  &:hover {
     transform: translateY(-2px);
   }
+}
 
-  /* Loading states */
-  .loading-skeleton {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: loading 1.5s infinite;
-  }
-
-  @keyframes loading {
-    0% {
-      background-position: 200% 0;
-    }
-    100% {
-      background-position: -200% 0;
-    }
-  }
-
-  /* Empty state styles */
-  .empty-state {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: #6b7280;
-  }
+// Button animations
+.action-button {
+  transition: all 0.2s ease;
   
-  .empty-state .empty-icon {
-    width: 4rem;
-    height: 4rem;
-    margin: 0 auto 1rem;
-    opacity: 0.5;
+  &:active {
+    transform: scale(0.98);
   }
 }
 
-/* Responsive improvements */
-@media (max-width: 640px) {
-  .vendor-orders-dashboard .order-card {
-    margin: 0.5rem;
-    padding: 1rem;
+// Mobile optimizations
+@media (max-width: 768px) {
+  .order-card {
+    margin-bottom: 1rem;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
   
-  .vendor-orders-dashboard .notification-dropdown {
-    width: calc(100vw - 2rem);
-    left: 50%;
-    transform: translateX(-50%);
-    right: auto;
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    button {
+      width: 100%;
+    }
   }
 }
 
-/* Print styles */
-@media print {
-  .vendor-orders-dashboard .notification-bell,
-  .vendor-orders-dashboard .btn-accept,
-  .vendor-orders-dashboard .btn-reject,
-  .vendor-orders-dashboard .modal-backdrop {
-    display: none !important;
+// Desktop enhancements
+@media (min-width: 1024px) {
+  .orders-grid {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   }
-  
-  .vendor-orders-dashboard .order-card,
-  .vendor-orders-dashboard .table-row {
-    break-inside: avoid;
+}
+
+// Status color variations
+.status-pending {
+  background: linear-gradient(135deg, #fef3c7 0%, #fef7cd 100%);
+  border-color: #f59e0b;
+}
+
+.status-confirmed {
+  background: linear-gradient(135deg, #dbeafe 0%, #e0f2fe 100%);
+  border-color: #3b82f6;
+}
+
+.status-completed {
+  background: linear-gradient(135deg, #dcfce7 0%, #f0fdf4 100%);
+  border-color: #22c55e;
+}
+
+.status-rejected {
+  background: linear-gradient(135deg, #fee2e2 0%, #fef2f2 100%);
+  border-color: #ef4444;
+}
+
+// Toast notification styles
+.toast-success {
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.15);
+}
+
+.toast-error {
+  box-shadow: 0 10px 25px rgba(239, 68, 68, 0.15);
+}
+
+// Loading skeleton animation
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
   }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.skeleton-loading {
+  animation: shimmer 1.5s infinite linear;
+  background: linear-gradient(to right, #f6f7f8 8%, #edeef1 18%, #f6f7f8 33%);
+  background-size: 800px 104px;
 }
