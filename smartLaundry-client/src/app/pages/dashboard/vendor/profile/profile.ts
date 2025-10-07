@@ -1,125 +1,276 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
+export interface DriverProfile {
+  id: string;
+  fullName: string;
+  phoneNumber: string;
+  email: string;
+  profilePhoto: string;
+  vehicleType: 'bike' | 'car' | 'van';
+  vehicleRegistration: string;
+  licenseNumber: string;
+  address: {
+    city: string;
+    street: string;
+    houseNumber: string;
+  };
+}
 
 @Component({
-  selector: 'app-profile',
-  imports: [ReactiveFormsModule, CommonModule],
+  selector: 'app-profile-update',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RouterModule],
   templateUrl: './profile.html',
   styleUrls: ['./profile.scss']
 })
-export class ProfileComponent implements OnInit {
-  @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
-
-  profileForm!: FormGroup;
+export class ProfileUpdateComponent implements OnInit {
+  profileForm: FormGroup;
+  loading = true;
+  submitting = false;
+  error = '';
+  success = false;
   selectedFile: File | null = null;
-  previewUrl: string | null = null;
-  isUploading = false;
-  notification: { type: string; message: string } | null = null;
+  imagePreview: string | ArrayBuffer | null = null;
 
-  businessCategories = [
-    'Motorcycle Delivery',
-    'Taxi Service',
-    'Courier Service',
-    'Ride Sharing',
-    'Logistics & Freight',
-    'Public Transport',
-    'Bike Rental',
-    'Car Rental'
+  vehicleTypes = [
+    { value: 'bike', label: 'Motorcycle' },
+    { value: 'car', label: 'Car' },
+    { value: 'van', label: 'Van' }
   ];
 
-  constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {
-    this.initializeForm();
+  constructor(
+    private http: HttpClient,
+    private fb: FormBuilder,
+    private router: Router
+  ) {
+    this.profileForm = this.createForm();
   }
 
-  private initializeForm(): void {
-    this.profileForm = this.fb.group({
-      businessName: ['', [Validators.required, Validators.minLength(2)]],
+  ngOnInit(): void {
+    this.loadDriverProfile();
+  }
+
+  createForm(): FormGroup {
+    return this.fb.group({
+      // Profile Info
+      fullName: ['', [Validators.required, Validators.minLength(2)]],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9+\-\s()]{10,}$/)]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(/^(\+254|0)[17]\d{8}$/)]],
-      businessCategory: ['', Validators.required],
-      businessDescription: ['', [Validators.required, Validators.maxLength(500)]]
+      
+      // Vehicle Details
+      vehicleType: ['', Validators.required],
+      vehicleRegistration: ['', [Validators.required, Validators.minLength(3)]],
+      licenseNumber: ['', [Validators.required, Validators.minLength(5)]],
+      
+      // Address
+      address: this.fb.group({
+        city: ['', Validators.required],
+        street: ['', Validators.required],
+        houseNumber: ['', Validators.required]
+      })
     });
   }
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
+  async loadDriverProfile(): Promise<void> {
+    try {
+      this.loading = true;
+      const driverId = this.getDriverId();
+      const profile = await this.http.get<DriverProfile>(`/api/drivers/${driverId}`).toPromise();
 
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        this.showNotification('error', 'Please select a valid image file.');
+      if (!profile) {
+        this.error = 'Profile not found.';
         return;
       }
 
-      // Validate file size (5MB max)
+      this.populateForm(profile);
+      this.imagePreview = profile.profilePhoto;
+    } catch (error) {
+      console.error('Error loading profile:', error);
+      this.error = 'Failed to load profile data. Please try again.';
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  populateForm(profile: DriverProfile): void {
+    this.profileForm.patchValue({
+      fullName: profile.fullName,
+      phoneNumber: profile.phoneNumber,
+      email: profile.email,
+      vehicleType: profile.vehicleType,
+      vehicleRegistration: profile.vehicleRegistration,
+      licenseNumber: profile.licenseNumber,
+      address: {
+        city: profile.address.city,
+        street: profile.address.street,
+        houseNumber: profile.address.houseNumber
+      }
+    });
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.match('image.*')) {
+        this.error = 'Please select a valid image file (JPEG, PNG, etc.)';
+        return;
+      }
+
+      // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        this.showNotification('error', 'File size must be less than 5MB.');
+        this.error = 'Image size should be less than 5MB';
         return;
       }
 
       this.selectedFile = file;
-      this.createPreview(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(file);
     }
   }
 
-  private createPreview(file: File): void {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.previewUrl = e.target?.result as string;
-    };
-    reader.readAsDataURL(file);
-  }
+  async onSubmit(): Promise<void> {
+    if (this.profileForm.invalid) {
+      this.markFormGroupTouched();
+      return;
+    }
 
-  removeImage(): void {
-    this.selectedFile = null;
-    this.previewUrl = null;
-  }
+    try {
+      this.submitting = true;
+      this.error = '';
+      this.success = false;
 
-  triggerFileInput(): void {
-    this.fileInput.nativeElement.click();
-  }
+      const formData = this.prepareFormData();
+      const driverId = this.getDriverId();
 
-  onSubmit(): void {
-    if (this.profileForm.valid) {
-      this.isUploading = true;
-      // Simulate API call
+      const updatedProfile = await this.http.patch<DriverProfile>(
+        `/api/drivers/${driverId}`,
+        formData
+      ).toPromise();
+
+      if (!updatedProfile) {
+        this.error = 'Failed to update profile.';
+        return;
+      }
+
+      this.success = true;
+      this.populateForm(updatedProfile);
+      
+      // Reset file selection after successful upload
+      this.selectedFile = null;
+      
+      // Hide success message after 3 seconds
       setTimeout(() => {
-        this.isUploading = false;
-        this.showNotification('success', 'Profile updated successfully!');
-      }, 2000);
-    } else {
-      this.showNotification('error', 'Please fill in all required fields correctly.');
+        this.success = false;
+      }, 3000);
+
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      this.error = 'Failed to update profile. Please try again.';
+    } finally {
+      this.submitting = false;
     }
   }
 
-  private showNotification(type: string, message: string): void {
-    this.notification = { type, message };
-    setTimeout(() => {
-      this.notification = null;
-    }, 5000);
+  prepareFormData(): FormData {
+    const formData = new FormData();
+    const formValue = this.profileForm.value;
+
+    // Append form fields
+    Object.keys(formValue).forEach(key => {
+      if (key === 'address') {
+        formData.append(key, JSON.stringify(formValue[key]));
+      } else {
+        formData.append(key, formValue[key]);
+      }
+    });
+
+    // Append profile photo if selected
+    if (this.selectedFile) {
+      formData.append('profilePhoto', this.selectedFile);
+    }
+
+    return formData;
   }
 
-  getErrorMessage(fieldName: string): string {
+  onReset(): void {
+    this.loadDriverProfile();
+    this.selectedFile = null;
+    this.error = '';
+    this.success = false;
+  }
+
+  onCancel(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+  markFormGroupTouched(): void {
+    Object.keys(this.profileForm.controls).forEach(key => {
+      const control = this.profileForm.get(key);
+      if (control instanceof FormGroup) {
+        this.markNestedFormGroupTouched(control);
+      } else {
+        control?.markAsTouched();
+      }
+    });
+  }
+
+  markNestedFormGroupTouched(formGroup: FormGroup): void {
+    Object.keys(formGroup.controls).forEach(key => {
+      const control = formGroup.get(key);
+      control?.markAsTouched();
+    });
+  }
+
+  getDriverId(): string {
+    // In real implementation, get from auth service or token
+    return localStorage.getItem('driverId') || 'current-driver';
+  }
+
+  getAuthToken(): string {
+    return localStorage.getItem('authToken') || '';
+  }
+
+  // Helper methods for template
+  isFieldInvalid(fieldName: string): boolean {
     const field = this.profileForm.get(fieldName);
-    if (field?.hasError('required')) {
-      return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`;
-    }
-    if (field?.hasError('email')) {
-      return 'Please enter a valid email address';
-    }
-    if (field?.hasError('minlength')) {
-      return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} must be at least 2 characters`;
-    }
-    if (field?.hasError('maxlength')) {
-      return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} must be less than 500 characters`;
-    }
-    if (field?.hasError('pattern')) {
-      return 'Please enter a valid phone number';
-    }
-    return '';
+    return !!(field && field.invalid && field.touched);
+  }
+
+  getFieldError(fieldName: string): string {
+    const field = this.profileForm.get(fieldName);
+    if (!field || !field.errors) return '';
+
+    if (field.errors['required']) return 'This field is required';
+    if (field.errors['email']) return 'Please enter a valid email address';
+    if (field.errors['minlength']) return `Minimum ${field.errors['minlength'].requiredLength} characters required`;
+    if (field.errors['pattern']) return 'Please enter a valid phone number';
+
+    return 'Invalid value';
+  }
+
+  getNestedFieldError(groupName: string, fieldName: string): string {
+    const field = this.profileForm.get(`${groupName}.${fieldName}`);
+    if (!field || !field.errors) return '';
+
+    if (field.errors['required']) return 'This field is required';
+    return 'Invalid value';
+  }
+
+  isNestedFieldInvalid(groupName: string, fieldName: string): boolean {
+    const field = this.profileForm.get(`${groupName}.${fieldName}`);
+    return !!(field && field.invalid && field.touched);
   }
 }
