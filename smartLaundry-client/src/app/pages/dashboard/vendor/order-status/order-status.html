@@ -28,7 +28,7 @@
   <!-- Filter Tabs -->
   <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
     <div class="flex space-x-1 bg-gray-100 rounded-lg p-1">
-      <button 
+      <button
         *ngFor="let filter of ['all', 'active', 'completed', 'pending']"
         (click)="applyFilter(filter)"
         [class]="activeFilter === filter 

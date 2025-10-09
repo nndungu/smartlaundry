@@ -71,8 +71,8 @@
       <section class="order-details-section">
         <div class="order-header">
           <div class="order-info">
-            <h2 class="order-title">Order {{ currentOrder?.id }}</h2>
-            @if (currentOrder?.orderDate) {
+            <h2 class="order-title">Order {{ currentOrder.id }}</h2>
+            @if (currentOrder.orderDate) {
               <p class="order-date">Placed on {{ formatDate(currentOrder.orderDate!) }}</p>
             }
           </div>
@@ -167,15 +167,15 @@
           <div class="info-list">
             <div class="info-item">
               <span class="info-label">Name:</span>
-              <span class="info-value">{{ currentOrder?.customerName }}</span>
+              <span class="info-value">{{ currentOrder.customerName }}</span>
             </div>
             <div class="info-item">
               <span class="info-label">Phone:</span>
-              <span class="info-value">{{ currentOrder?.customerPhone }}</span>
+              <span class="info-value">{{ currentOrder.customerPhone }}</span>
             </div>
             <div class="info-item">
               <span class="info-label">Email:</span>
-              <span class="info-value">{{ currentOrder?.customerEmail }}</span>
+              <span class="info-value">{{ currentOrder.customerEmail }}</span>
             </div>
           </div>
         </div>
@@ -186,15 +186,15 @@
           <div class="info-list">
             <div class="info-item">
               <span class="info-label">Package:</span>
-              <span class="info-value">{{ currentOrder?.packageName }}</span>
+              <span class="info-value">{{ currentOrder.packageName }}</span>
             </div>
             <div class="info-item">
               <span class="info-label">Total Amount:</span>
-              <span class="info-value price">{{ currentOrder?.currency }} {{ currentOrder?.totalAmount | number }}</span>
+              <span class="info-value price">{{ currentOrder.currency }} {{ currentOrder.totalAmount | number }}</span>
             </div>
             <div class="info-item">
               <span class="info-label">Estimated Delivery:</span>
-              @if (currentOrder?.estimatedDelivery) {
+              @if (currentOrder.estimatedDelivery) {
                 <span class="info-value">{{ formatDate(currentOrder.estimatedDelivery!) }}</span>
               }
             </div>
@@ -207,26 +207,26 @@
           <div class="info-list">
             <div class="info-item">
               <span class="info-label">Pickup Address:</span>
-              <span class="info-value">{{ currentOrder?.pickupAddress }}</span>
+              <span class="info-value">{{ currentOrder.pickupAddress }}</span>
             </div>
             <div class="info-item">
               <span class="info-label">Delivery Address:</span>
-              <span class="info-value">{{ currentOrder?.deliveryAddress }}</span>
+              <span class="info-value">{{ currentOrder.deliveryAddress }}</span>
             </div>
-            @if (currentOrder?.driverName) {
+            @if (currentOrder.driverName) {
               <div class="info-item">
                 <span class="info-label">Driver:</span>
-                <span class="info-value">{{ currentOrder?.driverName }}</span>
+                <span class="info-value">{{ currentOrder.driverName }}</span>
               </div>
             }
           </div>
         </div>
 
         <!-- Special Instructions -->
-        @if (currentOrder?.specialInstructions) {
+        @if (currentOrder.specialInstructions) {
           <div class="summary-card special-instructions">
             <h3 class="card-title">Special Instructions</h3>
-            <p class="instructions-text">{{ currentOrder?.specialInstructions }}</p>
+            <p class="instructions-text">{{ currentOrder.specialInstructions }}</p>
           </div>
         }
       </div>

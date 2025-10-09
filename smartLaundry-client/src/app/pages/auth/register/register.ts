@@ -13,7 +13,7 @@ import { UserCredential } from '@angular/fire/auth'; // Added UserCredential imp
   templateUrl: './register.html',
   styleUrls: ['./register.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, NgIf, NgForOf]
+  imports: [CommonModule, FormsModule]
 })
 export class RegisterComponent {
   selectedRole = '';

@@ -201,17 +201,17 @@
     </section>
 
     <!-- Booking Form Section -->
-    @if (showBookingForm && selectedPackage) {
+@if (showBookingForm && selectedPackage) {
       <section id="booking-form" class="booking-form-section">
       <div class="form-container">
         <h2 class="section-title">Complete Your Booking</h2>
 
         <!-- Selected Package Summary -->
         <div class="selected-package-summary">
-          <h3>Selected Package: {{ selectedPackage?.name }}</h3>
-          <p>{{ selectedPackage?.description }}</p>
+          <h3>Selected Package: {{ selectedPackage.name }}</h3>
+          <p>{{ selectedPackage.description }}</p>
           <div class="package-price">
-            Base Price: {{ selectedPackage?.currency }} {{ selectedPackage?.price | number }}
+            Base Price: {{ selectedPackage.currency }} {{ selectedPackage.price | number }}
           </div>
         </div>
 
@@ -365,7 +365,7 @@
                     <span class="checkmark"></span>
                     <div class="addon-details">
                       <span class="addon-name">{{ addon.name }}</span>
-                      <span class="addon-price">+{{ selectedPackage?.currency }} {{ addon.price | number }}</span>
+                      <span class="addon-price">+{{ selectedPackage.currency }} {{ addon.price | number }}</span>
                     </div>
                   </label>
                 </div>
@@ -389,8 +389,8 @@
           <div class="order-summary">
             <h4>Order Summary</h4>
             <div class="summary-item">
-              <span>{{ selectedPackage?.name }}</span>
-              <span>{{ selectedPackage?.currency }} {{ selectedPackage?.price | number }}</span>
+              <span>{{ selectedPackage.name }}</span>
+              <span>{{ selectedPackage.currency }} {{ selectedPackage.price | number }}</span>
             </div>
 
             <!-- Cart items in summary -->

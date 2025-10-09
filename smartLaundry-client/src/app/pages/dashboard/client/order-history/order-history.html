@@ -107,21 +107,21 @@
         <div class="detail-grid">
           <div class="detail-item">
             <label>Reference Number:</label>
-            <span>{{ selectedOrder?.referenceNumber }}</span>
+            <span>{{ selectedOrder.referenceNumber }}</span>
           </div>
           <div class="detail-item">
             <label>Date & Time:</label>
-            <span>{{ selectedOrder?.dateTime | date:'full' }}</span>
+            <span>{{ selectedOrder.dateTime | date:'full' }}</span>
           </div>
           <div class="detail-item">
             <label>Status:</label>
-            <span [class]="'status-badge ' + getStatusClass(selectedOrder?.status || '')">
-              {{ selectedOrder?.status }}
+            <span [class]="'status-badge ' + getStatusClass(selectedOrder.status || '')">
+              {{ selectedOrder.status }}
             </span>
           </div>
           <div class="detail-item">
             <label>Payment Method:</label>
-            <span>{{ selectedOrder?.paymentMethod }}</span>
+            <span>{{ selectedOrder.paymentMethod }}</span>
           </div>
         </div>
       </div>
@@ -135,7 +135,7 @@
             <span>Qty</span>
             <span>Price</span>
           </div>
-          <div *ngFor="let item of selectedOrder?.items" class="items-row">
+          <div *ngFor="let item of selectedOrder.items" class="items-row">
             <span>{{ item.name }}</span>
             <span>{{ item.serviceType }}</span>
             <span>{{ item.quantity }}</span>
@@ -145,7 +145,7 @@
             <span></span>
             <span></span>
             <span><strong>Total:</strong></span>
-            <span><strong>${{ selectedOrder?.totalPrice?.toFixed(2) || '0.00' }}</strong></span>
+            <span><strong>${{ selectedOrder.totalPrice.toFixed(2) || '0.00' }}</strong></span>
           </div>
         </div>
       </div>
@@ -153,54 +153,54 @@
       <div class="detail-section">
         <h3>Timeline</h3>
         <div class="status-timeline">
-          <div class="timeline-item" [class.completed]="selectedOrder?.statusTimeline?.picked">
+          <div class="timeline-item" [class.completed]="selectedOrder.statusTimeline.picked">
             <div class="timeline-icon">📦</div>
             <div class="timeline-content">
               <h4>Picked Up</h4>
-              <p *ngIf="selectedOrder?.statusTimeline?.picked">
-                {{ selectedOrder?.statusTimeline?.picked | date:'medium' }}
+              <p *ngIf="selectedOrder.statusTimeline.picked">
+                {{ selectedOrder.statusTimeline.picked | date:'medium' }}
               </p>
-              <p *ngIf="!selectedOrder?.statusTimeline?.picked" class="pending">Scheduled: {{ selectedOrder?.pickupDate | date:'medium' }}</p>
+              <p *ngIf="!selectedOrder.statusTimeline.picked" class="pending">Scheduled: {{ selectedOrder.pickupDate | date:'medium' }}</p>
             </div>
           </div>
 
-          <div class="timeline-item" [class.completed]="selectedOrder?.statusTimeline?.washing">
+          <div class="timeline-item" [class.completed]="selectedOrder.statusTimeline.washing">
             <div class="timeline-icon">🧺</div>
             <div class="timeline-content">
               <h4>Processing</h4>
-              <p *ngIf="selectedOrder?.statusTimeline?.washing">
-                {{ selectedOrder?.statusTimeline?.washing | date:'medium' }}
+              <p *ngIf="selectedOrder.statusTimeline.washing">
+                {{ selectedOrder.statusTimeline.washing | date:'medium' }}
               </p>
-              <p *ngIf="!selectedOrder?.statusTimeline?.washing" class="pending">Waiting for pickup</p>
+              <p *ngIf="!selectedOrder.statusTimeline.washing" class="pending">Waiting for pickup</p>
             </div>
           </div>
 
-          <div class="timeline-item" [class.completed]="selectedOrder?.statusTimeline?.delivered">
+          <div class="timeline-item" [class.completed]="selectedOrder.statusTimeline.delivered">
             <div class="timeline-icon">🚚</div>
             <div class="timeline-content">
               <h4>Delivered</h4>
-              <p *ngIf="selectedOrder?.statusTimeline?.delivered">
-                {{ selectedOrder?.statusTimeline?.delivered | date:'medium' }}
+              <p *ngIf="selectedOrder.statusTimeline.delivered">
+                {{ selectedOrder.statusTimeline.delivered | date:'medium' }}
               </p>
-              <p *ngIf="!selectedOrder?.statusTimeline?.delivered" class="pending">
-                <span *ngIf="selectedOrder?.deliveryDate">Scheduled: {{ selectedOrder?.deliveryDate | date:'medium' }}</span>
-                <span *ngIf="!selectedOrder?.deliveryDate">To be scheduled</span>
+              <p *ngIf="!selectedOrder.statusTimeline.delivered" class="pending">
+                <span *ngIf="selectedOrder.deliveryDate">Scheduled: {{ selectedOrder.deliveryDate | date:'medium' }}</span>
+                <span *ngIf="!selectedOrder.deliveryDate">To be scheduled</span>
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <div *ngIf="selectedOrder?.feedback" class="detail-section">
+      <div *ngIf="selectedOrder.feedback" class="detail-section">
         <h3>Your Feedback</h3>
         <div class="feedback-display">
           <div class="rating-display">
             <span *ngFor="let star of [1,2,3,4,5]"
-                  [class]="star <= (selectedOrder?.feedback?.rating || 0) ? 'star-filled' : 'star-empty'">
+                  [class]="star <= (selectedOrder.feedback.rating || 0) ? 'star-filled' : 'star-empty'">
               ★
             </span>
           </div>
-          <p>{{ selectedOrder?.feedback?.comment }}</p>
+          <p>{{ selectedOrder.feedback.comment }}</p>
         </div>
       </div>
     </div>

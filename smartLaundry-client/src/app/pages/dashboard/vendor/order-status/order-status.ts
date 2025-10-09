@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -30,6 +31,8 @@ export interface OrderItem {
 
 @Component({
   selector: 'app-order-status',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './order-status.html',
   styleUrls: ['./order-status.scss']
 })
@@ -38,7 +41,7 @@ export class OrderStatusComponent implements OnInit {
   filteredOrders: Order[] = [];
   loading = true;
   error = '';
-  activeFilter: 'all' | 'active' | 'completed' | 'pending' = 'all';
+  activeFilter: string = 'all';
 
   // Toast notifications
   showToast = false;
@@ -145,7 +148,7 @@ export class OrderStatusComponent implements OnInit {
     }
   }
 
-  applyFilter(filter: 'all' | 'active' | 'completed' | 'pending'): void {
+  applyFilter(filter: string): void {
     this.activeFilter = filter;
 
     switch (filter) {
