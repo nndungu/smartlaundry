@@ -15,7 +15,7 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
-            "https://smartlaundry-frontend.vercel.app", // your frontend prod domain
+            "https://smartlaundryclient.onrender.com/", // your frontend prod domain
             "http://localhost:5173"                     // for local dev
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

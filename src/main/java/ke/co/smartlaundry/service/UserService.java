@@ -108,6 +108,13 @@ public class UserService {
         return userRepository.save(existing);
     }
 
+    public void markUserAsVerified(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        user.setVerified(true);
+        userRepository.save(user);
+    }
+
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
@@ -153,5 +160,17 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public User findUserByEmail(String mail) {
+        return null;
+    }
+
+    public User registerUser(User user) {
+        return user;
+    }
+
+    public Object authenticateUser(String mail, String password) {
+        return null;
     }
 }

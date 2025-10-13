@@ -13,35 +13,44 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.jwtSecret}")
+    @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("${jwt.jwtExpiration}")
-    private long jwtExpirationMs;   // ✅ changed from String → long
+    @Value("${jwt.expiration}")
+    private Long jwtExpirationMs;
 
     private SecretKey key;
 
     @PostConstruct
     public void init() {
-        // ✅ Must be ≥ 32 bytes for HS256
         this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-    // ✅ Generate JWT token
     public String generateToken(String email) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + jwtExpirationMs);
 
         return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(now)
-                .setExpiration(expiry)
+                .subject(email)
+                .issuedAt(now)
+                .expiration(expiry)
                 .signWith(key, Jwts.SIG.HS256)
                 .compact();
     }
 
-    // ✅ Extract email
-    public String getEmailFromToken(String token) {
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    public String extractEmail(String token) {
         return Jwts.parser()
                 .verifyWith(key)
                 .build()
@@ -49,15 +58,4 @@ public class JwtUtil {
                 .getPayload()
                 .getSubject();
     }
-
-    // ✅ Validate
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
-        }
-    }
 }
-

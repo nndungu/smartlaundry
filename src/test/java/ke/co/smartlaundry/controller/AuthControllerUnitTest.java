@@ -1,94 +1,140 @@
 package ke.co.smartlaundry.controller;
 
-import ke.co.smartlaundry.dto.LoginRequestDTO;
-import ke.co.smartlaundry.dto.RegisterRequestDTO;
+import ke.co.smartlaundry.configuration.JwtUtil;
+import ke.co.smartlaundry.dto.AuthResponseDTO;
 import ke.co.smartlaundry.model.Role;
 import ke.co.smartlaundry.model.User;
 import ke.co.smartlaundry.repository.RoleRepository;
-import ke.co.smartlaundry.configuration.JwtUtil;
+import ke.co.smartlaundry.service.AfricasTalkingSmsService;
+import ke.co.smartlaundry.service.OtpService;
 import ke.co.smartlaundry.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.Mockito;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@AutoConfigureMockMvc
 class AuthControllerUnitTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockitoBean
     private UserService userService;
-
-    @MockitoBean
-    private RoleRepository roleRepository;
-
-    @MockitoBean
     private JwtUtil jwtUtil;
+    private RoleRepository roleRepository;
+    private AuthController authController;
+    private PasswordEncoder passwordEncoder;
+    private AuthenticationManager authenticationManager;
+    private OtpService otpService;
+    private AfricasTalkingSmsService smsService;
 
-    @Test
-    void register_Success() throws Exception {
-        RegisterRequestDTO request = new RegisterRequestDTO();
-        request.setUsername("John Doe");
-        request.setEmail("john@example.com");
-        request.setPassword("secret123");
-        request.setRoleName("USER");
+    @BeforeEach
+    void setup() {
+        userService = Mockito.mock(UserService.class);
+        jwtUtil = Mockito.mock(JwtUtil.class);
+        roleRepository = Mockito.mock(RoleRepository.class);
+        passwordEncoder = new BCryptPasswordEncoder();
+        authenticationManager = Mockito.mock(AuthenticationManager.class);
+        otpService = Mockito.mock(OtpService.class);
+        smsService = Mockito.mock(AfricasTalkingSmsService.class);
 
-        Role role = new Role();
-        role.setId((short) 5);
-        role.setName("USER");
-
-        User user = new User();
-        user.setId(5L);
-        user.setUsername("John Doe");
-        user.setEmail("john@example.com");
-        user.setStatus(User.Status.ACTIVE);
-        user.setRole(role);
-
-        when(roleRepository.findByName("USER")).thenReturn(Optional.of(role));
-        when(userService.fromRegisterDTO(any(RegisterRequestDTO.class), eq(role))).thenReturn(user);
-        when(userService.createUser(any(User.class))).thenReturn(user);
-        when(jwtUtil.generateToken("john@example.com")).thenReturn("mock-jwt");
-
-        mockMvc.perform(post("/api/auth/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"fullName\":\"John Doe\",\"email\":\"john@example.com\",\"password\":\"secret123\",\"roleName\":\"USER\"}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value("mock-jwt"))
-                .andExpect(jsonPath("$.user.email").value("john@example.com"))
-                .andExpect(jsonPath("$.user.isActive").value(true));
+        // Pass all six dependencies
+        authController = new AuthController(
+                userService,
+                roleRepository,
+                jwtUtil,
+                authenticationManager,
+                otpService,
+                smsService
+        );
     }
 
     @Test
-    void login_Success() throws Exception {
+    void register_shouldReturnTokenAndUser() {
+        Mockito.when(roleRepository.findByName("CUSTOMER"))
+                .thenReturn(Optional.of(new Role("CUSTOMER")));
+
         User user = new User();
-        user.setId(5L);
-        user.setEmail("john@example.com");
-        user.setPasswordHash("encoded-pass");
-        user.setStatus(User.Status.ACTIVE);
+        user.setEmail("test@example.com");
+        user.setUsername("Test User");
 
-        when(userService.getUserByEmail("john@example.com")).thenReturn(user);
-        when(userService.checkPassword("secret123", "encoded-pass")).thenReturn(true);
-        when(jwtUtil.generateToken("john@example.com")).thenReturn("mock-jwt");
+        ke.co.smartlaundry.dto.UserDTO userDTO = new ke.co.smartlaundry.dto.UserDTO();
+        userDTO.setEmail(user.getEmail());
+        userDTO.setUsername(user.getUsername());
 
-        mockMvc.perform(post("/api/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\":\"john@example.com\",\"password\":\"secret123\"}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value("mock-jwt"))
-                .andExpect(jsonPath("$.user.email").value("john@example.com"))
-                .andExpect(jsonPath("$.user.isActive").value(true));
+        Mockito.when(userService.fromRegisterDTO(Mockito.any(), Mockito.any())).thenReturn(user);
+        Mockito.when(userService.createUser(user)).thenReturn(user);
+        Mockito.when(userService.toDTO(user)).thenReturn(userDTO);
+        Mockito.when(jwtUtil.generateToken(user.getEmail())).thenReturn("mockToken");
+
+        ResponseEntity<?> response = authController.register(Mockito.mock(ke.co.smartlaundry.dto.RegisterRequestDTO.class));
+
+        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+        AuthResponseDTO body = (AuthResponseDTO) response.getBody();
+        assertThat(body).isNotNull();
+        assertThat(body.getToken()).isEqualTo("mockToken");
+        assertThat(body.getUser().getEmail()).isEqualTo("test@example.com");
+    }
+
+    @Test
+    void login_shouldReturnTokenForValidUser() {
+        User user = new User();
+        user.setEmail("test@example.com");
+        user.setPasswordHash(passwordEncoder.encode("Customer1@123"));
+
+        ke.co.smartlaundry.dto.UserDTO userDTO = new ke.co.smartlaundry.dto.UserDTO();
+        userDTO.setEmail(user.getEmail());
+        userDTO.setUsername(user.getUsername());
+
+        Mockito.when(userService.getUserByEmail("test@example.com")).thenReturn(user);
+        Mockito.when(userService.checkPassword("Customer1@123", user.getPasswordHash())).thenReturn(true);
+        Mockito.when(userService.toDTO(user)).thenReturn(userDTO);
+        Mockito.when(jwtUtil.generateToken(user.getEmail())).thenReturn("mockToken");
+
+        ke.co.smartlaundry.dto.LoginRequestDTO loginDTO = new ke.co.smartlaundry.dto.LoginRequestDTO();
+        loginDTO.setEmail("test@example.com");
+        loginDTO.setPassword("Customer1@123");
+
+        ResponseEntity<?> response = authController.login(loginDTO);
+
+        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
+        AuthResponseDTO body = (AuthResponseDTO) response.getBody();
+        assertThat(body).isNotNull();
+        assertThat(body.getToken()).isEqualTo("mockToken");
+        assertThat(body.getUser().getEmail()).isEqualTo("test@example.com");
+    }
+
+    @Test
+    void login_shouldReturnUnauthorizedForInvalidPassword() {
+        User user = new User();
+        user.setEmail("test@example.com");
+        user.setPasswordHash(passwordEncoder.encode("Customer@123"));
+
+        Mockito.when(userService.getUserByEmail("test@example.com")).thenReturn(user);
+        Mockito.when(userService.checkPassword("wrongpass", user.getPasswordHash())).thenReturn(false);
+
+        ke.co.smartlaundry.dto.LoginRequestDTO loginDTO = new ke.co.smartlaundry.dto.LoginRequestDTO();
+        loginDTO.setEmail("test@example.com");
+        loginDTO.setPassword("wrongpass");
+
+        ResponseEntity<?> response = authController.login(loginDTO);
+        assertThat(response.getStatusCodeValue()).isEqualTo(401);
+    }
+
+    @Test
+    void login_shouldReturnUnauthorizedForNonExistingUser() {
+        Mockito.when(userService.getUserByEmail("missing@example.com"))
+                .thenThrow(new NoSuchElementException("User not found"));
+
+        ke.co.smartlaundry.dto.LoginRequestDTO loginDTO = new ke.co.smartlaundry.dto.LoginRequestDTO();
+        loginDTO.setEmail("missing@example.com");
+        loginDTO.setPassword("anything");
+
+        ResponseEntity<?> response = authController.login(loginDTO);
+        assertThat(response.getStatusCodeValue()).isEqualTo(401);
     }
 }

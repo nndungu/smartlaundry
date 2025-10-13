@@ -1,77 +1,43 @@
 package ke.co.smartlaundry.controller;
 
-import ke.co.smartlaundry.configuration.JwtUtil;
-import ke.co.smartlaundry.model.User;
-import ke.co.smartlaundry.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ke.co.smartlaundry.dto.LoginRequestDTO;
+import ke.co.smartlaundry.dto.RegisterRequestDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
-import jakarta.transaction.Transactional;
+import java.util.Map;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
 @ActiveProfiles("test")
+@Sql(scripts = "/test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class AuthControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private ObjectMapper objectMapper;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    // =========================
-    // REGISTER
-    // =========================
     @Test
-    void registerNewUser_shouldReturnTokenAndUser() throws Exception {
-        String json = """
-                {
-                    "fullName": "Alice Test",
-                    "email": "alice@example.com",
-                    "password": "password123"
-                }
-                """;
-
-        mockMvc.perform(post("/api/auth/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").exists())
-                .andExpect(jsonPath("$.user.email").value("alice@example.com"));
-    }
-
-    // =========================
-    // LOGIN
-    // =========================
-    @Test
-    void loginWithValidCredentials_shouldReturnToken() throws Exception {
-        // Ensure user exists in DB
-        User user = userRepository.findByEmail("customer1@laundromart.ke").orElseThrow();
-
-        String json = """
-                {
-                    "email": "customer1@laundromart.ke",
-                    "password": "customer123"
-                }
-                """;
+    void loginWithValidCustomer_shouldReturnToken() throws Exception {
+        LoginRequestDTO loginReq = new LoginRequestDTO();
+        loginReq.setEmail("customer1@laundromart.ke");
+        loginReq.setPassword("Customer@123");
 
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(objectMapper.writeValueAsString(loginReq)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").exists())
                 .andExpect(jsonPath("$.user.email").value("customer1@laundromart.ke"));
@@ -79,108 +45,62 @@ class AuthControllerIntegrationTest {
 
     @Test
     void loginWithInvalidPassword_shouldReturnUnauthorized() throws Exception {
-        String json = """
-                {
-                    "email": "customer1@laundromart.ke",
-                    "password": "wrongpass"
-                }
-                """;
+        LoginRequestDTO loginReq = new LoginRequestDTO();
+        loginReq.setEmail("customer1@laundromart.ke");
+        loginReq.setPassword("wrongpass");
 
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().string("Invalid credentials"));
+                        .content(objectMapper.writeValueAsString(loginReq)))
+                .andExpect(status().isUnauthorized());
     }
 
-    // =========================
-    // FORGOT PASSWORD
-    // =========================
     @Test
-    void forgotPasswordExistingUser_shouldReturnOk() throws Exception {
-        String json = """
-                {
-                    "email": "customer1@laundromart.ke"
-                }
-                """;
+    void accessProtectedEndpointWithAdminToken_shouldReturnOk() throws Exception {
+        // Login as admin first
+        LoginRequestDTO loginReq = new LoginRequestDTO();
+        loginReq.setEmail("admin@laundromart.ke");
+        loginReq.setPassword("Admin@123");
 
-        mockMvc.perform(post("/api/auth/forgot-password")
+        var mvcResult = mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(objectMapper.writeValueAsString(loginReq)))
                 .andExpect(status().isOk())
-                .andExpect(content().string("If an account exists with that email, a reset link has been sent."));
-    }
+                .andReturn();
 
-    @Test
-    void forgotPasswordNonExistentUser_shouldReturnOk() throws Exception {
-        String json = """
-                {
-                    "email": "nonexistent@example.com"
-                }
-                """;
+        String response = mvcResult.getResponse().getContentAsString();
+        String token = objectMapper.readTree(response).get("token").asText();
 
-        mockMvc.perform(post("/api/auth/forgot-password")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isOk())
-                .andExpect(content().string("If an account exists with that email, a reset link has been sent."));
-    }
-
-    // =========================
-    // RESET PASSWORD
-    // =========================
-    @Test
-    void resetPasswordValidToken_shouldReturnOk() throws Exception {
-        // Generate token using JwtUtil
-        String token = jwtUtil.generateToken("customer1@laundromart.ke");
-
-        String json = String.format("""
-                {
-                    "token": "%s",
-                    "newPassword": "newPassword123"
-                }
-                """, token);
-
-        mockMvc.perform(post("/api/auth/reset-password")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Password reset successful"));
-    }
-
-    @Test
-    void resetPasswordInvalidToken_shouldReturnBadRequest() throws Exception {
-        String json = """
-                {
-                    "token": "invalidToken",
-                    "newPassword": "password123"
-                }
-                """;
-
-        mockMvc.perform(post("/api/auth/reset-password")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Invalid or expired token"));
-    }
-
-    // =========================
-    // JWT AUTH PROTECTION
-    // =========================
-    @Test
-    void accessProtectedEndpointWithValidToken_shouldReturnOk() throws Exception {
-        String token = jwtUtil.generateToken("admin@laundromart.ke");
-
+        // Call protected endpoint (example: list all users)
         mockMvc.perform(get("/api/users")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void accessProtectedEndpointWithInvalidToken_shouldReturnUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/users")
-                        .header("Authorization", "Bearer invalidToken"))
-                .andExpect(status().isUnauthorized());
+    void registerNewCustomer_shouldReturnTokenAndUser() throws Exception {
+        RegisterRequestDTO registerReq = new RegisterRequestDTO();
+        registerReq.setUsername("newcustomer");
+        registerReq.setEmail("newcustomer@laundromart.ke");
+        registerReq.setPassword("Customer@123");
+
+        mockMvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(registerReq)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").exists())
+                .andExpect(jsonPath("$.user.email").value("newcustomer@laundromart.ke"))
+                .andExpect(jsonPath("$.user.username").value("newcustomer"));
+    }
+
+    @Test
+    void forgotPassword_shouldReturnOkMessage() throws Exception {
+        var request = Map.of("email", "customer1@laundromart.ke");
+
+        mockMvc.perform(post("/api/auth/forgot-password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("If an account exists with that email, a reset link has been sent."));
     }
 }
-

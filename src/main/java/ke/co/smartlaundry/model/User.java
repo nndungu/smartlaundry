@@ -37,6 +37,9 @@ public class User {
     @Column(nullable = false, length = 20)
     private Status status = Status.ACTIVE;
 
+    @Column(nullable = false)
+    private boolean verified = false;
+
     public enum Status {
         ACTIVE,
         SUSPENDED
@@ -50,11 +53,13 @@ public class User {
         this.phone = phone;
         this.passwordHash = passwordHash;
         this.role = role;
-        this.status = Status.ACTIVE;
     }
 
     public boolean getIsActive() {
         return status == Status.ACTIVE;
+    }
+    public void setIsActive(boolean status){
+        this.status = Status.ACTIVE;
     }
 
     // Getters and Setters
@@ -81,5 +86,9 @@ public class User {
 
     public Status getStatus() { return status; }
     public void setStatus(Status status) { this.status = status; }
+
+    public boolean isVerified() { return verified; }
+    public void setVerified(boolean verified) { this.verified = verified; }
+
 }
 

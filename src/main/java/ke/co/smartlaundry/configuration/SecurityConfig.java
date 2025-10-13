@@ -3,81 +3,49 @@ package ke.co.smartlaundry.configuration;
 import ke.co.smartlaundry.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableMethodSecurity
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationFilter jwtFilter;
 
-    public SecurityConfig(@Lazy JwtAuthenticationFilter jwtAuthenticationFilter) {
-        // 👈 Lazy to prevent circular dependency with JPA/UserRepository
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    public SecurityConfig(JwtAuthenticationFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
     }
 
-    // --- Password encoder bean ---
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    // --- Expose CustomUserDetailsService as UserDetailsService ---
-    @Bean
-    public UserDetailsService userDetailsService(CustomUserDetailsService customUserDetailsService) {
-        return customUserDetailsService;
-    }
-
-    // --- Authentication manager bean ---
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
-
-    // --- Security filter chain ---
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/auth/**",
-                                "/api/password-reset/**",
-                                "/public/**",
-                                "/h2-console/**"
-                        ).permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/me").authenticated()
+                        .requestMatchers("/api/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-        // Allow H2 console frames
-        http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // --- Inner utility class for password hashing ---
-    public static class PasswordHashGenerator {
-        private final PasswordEncoder passwordEncoder;
+    @Bean
+    public AuthenticationManager authManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
 
-        public PasswordHashGenerator(PasswordEncoder passwordEncoder) {
-            this.passwordEncoder = passwordEncoder;
-        }
-
-        public String encode(String rawPassword) {
-            return passwordEncoder.encode(rawPassword);
-        }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
+

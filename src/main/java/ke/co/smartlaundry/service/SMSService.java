@@ -1,15 +1,8 @@
 package ke.co.smartlaundry.service;
 
-import org.springframework.stereotype.Service;
-
-@Service
-public class SMSService {
-
+public interface SMSService {
     /**
-     * For development, just log the message.
-     * Later, integrate with Twilio or Africa's Talking for production.
+     * Send an SMS message. Returns true if send succeeded (or queued), false otherwise.
      */
-    public void sendSMS(String phoneNumber, String message) {
-        System.out.println("Sending SMS to " + phoneNumber + " | Message: " + message);
-    }
+    boolean sendSMS(String phoneNumber, String message);
 }
