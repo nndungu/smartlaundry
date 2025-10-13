@@ -2,29 +2,30 @@ package ke.co.smartlaundry.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "app_user") // safer than "user"
+@Table(name = "app_user")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "username", nullable = false)
-    private String fullName;
+    @Column(nullable = false, length = 100)
+    private String username;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(unique = true)
+    @Column(unique = true, length = 20)
     private String phone;
 
-    @Column(name = "password_hash", nullable = false)
+    @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
@@ -32,25 +33,41 @@ public class User {
     @Column(name = "created_at", updatable = false)
     private Timestamp createdAt;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Status status; // ACTIVE, SUSPENDED
+    @Column(nullable = false, length = 20)
+    private Status status = Status.ACTIVE;
 
-    public boolean getIsActive() {
-        return status != null && status == Status.ACTIVE;
-    }
+    @Column(nullable = false)
+    private boolean verified = false;
 
     public enum Status {
         ACTIVE,
         SUSPENDED
     }
 
-    // getters and setters
+    public User() {}
+
+    public User(String username, String email, String phone, String passwordHash, Role role) {
+        this.username = username;
+        this.email = email;
+        this.phone = phone;
+        this.passwordHash = passwordHash;
+        this.role = role;
+    }
+
+    public boolean getIsActive() {
+        return status == Status.ACTIVE;
+    }
+    public void setIsActive(boolean status){
+        this.status = Status.ACTIVE;
+    }
+
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
@@ -62,9 +79,16 @@ public class User {
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
 
     public Role getRole() { return role; }
-    public void setRole(Role roleName) { this.role = roleName; }
+    public void setRole(Role role) { this.role = role; }
 
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
 
+    public Status getStatus() { return status; }
+    public void setStatus(Status status) { this.status = status; }
+
+    public boolean isVerified() { return verified; }
+    public void setVerified(boolean verified) { this.verified = verified; }
+
 }
+

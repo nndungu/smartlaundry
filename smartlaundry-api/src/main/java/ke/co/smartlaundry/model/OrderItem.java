@@ -5,14 +5,17 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "order_items")
 public class OrderItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Many items belong to one order
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
+    // For now, store item name and price. Later can link to Product/Service entity.
     @Column(nullable = false)
     private String itemName;
 
@@ -22,7 +25,12 @@ public class OrderItem {
     @Column(nullable = false)
     private double price;
 
-    // getters & setters
+    // Optional: category (e.g., Clothing, Bedding)
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -37,4 +45,7 @@ public class OrderItem {
 
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
+
+    public Category getCategory() { return category; }
+    public void setCategory(Category category) { this.category = category; }
 }

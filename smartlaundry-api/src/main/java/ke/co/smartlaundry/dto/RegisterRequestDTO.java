@@ -7,9 +7,10 @@ import jakarta.validation.constraints.Size;
 public class RegisterRequestDTO {
 
     @NotBlank
-    private String fullName;
+    private String username;
 
     @Email
+    @NotBlank
     private String email;
 
     private String phone;
@@ -18,11 +19,11 @@ public class RegisterRequestDTO {
     @Size(min = 6)
     private String password;
 
-    private String roleName; // <--- Add this
+    private String roleName; // optional
 
     // Getters & Setters
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
@@ -33,6 +34,6 @@ public class RegisterRequestDTO {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public String getRoleName() { return roleName; }  // <--- Add getter
-    public void setRoleName(String roleName) { this.roleName = roleName; }  // <--- Add setter
+    public String getRoleName() { return roleName; }
+    public void setRoleName(String roleName) { this.roleName = roleName; }
 }

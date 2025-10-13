@@ -38,23 +38,25 @@ public class UserService {
     // --- DTO Conversions ---
     public UserDTO toDTO(User user) {
         if (user == null) return null;
+
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
-        dto.setFullName(user.getFullName());
+        dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
         dto.setPhone(user.getPhone());
         dto.setRole(user.getRole());
-        //dto.setIsActive(user.getStatus() != null && user.getStatus().name().equalsIgnoreCase("ACTIVE"));
+        dto.setIsActive(user.getIsActive()); // ✅ use enum-based method
         return dto;
     }
 
     public User fromRegisterDTO(RegisterRequestDTO dto, Role role) {
         User user = new User();
-        user.setFullName(dto.getFullName());
+        user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
         user.setPhone(dto.getPhone());
         user.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
         user.setRole(role);
+        user.setStatus(User.Status.ACTIVE); // ✅ enum
         return user;
     }
 
@@ -64,23 +66,28 @@ public class UserService {
     }
 
     public UserDTO getUserById(Long id) {
-        return toDTO(userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found")));
+        return toDTO(userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found")));
     }
 
     public User createUser(User user) {
-        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash())); // ensure encoding
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash())); // encode before save
+        if (user.getStatus() == null) {
+            user.setStatus(User.Status.ACTIVE); // default
+        }
         return userRepository.save(user);
     }
 
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("User not found"));
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
     }
 
     public User updateUser(Long id, User updatedUser, String roleName) {
         User existing = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        existing.setFullName(updatedUser.getFullName());
+        existing.setUsername(updatedUser.getUsername());
         existing.setPhone(updatedUser.getPhone());
         existing.setEmail(updatedUser.getEmail());
 
@@ -94,7 +101,18 @@ public class UserService {
             existing.setRole(role);
         }
 
+        if (updatedUser.getStatus() != null) {
+            existing.setStatus(updatedUser.getStatus()); // update enum
+        }
+
         return userRepository.save(existing);
+    }
+
+    public void markUserAsVerified(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        user.setVerified(true);
+        userRepository.save(user);
     }
 
     public void deleteUser(Long id) {
@@ -114,6 +132,7 @@ public class UserService {
     public String createPasswordResetToken(String email) {
         User user = getUserByEmail(email);
 
+        // delete old tokens
         tokenRepository.findAll().stream()
                 .filter(t -> t.getUser().getId().equals(user.getId()))
                 .forEach(tokenRepository::delete);
@@ -133,6 +152,7 @@ public class UserService {
         if (tokenOpt.isPresent()) {
             PasswordResetToken resetToken = tokenOpt.get();
             if (resetToken.getExpiryDate().isBefore(LocalDateTime.now())) return false;
+
             User user = resetToken.getUser();
             user.setPasswordHash(passwordEncoder.encode(newPassword));
             userRepository.save(user);
@@ -140,5 +160,17 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public User findUserByEmail(String mail) {
+        return null;
+    }
+
+    public User registerUser(User user) {
+        return user;
+    }
+
+    public Object authenticateUser(String mail, String password) {
+        return null;
     }
 }
