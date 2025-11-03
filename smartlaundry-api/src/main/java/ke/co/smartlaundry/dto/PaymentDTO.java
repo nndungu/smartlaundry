@@ -1,17 +1,30 @@
 package ke.co.smartlaundry.dto;
 
-import ke.co.smartlaundry.model.PaymentStatus;
+import ke.co.smartlaundry.model.PaymentMethod;
+import ke.co.smartlaundry.enums.PaymentStatus;
 
 import java.time.LocalDateTime;
 
 public class PaymentDTO {
     private Long id;
     private Long orderId;
-    private Long methodId;
+    private String methodCode;
     private Double amount;
     private String transactionRef;
     private PaymentStatus status;
     private LocalDateTime createdAt;
+
+    public PaymentDTO() {}
+
+    public PaymentDTO(Long id, Long orderId, PaymentMethod method, Double amount, String transactionRef, PaymentStatus status, LocalDateTime createdAt) {
+        this.id = id;
+        this.orderId = orderId;
+        this.methodCode = method != null ? method.getCode() : null;
+        this.amount = amount;
+        this.transactionRef = transactionRef;
+        this.status = status;
+        this.createdAt = createdAt;
+    }
 
     // Getters & Setters
     public Long getId() { return id; }
@@ -20,8 +33,8 @@ public class PaymentDTO {
     public Long getOrderId() { return orderId; }
     public void setOrderId(Long orderId) { this.orderId = orderId; }
 
-    public Long getMethodId() { return methodId; }
-    public void setMethodId(Long methodId) { this.methodId = methodId; }
+    public String getMethodCode() { return methodCode; }
+    public void setMethodCode(String methodCode) { this.methodCode = methodCode; }
 
     public Double getAmount() { return amount; }
     public void setAmount(Double amount) { this.amount = amount; }

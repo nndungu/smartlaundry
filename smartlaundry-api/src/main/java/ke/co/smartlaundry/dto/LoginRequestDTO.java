@@ -12,6 +12,13 @@ public class LoginRequestDTO {
     @NotBlank
     private String password;
 
+    public LoginRequestDTO() {}
+
+    public LoginRequestDTO(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
     // Getters & Setters
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }

@@ -1,53 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="dataSourceStorageLocal" created-in="IU-252.26199.169">
-    <data-source name="laundromartdb" uuid="dc27e2b8-237a-47ba-8534-68d96d3195fb">
-      <database-info product="H2" version="2.3.232 (2024-08-11)" jdbc-version="4.3" driver-name="H2 JDBC Driver" driver-version="2.3.232 (2024-08-11)" dbms="H2" exact-version="2.3.232" exact-driver-version="2.3">
+  <component name="dataSourceStorageLocal" created-in="IU-252.27397.103">
+    <data-source name="dev@localhost" uuid="1d314a78-2a90-4593-a2e6-685fcb86436a">
+      <database-info product="PostgreSQL" version="15.14 (Debian 15.14-0+deb12u1)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="15.14" exact-driver-version="42.7">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
-      <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact" />
-      <user-name>sa</user-name>
-      <schema-mapping>
-        <introspection-scope>
-          <node kind="database" qname="@">
-            <node kind="schema" qname="@" />
-          </node>
-        </introspection-scope>
-      </schema-mapping>
-    </data-source>
-    <data-source name="laundromart@localhost" uuid="24b30a69-a2fe-4d1b-883a-7ca558730740">
-      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MYSQL" />
-      <user-name>root</user-name>
-      <schema-mapping />
-    </data-source>
-    <data-source name="laundromart@localhost" uuid="df986d0b-ffe5-40d6-aae0-11841fbfa085">
-      <database-info product="MySQL" version="5.5.5-10.11.14-MariaDB-0+deb12u2" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-8.2.0 (Revision: 06a1f724497fd81c6a659131fda822c9e5085b6c)" dbms="MARIADB" exact-version="10.11.14" exact-driver-version="8.2">
-        <extra-name-characters>#@</extra-name-characters>
-        <identifier-quote-string>`</identifier-quote-string>
-      </database-info>
-      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
       <user-name>laundry_admin</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="schema" qname="@" />
-        </introspection-scope>
-      </schema-mapping>
-    </data-source>
-    <data-source name="laundromartdb" uuid="345a98c9-6a1a-489f-9195-81f6512a46c3">
-      <database-info product="H2" version="2.3.232 (2024-08-11)" jdbc-version="4.3" driver-name="H2 JDBC Driver" driver-version="2.3.232 (2024-08-11)" dbms="H2" exact-version="2.3.232" exact-driver-version="2.3">
-        <identifier-quote-string>&quot;</identifier-quote-string>
-      </database-info>
-      <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact" />
-      <user-name>sa</user-name>
-      <schema-mapping>
-        <introspection-scope>
           <node kind="database" qname="@">
             <node kind="schema" qname="@" />
           </node>
         </introspection-scope>
       </schema-mapping>
     </data-source>
-    <data-source name="smartlaundry@localhost" uuid="40e19070-61d4-4df3-bb16-d6caf1544e1f">
+    <data-source name="test@localhost" uuid="6eff29fe-de31-48e0-89df-6d5578240783">
       <database-info product="PostgreSQL" version="15.14 (Debian 15.14-0+deb12u1)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="15.14" exact-driver-version="42.7">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>

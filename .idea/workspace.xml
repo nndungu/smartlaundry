@@ -5,10 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0311d6c-3642-4aea-86c7-8970c3eb78af" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/345a98c9-6a1a-489f-9195-81f6512a46c3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/345a98c9-6a1a-489f-9195-81f6512a46c3/storage_v2/_src_/database/LAUNDROMARTDB.h4vKIw.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/345a98c9-6a1a-489f-9195-81f6512a46c3/storage_v2/_src_/database/LAUNDROMARTDB.h4vKIw/schema/INFORMATION_SCHEMA.NBgcMw.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/345a98c9-6a1a-489f-9195-81f6512a46c3/storage_v2/_src_/database/LAUNDROMARTDB.h4vKIw/schema/PUBLIC.aaZQjQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/40e19070-61d4-4df3-bb16-d6caf1544e1f.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/40e19070-61d4-4df3-bb16-d6caf1544e1f/storage_v2/_src_/database/smartlaundry.NF7Ofw.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/40e19070-61d4-4df3-bb16-d6caf1544e1f/storage_v2/_src_/database/smartlaundry.NF7Ofw/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/40e19070-61d4-4df3-bb16-d6caf1544e1f/storage_v2/_src_/database/smartlaundry.NF7Ofw/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/40e19070-61d4-4df3-bb16-d6caf1544e1f/storage_v2/_src_/database/smartlaundry.NF7Ofw/schema/public.abK9xQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/dc27e2b8-237a-47ba-8534-68d96d3195fb.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/dc27e2b8-237a-47ba-8534-68d96d3195fb/storage_v2/_src_/database/LAUNDROMARTDB.h4vKIw.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/dc27e2b8-237a-47ba-8534-68d96d3195fb/storage_v2/_src_/database/LAUNDROMARTDB.h4vKIw/schema/INFORMATION_SCHEMA.NBgcMw.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/dc27e2b8-237a-47ba-8534-68d96d3195fb/storage_v2/_src_/database/LAUNDROMARTDB.h4vKIw/schema/PUBLIC.aaZQjQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/df986d0b-ffe5-40d6-aae0-11841fbfa085.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/df986d0b-ffe5-40d6-aae0-11841fbfa085/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -24,6 +39,9 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$/smartlaundry-api">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand />
@@ -58,7 +76,7 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/nndungu/smartlaundry.git&quot;,
+    &quot;url&quot;: &quot;git@github.com:nndungu/smartlaundry.git&quot;,
     &quot;accountId&quot;: &quot;d5ca64e6-ab8d-4f0b-a7e5-6f01fb31ab15&quot;
   }
 }</component>
@@ -79,9 +97,30 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Gradle.AuthControllerIntegrationTest.executor": "Run",
+    "Gradle.AuthControllerIntegrationTest.loginWithValidCustomer_shouldReturnToken.executor": "Run",
+    "Gradle.AuthControllerIntegrationTest.registerNewCustomer_shouldReturnTokenAndUser.executor": "Run",
+    "Gradle.AuthControllerUnitTest.executor": "Run",
+    "Gradle.AuthControllerUnitTest.registerCustomer_shouldReturnTokenAndUser.executor": "Run",
     "Gradle.Build smartlaundry-api.executor": "Run",
+    "Gradle.CartControllerIntegrationTest.executor": "Run",
+    "Gradle.CartControllerIntegrationTest.getCartItems_returnsCartItems.executor": "Run",
     "Gradle.Download Sources.executor": "Run",
+    "Gradle.JwtUtilIntegrationTest.executor": "Run",
+    "Gradle.JwtUtilIntegrationTest.shouldGenerateAndValidateToken.executor": "Run",
+    "Gradle.OrderControllerIntegrationTest.checkout_shouldReturnOrder.executor": "Run",
+    "Gradle.OrderControllerIntegrationTest.deleteOrder_shouldRemove.executor": "Debug",
+    "Gradle.OrderControllerIntegrationTest.executor": "Run",
+    "Gradle.OrderControllerIntegrationTest.getUserOrders_shouldReturnList.executor": "Run",
+    "Gradle.SmartlaundryApiApplicationTests.executor": "Run",
+    "Gradle.UserControllerIntegrationTest.executor": "Run",
+    "JUnit.AuthControllerUnitTest.executor": "Run",
+    "JUnit.AuthControllerUnitTest.googleLogin_shouldReturnTokenForValidToken.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
@@ -90,10 +129,10 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.SmartlaundryApiApplication.executor": "Run",
-    "git-widget-placeholder": "#9 on nelson",
+    "git-widget-placeholder": "nelson",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/m4in/IdeaProjects/smartlaundry/smartlaundry-api/src/test/resources",
+    "last_opened_file_path": "/home/m4in/IdeaProjects/smartlaundry",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -112,18 +151,143 @@
     ]
   }
 }]]></component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/smartlaundry-api/src/test/resources/db" />
       <recent name="$PROJECT_DIR$/smartlaundry-api/src/test/resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/smartlaundry-api/src/main/resources" />
-      <recent name="$PROJECT_DIR$/smartlaundry-api/src/main/resources/h2" />
-      <recent name="$PROJECT_DIR$/smartlaundry-api/src/main/resources/mysql" />
-      <recent name="C:\Users\ma1n\IdeaProjects\smartlaundry\smartlaundry-api\src\main\resources\db\migration\mysql" />
+      <recent name="$PROJECT_DIR$/smartlaundry-api/src/test/resources/db/migration/test-data" />
+      <recent name="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/dev-seed" />
+      <recent name="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/prod-seed" />
+      <recent name="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration" />
+      <recent name="$PROJECT_DIR$/smartlaundry-api/src/test/resources/db/migration" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Spring Boot.SmartlaundryApiApplication">
+    <configuration name="AuthControllerIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;ke.co.smartlaundry.controller.AuthControllerIntegrationTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="AuthControllerIntegrationTest.registerNewCustomer_shouldReturnTokenAndUser" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;ke.co.smartlaundry.controller.AuthControllerIntegrationTest.registerNewCustomer_shouldReturnTokenAndUser&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="OrderControllerIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;ke.co.smartlaundry.controller.OrderControllerIntegrationTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="SmartlaundryApiApplicationTests" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;ke.co.smartlaundry.SmartlaundryApiApplicationTests&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="UserControllerIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;ke.co.smartlaundry.controller.UserControllerIntegrationTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="SmartlaundryApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="ke.co.smartlaundry.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ke.co.smartlaundry.SmartlaundryApiApplication" />
@@ -131,12 +295,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.AuthControllerIntegrationTest.registerNewCustomer_shouldReturnTokenAndUser" />
+        <item itemvalue="Gradle.AuthControllerIntegrationTest" />
+        <item itemvalue="Gradle.OrderControllerIntegrationTest" />
+        <item itemvalue="Gradle.UserControllerIntegrationTest" />
+        <item itemvalue="Gradle.SmartlaundryApiApplicationTests" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169" />
-        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-IU-252.26199.169" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
       </set>
     </attachedChunks>
   </component>
@@ -218,7 +391,75 @@
       <workItem from="1760295740470" duration="2773000" />
       <workItem from="1760317019758" duration="14259000" />
       <workItem from="1760338698700" duration="284000" />
-      <workItem from="1760350565177" duration="13036000" />
+      <workItem from="1760350565177" duration="16945000" />
+      <workItem from="1760385280681" duration="10270000" />
+      <workItem from="1760418038557" duration="40224000" />
+      <workItem from="1760486535297" duration="1204000" />
+      <workItem from="1760489285569" duration="412000" />
+      <workItem from="1760490675292" duration="2294000" />
+      <workItem from="1760493470091" duration="6865000" />
+      <workItem from="1760517053040" duration="7499000" />
+      <workItem from="1760528689694" duration="1959000" />
+      <workItem from="1760571134309" duration="11414000" />
+      <workItem from="1760596577760" duration="1416000" />
+      <workItem from="1760602465256" duration="8127000" />
+      <workItem from="1760614023436" duration="69000" />
+      <workItem from="1760615030424" duration="1460000" />
+      <workItem from="1760632467170" duration="10204000" />
+      <workItem from="1760672722858" duration="9374000" />
+      <workItem from="1760686429145" duration="83000" />
+      <workItem from="1760772985059" duration="11420000" />
+      <workItem from="1760934709165" duration="1681000" />
+      <workItem from="1760939943948" duration="1990000" />
+      <workItem from="1760945826289" duration="1375000" />
+      <workItem from="1760948388927" duration="1553000" />
+      <workItem from="1760961614302" duration="8006000" />
+      <workItem from="1761013583694" duration="2575000" />
+      <workItem from="1761018427553" duration="4213000" />
+      <workItem from="1761038346292" duration="1340000" />
+      <workItem from="1761040029129" duration="1647000" />
+      <workItem from="1761045753745" duration="1823000" />
+      <workItem from="1761049619058" duration="819000" />
+      <workItem from="1761054213820" duration="820000" />
+      <workItem from="1761061325288" duration="2257000" />
+      <workItem from="1761088481776" duration="1636000" />
+      <workItem from="1761091343294" duration="1691000" />
+      <workItem from="1761095767218" duration="654000" />
+      <workItem from="1761107136458" duration="6015000" />
+      <workItem from="1761117102444" duration="869000" />
+      <workItem from="1761141132402" duration="17007000" />
+      <workItem from="1761190261301" duration="5126000" />
+      <workItem from="1761217254801" duration="58000" />
+      <workItem from="1761223824239" duration="10193000" />
+      <workItem from="1761240155211" duration="96000" />
+      <workItem from="1761266449552" duration="5357000" />
+      <workItem from="1761281012357" duration="1740000" />
+      <workItem from="1761286541102" duration="9667000" />
+      <workItem from="1761301656783" duration="10861000" />
+      <workItem from="1761314911260" duration="4239000" />
+      <workItem from="1761356623140" duration="5922000" />
+      <workItem from="1761445483861" duration="197000" />
+      <workItem from="1761452690682" duration="6874000" />
+      <workItem from="1761462921362" duration="26250000" />
+      <workItem from="1761539438391" duration="1691000" />
+      <workItem from="1761567652582" duration="1707000" />
+      <workItem from="1761577872543" duration="3813000" />
+      <workItem from="1761632485681" duration="4170000" />
+      <workItem from="1761705932174" duration="2812000" />
+      <workItem from="1761714869319" duration="888000" />
+      <workItem from="1761724850232" duration="289000" />
+      <workItem from="1761738461156" duration="5475000" />
+      <workItem from="1761785470471" duration="4003000" />
+      <workItem from="1761794175634" duration="1081000" />
+      <workItem from="1761798691283" duration="399000" />
+      <workItem from="1761799264652" duration="334000" />
+      <workItem from="1761803161163" duration="1313000" />
+      <workItem from="1761812433208" duration="3731000" />
+      <workItem from="1761817593175" duration="4317000" />
+      <workItem from="1761822818246" duration="6155000" />
+      <workItem from="1761872344009" duration="12289000" />
+      <workItem from="1761956453885" duration="5624000" />
+      <workItem from="1762150544953" duration="2474000" />
     </task>
     <servers />
   </component>
@@ -247,6 +488,15 @@
           <properties class="java.lang.IllegalStateException" package="java.lang" />
           <option name="timeStamp" value="1" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/User.java</url>
+          <line>73</line>
+          <properties class="ke.co.smartlaundry.model.User" method="setActive">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

@@ -1,38 +1,77 @@
 package ke.co.smartlaundry.service;
 
 import org.springframework.stereotype.Service;
-import java.time.Instant;
+
+import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class OtpService {
 
+    // Store OTP with timestamp
     private final Map<String, OtpEntry> otpStore = new ConcurrentHashMap<>();
-    private static final long EXPIRATION_TIME_MS = 5 * 60 * 1000; // 5 minutes
 
-    private static class OtpEntry {
-        String otp;
-        long timestamp;
-        OtpEntry(String otp, long timestamp) {
-            this.otp = otp;
-            this.timestamp = timestamp;
-        }
-    }
+    private static final int EXPIRATION_MINUTES = 5;
+    private static final int MAX_ATTEMPTS = 3;
 
     public String generateOtp(String email) {
-        String otp = String.format("%06d", new Random().nextInt(999999));
-        otpStore.put(email, new OtpEntry(otp, Instant.now().toEpochMilli()));
+        OtpEntry existing = otpStore.get(email);
+
+        // Throttle: don't generate a new OTP if one exists and hasn't expired
+        if (existing != null && existing.getExpiry().isAfter(LocalDateTime.now())) {
+            return existing.getOtp();
+        }
+
+        String otp = String.valueOf((int)(Math.random() * 900000) + 100000); // 6-digit
+        OtpEntry entry = new OtpEntry(otp, LocalDateTime.now().plusMinutes(EXPIRATION_MINUTES));
+        otpStore.put(email, entry);
         return otp;
     }
 
     public boolean validateOtp(String email, String otp) {
         OtpEntry entry = otpStore.get(email);
         if (entry == null) return false;
-        boolean isValid = entry.otp.equals(otp) &&
-                (Instant.now().toEpochMilli() - entry.timestamp) < EXPIRATION_TIME_MS;
-        if (isValid) otpStore.remove(email); // OTP used once
-        return isValid;
+
+        if (entry.getExpiry().isBefore(LocalDateTime.now())) {
+            otpStore.remove(email); // expired
+            return false;
+        }
+
+        if (!entry.getOtp().equals(otp)) {
+            entry.incrementAttempts();
+            if (entry.getAttempts() >= MAX_ATTEMPTS) otpStore.remove(email); // too many attempts
+            return false;
+        }
+
+        otpStore.remove(email); // single-use
+        return true;
+    }
+
+    private static class OtpEntry {
+        private final String otp;
+        private final LocalDateTime expiry;
+        private int attempts = 0;
+
+        public OtpEntry(String otp, LocalDateTime expiry) {
+            this.otp = otp;
+            this.expiry = expiry;
+        }
+
+        public String getOtp() {
+            return otp;
+        }
+
+        public LocalDateTime getExpiry() {
+            return expiry;
+        }
+
+        public int getAttempts() {
+            return attempts;
+        }
+
+        public void incrementAttempts() {
+            attempts++;
+        }
     }
 }

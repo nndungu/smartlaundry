@@ -3,6 +3,7 @@ package ke.co.smartlaundry.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -13,6 +14,7 @@ import jakarta.annotation.PostConstruct;
 import java.util.Map;
 
 @Service
+@Profile("!test")
 public class AfricasTalkingSmsService implements SMSService {
 
     private static final Logger log = LoggerFactory.getLogger(AfricasTalkingSmsService.class);

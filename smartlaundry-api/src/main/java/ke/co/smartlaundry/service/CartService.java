@@ -3,12 +3,12 @@ package ke.co.smartlaundry.service;
 import ke.co.smartlaundry.model.*;
 import ke.co.smartlaundry.repository.*;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 public class CartService {
+
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final UserRepository userRepository;
@@ -35,16 +35,22 @@ public class CartService {
     public CartItem addItemToCart(Long userId, String itemName, int quantity, double price) {
         Cart cart = getCartByUserId(userId);
 
+        CartItem existingItem = cart.getItems().stream()
+                .filter(i -> i.getItemName().equalsIgnoreCase(itemName))
+                .findFirst()
+                .orElse(null);
+
+        if (existingItem != null) {
+            existingItem.setQuantity(existingItem.getQuantity() + quantity);
+            return cartItemRepository.save(existingItem);
+        }
+
         CartItem item = new CartItem();
         item.setCart(cart);
         item.setItemName(itemName);
         item.setQuantity(quantity);
         item.setPrice(price);
-
-        cart.getItems().add(item);
-        cartRepository.save(cart);
-
-        return item;
+        return cartItemRepository.save(item);
     }
 
     public void removeItem(Long itemId) {
@@ -55,6 +61,16 @@ public class CartService {
         Cart cart = getCartByUserId(userId);
         cart.getItems().clear();
         cartRepository.save(cart);
+    }
+
+    public List<CartItem> getCartItemsByUserId(Long userId) {
+        return getCartByUserId(userId).getItems();
+    }
+
+    public double calculateTotal(Long userId) {
+        return getCartItemsByUserId(userId).stream()
+                .mapToDouble(i -> i.getQuantity() * i.getPrice())
+                .sum();
     }
 
     public List<CartItem> getItems(Long userId) {
