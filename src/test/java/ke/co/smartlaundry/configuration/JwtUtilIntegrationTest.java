@@ -1,5 +1,6 @@
 package ke.co.smartlaundry.configuration;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,20 +16,33 @@ class JwtUtilIntegrationTest {
     private JwtUtil jwtUtil;
 
     @Test
+    @DisplayName("Should generate a valid token and extract the correct email")
     void shouldGenerateAndValidateToken() {
-        String email = "customer1@laundromart.ke";
-        String token = jwtUtil.generateToken(email);
+        // Arrange
+        String email = "customer1@smartlaundry.ke";
 
+        // Act
+        String token = jwtUtil.generateToken(email);
+        boolean isValid = jwtUtil.validateToken(token);
+        String extractedEmail = jwtUtil.extractEmail(token);
+
+        // Assert
         assertThat(token).isNotBlank();
-        assertThat(jwtUtil.validateToken(token)).isTrue();
-        assertThat(jwtUtil.extractEmail(token)).isEqualTo(email);
+        assertThat(isValid).isTrue();
+        assertThat(extractedEmail).isEqualTo(email);
     }
 
     @Test
+    @DisplayName("Should invalidate a tampered token")
     void shouldInvalidateTamperedToken() {
-        String token = jwtUtil.generateToken("customer1@laundromart.ke");
+        // Arrange
+        String token = jwtUtil.generateToken("customer1@smartlaundry.ke");
         String tampered = token.substring(0, token.length() - 1) + "X";
 
-        assertThat(jwtUtil.validateToken(tampered)).isFalse();
+        // Act
+        boolean isValid = jwtUtil.validateToken(tampered);
+
+        // Assert
+        assertThat(isValid).isFalse();
     }
 }

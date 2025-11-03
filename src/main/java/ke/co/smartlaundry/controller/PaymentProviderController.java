@@ -18,36 +18,37 @@ public class PaymentProviderController {
         this.providerRepository = providerRepository;
     }
 
-    // ✅ Get all providers
     @GetMapping
     public ResponseEntity<List<PaymentProvider>> getAllProviders() {
         return ResponseEntity.ok(providerRepository.findAll());
     }
 
-    // ✅ Get provider by ID
     @GetMapping("/{id}")
-    public ResponseEntity<PaymentProvider> getProviderById(@PathVariable Long id) {
+    public ResponseEntity<PaymentProvider> getProvider(@PathVariable Long id) {
         PaymentProvider provider = providerRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Provider not found"));
         return ResponseEntity.ok(provider);
     }
 
-    // ✅ Create new provider
     @PostMapping
     public ResponseEntity<PaymentProvider> createProvider(@RequestBody PaymentProvider provider) {
         return ResponseEntity.ok(providerRepository.save(provider));
     }
 
-    // ✅ Update existing provider
     @PutMapping("/{id}")
-    public ResponseEntity<PaymentProvider> updateProvider(@PathVariable Long id, @RequestBody PaymentProvider updated) {
+    public ResponseEntity<PaymentProvider> updateProvider(@PathVariable Long id,
+                                                          @RequestBody PaymentProvider updated) {
         PaymentProvider existing = providerRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Provider not found"));
+
         existing.setName(updated.getName());
+        existing.setBaseUrl(updated.getBaseUrl());
+        existing.setApiKey(updated.getApiKey());
+        existing.setActive(updated.isActive());
+
         return ResponseEntity.ok(providerRepository.save(existing));
     }
 
-    // ✅ Delete provider
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProvider(@PathVariable Long id) {
         providerRepository.deleteById(id);

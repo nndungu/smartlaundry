@@ -1,11 +1,11 @@
 package ke.co.smartlaundry.configuration;
 
-import ke.co.smartlaundry.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableMethodSecurity(prePostEnabled = true) // ✅ enable @PreAuthorize
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
@@ -27,7 +28,16 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        // --- Auth endpoints ---
                         .requestMatchers("/api/auth/**").permitAll()
+
+                        // --- WebSocket handshake ---
+                        .requestMatchers("/ws/**", "/app/**", "/topic/**").permitAll()
+
+                        // --- Public assets if you serve Swagger or static content ---
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
+                        // --- Protected routes ---
                         .requestMatchers(HttpMethod.GET, "/api/users/me").authenticated()
                         .requestMatchers("/api/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -48,4 +58,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-

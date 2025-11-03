@@ -1,30 +1,39 @@
 package ke.co.smartlaundry.dto;
 
-import ke.co.smartlaundry.model.OrderStatus;
+import ke.co.smartlaundry.enums.OrderStatus;
 
+import java.time.LocalDateTime;
 import java.sql.Timestamp;
-import java.util.List;
 
 public class OrderDTO {
     private Long id;
-    private Long userId;
     private OrderStatus status;
-    private Timestamp createdAt;
-    private List<OrderItemDTO> items;
+    private Double totalPrice;
+    private LocalDateTime createdAt;
+
+    public OrderDTO() {}
+
+    public OrderDTO(Long id, OrderStatus status, Double totalPrice, LocalDateTime createdAt) {
+        this.id = id;
+        this.status = status;
+        this.totalPrice = totalPrice;
+        this.createdAt = createdAt;
+    }
+
+    public OrderDTO(Long id, OrderStatus status, Double totalPrice, Timestamp createdAt) {
+        this(id, status, totalPrice, createdAt != null ? createdAt.toLocalDateTime() : null);
+    }
 
     // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
-
     public OrderStatus getStatus() { return status; }
     public void setStatus(OrderStatus status) { this.status = status; }
 
-    public Timestamp getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+    public Double getTotalPrice() { return totalPrice; }
+    public void setTotalPrice(Double totalPrice) { this.totalPrice = totalPrice; }
 
-    public List<OrderItemDTO> getItems() { return items; }
-    public void setItems(List<OrderItemDTO> items) { this.items = items; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

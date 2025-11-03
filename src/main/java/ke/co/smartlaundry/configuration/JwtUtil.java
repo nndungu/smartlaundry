@@ -19,11 +19,18 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private Long jwtExpirationMs;
 
+
     private SecretKey key;
 
     @PostConstruct
     public void init() {
-        this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        if (jwtSecret == null || jwtSecret.getBytes(StandardCharsets.UTF_8).length < 32) {
+            // Use new JJWT 0.12+ key builder API
+            this.key = Jwts.SIG.HS256.key().build();
+            System.err.println("⚠️ Weak or missing JWT secret. Generated a temporary secure key for runtime.");
+        } else {
+            this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        }
     }
 
     public String generateToken(String email) {

@@ -1,6 +1,7 @@
 package ke.co.smartlaundry.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "customer_profile")
@@ -17,6 +18,9 @@ public class CustomerProfile {
     @Column
     private String address;
 
+    private Double latitude;
+    private Double longitude;
+
     @Column
     private String city;
 
@@ -25,6 +29,9 @@ public class CustomerProfile {
 
     @Column(name = "loyalty_points")
     private Integer loyaltyPoints = 0;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
     // Constructors
     public CustomerProfile() {}
@@ -37,52 +44,36 @@ public class CustomerProfile {
         this.loyaltyPoints = loyaltyPoints;
     }
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
-    public User getUser() {
-        return user;
-    }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+    public Double getLatitude() { return latitude; }
+    public void setLatitude(Double latitude) { this.latitude = latitude; }
 
-    public String getAddress() {
-        return address;
-    }
+    public Double getLongitude() { return longitude; }
+    public void setLongitude(Double longitude) { this.longitude = longitude; }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
 
-    public String getCity() {
-        return city;
-    }
+    public String getRegion() { return region; }
+    public void setRegion(String region) { this.region = region; }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+    public Integer getLoyaltyPoints() { return loyaltyPoints; }
+    public void setLoyaltyPoints(Integer loyaltyPoints) { this.loyaltyPoints = loyaltyPoints; }
 
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public Integer getLoyaltyPoints() {
-        return loyaltyPoints;
-    }
-
-    public void setLoyaltyPoints(Integer loyaltyPoints) {
-        this.loyaltyPoints = loyaltyPoints;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

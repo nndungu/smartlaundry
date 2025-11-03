@@ -1,6 +1,6 @@
 package ke.co.smartlaundry.controller;
 
-import ke.co.smartlaundry.dto.AuthResponseDTO;
+import ke.co.smartlaundry.dto.LoginResponseDTO;
 import ke.co.smartlaundry.dto.RegisterRequestDTO;
 import ke.co.smartlaundry.dto.UserDTO;
 import ke.co.smartlaundry.model.Role;
@@ -52,8 +52,8 @@ public class UserController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AuthResponseDTO> createUser(@RequestBody @Valid RegisterRequestDTO dto) {
-        String roleName = dto.getRoleName() != null ? dto.getRoleName() : "USER";
+    public ResponseEntity<LoginResponseDTO> createUser(@RequestBody @Valid RegisterRequestDTO dto) {
+        String roleName = dto.getRole() != null ? dto.getRole() : "USER";
         Role role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new NoSuchElementException("Role not found"));
 
@@ -63,14 +63,14 @@ public class UserController {
         String token = jwtUtil.generateToken(user.getEmail());
         UserDTO userDTO = userService.toDTO(user);
 
-        return ResponseEntity.ok(new AuthResponseDTO(token, userDTO));
+        return ResponseEntity.ok(new LoginResponseDTO(token, userDTO));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody @Valid RegisterRequestDTO dto) {
         try {
-            String roleName = dto.getRoleName() != null ? dto.getRoleName() : null;
+            String roleName = dto.getRole() != null ? dto.getRole() : null;
             User user = userService.fromRegisterDTO(dto, null); // role handled in service
             User updated = userService.updateUser(id, user, roleName);
             return ResponseEntity.ok(userService.toDTO(updated));
@@ -108,7 +108,7 @@ public class UserController {
         User user = userService.getUserByEmail(email);
 
         user.setUsername(dto.getUsername());
-        user.setPhone(dto.getPhone());
+        user.setPhoneNumber(dto.getPhoneNumber());
 
         User updated = userService.updateUser(user.getId(), user, null);
         return ResponseEntity.ok(userService.toDTO(updated));
@@ -136,7 +136,7 @@ public class UserController {
 
     // Change email
     @PostMapping("/me/change-email")
-    public ResponseEntity<AuthResponseDTO> changeEmail(
+    public ResponseEntity<LoginResponseDTO> changeEmail(
             Authentication authentication,
             @RequestParam String newEmail
     ) {
@@ -148,6 +148,6 @@ public class UserController {
 
         // Generate a new token for updated email
         String newToken = jwtUtil.generateToken(updated.getEmail());
-        return ResponseEntity.ok(new AuthResponseDTO(newToken, userService.toDTO(updated)));
+        return ResponseEntity.ok(new LoginResponseDTO(newToken, userService.toDTO(updated)));
     }
 }

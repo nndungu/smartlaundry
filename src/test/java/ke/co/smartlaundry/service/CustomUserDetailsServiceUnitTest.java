@@ -1,5 +1,6 @@
 package ke.co.smartlaundry.service;
 
+import ke.co.smartlaundry.model.Role;
 import ke.co.smartlaundry.model.User;
 import ke.co.smartlaundry.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,19 +26,22 @@ class CustomUserDetailsServiceUnitTest {
 
     @Test
     void loadUserByUsername_shouldReturnUserDetails() {
-        User user = new User();
-        user.setEmail("test@example.com");
-        user.setPasswordHash("encodedpass");
-        user.getRole();
-        user.setIsActive(true);
+    User user = new User();
+    user.setEmail("test@example.com");
+    user.setPasswordHash("encodedpass");
+    user.setActive(true);
+    Role role = new Role();
+    role.setName("ADMIN");
+    user.setRole(role);
 
-        Mockito.when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(user));
+    Mockito.when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(user));
 
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername("test@example.com");
+    UserDetails userDetails = customUserDetailsService.loadUserByUsername("test@example.com");
 
-        assertThat(userDetails.getUsername()).isEqualTo("test@example.com");
-        assertThat(userDetails.getAuthorities().iterator().next().getAuthority()).isEqualTo("ROLE_ADMIN");
-    }
+    assertThat(userDetails.getUsername()).isEqualTo("test@example.com");
+    assertThat(userDetails.getAuthorities().iterator().next().getAuthority()).isEqualTo("ROLE_ADMIN");
+}
+
 
     @Test
     void loadUserByUsername_shouldThrowWhenNotFound() {

@@ -2,7 +2,8 @@ package ke.co.smartlaundry.service;
 
 public interface SMSService {
     /**
-     * Send an SMS message. Returns true if send succeeded (or queued), false otherwise.
+     * Sends an SMS message using the configured provider.
+     * @return true if message sent or queued successfully.
      */
     boolean sendSMS(String phoneNumber, String message);
 }

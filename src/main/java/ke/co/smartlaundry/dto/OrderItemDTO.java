@@ -6,6 +6,16 @@ public class OrderItemDTO {
     private int quantity;
     private double price;
 
+    // Constructors
+    public OrderItemDTO() {}
+
+    public OrderItemDTO(Long id, String itemName, int quantity, double price) {
+        this.id = id;
+        this.itemName = itemName;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
     // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

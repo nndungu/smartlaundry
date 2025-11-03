@@ -1,53 +1,36 @@
 package ke.co.smartlaundry.controller;
 
-import ke.co.smartlaundry.dto.PasswordResetDTO;
-import ke.co.smartlaundry.dto.PasswordResetRequestDTO;
 import ke.co.smartlaundry.service.PasswordResetService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/password")
+@RequestMapping("/api/auth/password")
 public class PasswordResetController {
 
-    private final PasswordResetService passwordResetService;
+    private final PasswordResetService resetService;
 
-    @Autowired
-    public PasswordResetController(PasswordResetService passwordResetService) {
-        this.passwordResetService = passwordResetService;
+    public PasswordResetController(PasswordResetService resetService) {
+        this.resetService = resetService;
     }
 
-    /** Step 1: Request reset link */
     @PostMapping("/request")
-    public ResponseEntity<?> requestReset(@RequestBody PasswordResetRequestDTO request) {
-        try {
-            String token = passwordResetService.createPasswordResetToken(request.getEmail());
-            return ResponseEntity.ok("Password reset token: " + token);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<String> requestReset(@RequestParam String email) {
+        resetService.initiateReset(email);
+        return ResponseEntity.ok("Password reset email and OTP sent");
     }
 
-    /** Step 2: Validate token (optional but useful for frontend) */
-    @GetMapping("/validate")
-    public ResponseEntity<?> validateToken(@RequestParam String token) {
-        boolean valid = passwordResetService.validatePasswordResetToken(token);
-        if (valid) {
-            return ResponseEntity.ok("Valid token");
-        } else {
-            return ResponseEntity.badRequest().body("Invalid or expired token");
-        }
+    @PostMapping("/verify-otp")
+    public ResponseEntity<String> verifyOtp(@RequestParam String token,
+                                            @RequestParam String otp) {
+        resetService.verifyOtp(token, otp);
+        return ResponseEntity.ok("OTP verified successfully");
     }
 
-    /** Step 3: Reset password */
     @PostMapping("/reset")
-    public ResponseEntity<?> resetPassword(@RequestBody PasswordResetDTO dto) {
-        try {
-            passwordResetService.resetPassword(dto.getToken(), dto.getNewPassword());
-            return ResponseEntity.ok("Password successfully reset!");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<String> resetPassword(@RequestParam String token,
+                                                @RequestParam String newPassword) {
+        resetService.resetPassword(token, newPassword);
+        return ResponseEntity.ok("Password has been reset successfully");
     }
 }
