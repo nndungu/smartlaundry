@@ -107,7 +107,7 @@ public class UserController {
         String email = authentication.getName();
         User user = userService.getUserByEmail(email);
 
-        user.setFullName(dto.getFullName());
+        user.setUsername(dto.getUsername());
         user.setPhone(dto.getPhone());
 
         User updated = userService.updateUser(user.getId(), user, null);

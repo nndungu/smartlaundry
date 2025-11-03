@@ -5,20 +5,30 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "cart_items")
 public class CartItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Each item belongs to a cart
+    // Many items belong to one cart
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
-    private String itemName; // for now, just name
-    private int quantity;
-    private double price; // you can extend with product/service later
+    @Column(nullable = false)
+    private String itemName;
 
-    // getters & setters
+    @Column(nullable = false)
+    private int quantity;
+
+    @Column(nullable = false)
+    private double price;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -33,4 +43,7 @@ public class CartItem {
 
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
+
+    public Category getCategory() { return category; }
+    public void setCategory(Category category) { this.category = category; }
 }

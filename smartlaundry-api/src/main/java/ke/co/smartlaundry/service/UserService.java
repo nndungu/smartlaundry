@@ -4,13 +4,10 @@ import ke.co.smartlaundry.dto.RegisterRequestDTO;
 import ke.co.smartlaundry.dto.UserDTO;
 import ke.co.smartlaundry.model.Role;
 import ke.co.smartlaundry.model.User;
+import ke.co.smartlaundry.model.PasswordResetToken;
 import ke.co.smartlaundry.repository.RoleRepository;
 import ke.co.smartlaundry.repository.UserRepository;
 import ke.co.smartlaundry.repository.PasswordResetTokenRepository;
-import ke.co.smartlaundry.model.PasswordResetToken;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +25,6 @@ public class UserService {
     private final PasswordResetTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public UserService(UserRepository userRepository,
                        RoleRepository roleRepository,
                        PasswordResetTokenRepository tokenRepository,
@@ -42,24 +38,25 @@ public class UserService {
     // --- DTO Conversions ---
     public UserDTO toDTO(User user) {
         if (user == null) return null;
+
         UserDTO dto = new UserDTO();
         dto.setId(user.getId());
-        dto.setFullName(user.getFullName());
+        dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
         dto.setPhone(user.getPhone());
-        dto.setIsActive(user.getIsActive());
-        dto.setRole(user.getRole() != null ? user.getRole() : null);
+        dto.setRole(user.getRole());
+        dto.setIsActive(user.getIsActive()); // ✅ use enum-based method
         return dto;
     }
 
     public User fromRegisterDTO(RegisterRequestDTO dto, Role role) {
         User user = new User();
-        user.setFullName(dto.getFullName());
+        user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
         user.setPhone(dto.getPhone());
         user.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
         user.setRole(role);
-        user.setIsActive(true);
+        user.setStatus(User.Status.ACTIVE); // ✅ enum
         return user;
     }
 
@@ -69,27 +66,33 @@ public class UserService {
     }
 
     public UserDTO getUserById(Long id) {
-        return toDTO(userRepository.findById(id).orElseThrow());
+        return toDTO(userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found")));
     }
 
     public User createUser(User user) {
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash())); // encode before save
+        if (user.getStatus() == null) {
+            user.setStatus(User.Status.ACTIVE); // default
+        }
         return userRepository.save(user);
     }
 
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
     }
 
     public User updateUser(Long id, User updatedUser, String roleName) {
         User existing = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        existing.setFullName(updatedUser.getFullName());
+        existing.setUsername(updatedUser.getUsername());
         existing.setPhone(updatedUser.getPhone());
         existing.setEmail(updatedUser.getEmail());
 
-        if (updatedUser.getPasswordHash() != null) {
-            existing.setPasswordHash(updatedUser.getPasswordHash());
+        if (updatedUser.getPasswordHash() != null && !updatedUser.getPasswordHash().isEmpty()) {
+            existing.setPasswordHash(passwordEncoder.encode(updatedUser.getPasswordHash()));
         }
 
         if (roleName != null) {
@@ -98,7 +101,18 @@ public class UserService {
             existing.setRole(role);
         }
 
+        if (updatedUser.getStatus() != null) {
+            existing.setStatus(updatedUser.getStatus()); // update enum
+        }
+
         return userRepository.save(existing);
+    }
+
+    public void markUserAsVerified(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        user.setVerified(true);
+        userRepository.save(user);
     }
 
     public void deleteUser(Long id) {
@@ -114,15 +128,11 @@ public class UserService {
         return passwordEncoder.encode(rawPassword);
     }
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-
     // --- Reset password ---
     public String createPasswordResetToken(String email) {
         User user = getUserByEmail(email);
 
+        // delete old tokens
         tokenRepository.findAll().stream()
                 .filter(t -> t.getUser().getId().equals(user.getId()))
                 .forEach(tokenRepository::delete);
@@ -142,6 +152,7 @@ public class UserService {
         if (tokenOpt.isPresent()) {
             PasswordResetToken resetToken = tokenOpt.get();
             if (resetToken.getExpiryDate().isBefore(LocalDateTime.now())) return false;
+
             User user = resetToken.getUser();
             user.setPasswordHash(passwordEncoder.encode(newPassword));
             userRepository.save(user);
@@ -149,5 +160,17 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public User findUserByEmail(String mail) {
+        return null;
+    }
+
+    public User registerUser(User user) {
+        return user;
+    }
+
+    public Object authenticateUser(String mail, String password) {
+        return null;
     }
 }

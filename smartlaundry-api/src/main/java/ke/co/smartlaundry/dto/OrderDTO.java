@@ -1,12 +1,14 @@
 package ke.co.smartlaundry.dto;
 
+import ke.co.smartlaundry.model.OrderStatus;
+
 import java.sql.Timestamp;
 import java.util.List;
 
 public class OrderDTO {
     private Long id;
     private Long userId;
-    private String status;
+    private OrderStatus status;
     private Timestamp createdAt;
     private List<OrderItemDTO> items;
 
@@ -17,8 +19,8 @@ public class OrderDTO {
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public OrderStatus getStatus() { return status; }
+    public void setStatus(OrderStatus status) { this.status = status; }
 
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
