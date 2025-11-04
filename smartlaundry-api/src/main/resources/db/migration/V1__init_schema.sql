@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS role (
                                     id SERIAL PRIMARY KEY,
                                     name VARCHAR(50) NOT NULL UNIQUE
 );
-
+d
 -- ===============================
 -- Users
 -- ===============================
