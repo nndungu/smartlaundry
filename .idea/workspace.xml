@@ -5,19 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0311d6c-3642-4aea-86c7-8970c3eb78af" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1d314a78-2a90-4593-a2e6-685fcb86436a.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1d314a78-2a90-4593-a2e6-685fcb86436a/storage_v2/_src_/database/smartlaundry_dev.itd4GA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1d314a78-2a90-4593-a2e6-685fcb86436a/storage_v2/_src_/database/smartlaundry_dev.itd4GA/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1d314a78-2a90-4593-a2e6-685fcb86436a/storage_v2/_src_/database/smartlaundry_dev.itd4GA/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6eff29fe-de31-48e0-89df-6d5578240783.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6eff29fe-de31-48e0-89df-6d5578240783/storage_v2/_src_/database/smartlaundry_test.vV-p9g.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6eff29fe-de31-48e0-89df-6d5578240783/storage_v2/_src_/database/smartlaundry_test.vV-p9g/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6eff29fe-de31-48e0-89df-6d5578240783/storage_v2/_src_/database/smartlaundry_test.vV-p9g/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/gradlew" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log" afterDir="false" />
@@ -516,7 +504,9 @@
       <workItem from="1762181450523" duration="2831000" />
       <workItem from="1762186246607" duration="1327000" />
       <workItem from="1762196121224" duration="7717000" />
-      <workItem from="1762223623914" duration="4966000" />
+      <workItem from="1762223623914" duration="5390000" />
+      <workItem from="1762234223520" duration="2090000" />
+      <workItem from="1762236700568" duration="193000" />
     </task>
     <servers />
   </component>
