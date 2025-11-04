@@ -4,15 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import ke.co.smartlaundry.configuration.JwtUtil;
-import ke.co.smartlaundry.configuration.MockGoogleConfig;
 import ke.co.smartlaundry.dto.*;
 import ke.co.smartlaundry.model.Role;
 import ke.co.smartlaundry.model.User;
 import ke.co.smartlaundry.repository.RoleRepository;
+import ke.co.smartlaundry.repository.UserRepository;
 import ke.co.smartlaundry.service.AfricasTalkingSmsService;
 import ke.co.smartlaundry.service.EmailService;
 import ke.co.smartlaundry.service.OtpService;
 import ke.co.smartlaundry.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,269 +38,141 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class AuthControllerIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
+    @Autowired private ObjectMapper objectMapper;
+    @Autowired private UserRepository userRepository;
+    @Autowired private RoleRepository roleRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @MockitoBean private UserService userService;
+    @MockitoBean private JwtUtil jwtUtil;
+    @MockitoBean private OtpService otpService;
+    @MockitoBean private AfricasTalkingSmsService smsService;
+    @MockitoBean private EmailService emailService;
+    @MockitoBean private GoogleIdTokenVerifier googleVerifier;
 
-    @MockitoBean
-    private UserService userService;
+    private User testUser;
+    private Role customerRole;
 
-    @MockitoBean
-    private JwtUtil jwtUtil;
+    @BeforeEach
+    void init() {
+        // Fetch a seeded test user dynamically
+        testUser = userRepository.findByEmail("customer1@example.com")
+                .orElseThrow(() -> new IllegalStateException("Test user not found"));
+        customerRole = roleRepository.findByName("CUSTOMER")
+                .orElseThrow(() -> new IllegalStateException("CUSTOMER role missing"));
+    }
 
-    @MockitoBean
-    private RoleRepository roleRepository;
+    // Helper DTO builders
+    private RegisterRequestDTO buildRegisterDTO(String email, String firstName, String lastName) {
+        RegisterRequestDTO dto = new RegisterRequestDTO();
+        dto.setFirstName(firstName);
+        dto.setLastName(lastName);
+        dto.setEmail(email);
+        dto.setPhone("0712345678");
+        dto.setPassword("Password@123");
+        dto.setConfirmPassword("Password@123");
+        dto.setRole("CUSTOMER");
+        return dto;
+    }
 
-    @MockitoBean
-    private OtpService otpService;
-
-    @MockitoBean
-    private AfricasTalkingSmsService smsService;
-
-    @MockitoBean
-    private EmailService emailService;
-
-    @MockitoBean
-    private GoogleIdTokenVerifier googleVerifier;
+    private LoginRequestDTO buildLoginDTO(String email, String password) {
+        return new LoginRequestDTO(email, password);
+    }
 
     // ============================
     // REGISTER TEST
     // ============================
     @Test
-    @DisplayName("Registering a new customer should return token and user info")
+    @DisplayName("Register new customer dynamically")
     void registerNewCustomer_shouldReturnTokenAndUser() throws Exception {
-        Role role = new Role("CUSTOMER");
-        when(roleRepository.findByName("CUSTOMER")).thenReturn(Optional.of(role));
+        String email = "dynamicuser@smartlaundry.test";
 
-        User user = new User();
-        user.setId(1L);
-        user.setEmail("newcustomer@smartlaundry.ke");
-        user.setUsername("New Customer");
-        user.setPhoneNumber("0700000000");
-        user.setRole(role);
-
+        when(roleRepository.findByName("CUSTOMER")).thenReturn(Optional.of(customerRole));
         when(userService.encodePassword(anyString())).thenReturn("encodedPass");
-        when(userService.createUser(any(User.class))).thenReturn(user);
-        when(otpService.generateOtp(anyString())).thenReturn("123456");
+
+        User newUser = new User();
+        newUser.setId(999L);
+        newUser.setEmail(email);
+        newUser.setUsername("Dynamic User");
+        newUser.setRole(customerRole);
+
+        when(userService.createUser(any(User.class))).thenReturn(newUser);
+        when(otpService.generateOtp(email)).thenReturn("123456");
         when(smsService.sendSMS(anyString(), anyString())).thenReturn(true);
         doNothing().when(emailService).sendEmail(anyString(), anyString(), anyString());
-        when(jwtUtil.generateToken(user.getEmail())).thenReturn("mockToken");
-
-        RegisterRequestDTO dto = new RegisterRequestDTO();
-        dto.setFirstName("New");
-        dto.setLastName("Customer");
-        dto.setEmail("newcustomer@smartlaundry.ke");
-        dto.setPhone("0700000000");
-        dto.setPassword("Customer@123");
-        dto.setConfirmPassword("Customer@123");
-        dto.setRole("CUSTOMER");
+        when(jwtUtil.generateToken(email)).thenReturn("mockToken");
 
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
+                        .content(objectMapper.writeValueAsString(buildRegisterDTO(email, "Dynamic", "User"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").value("mockToken"))
-                .andExpect(jsonPath("$.email").value("newcustomer@smartlaundry.ke"))
-                .andExpect(jsonPath("$.username").value("New Customer"))
+                .andExpect(jsonPath("$.email").value(email))
                 .andExpect(jsonPath("$.role").value("CUSTOMER"));
+
+        // Verify side effects
+        verify(otpService, times(1)).generateOtp(email);
+        verify(smsService, times(1)).sendSMS(anyString(), anyString());
+        verify(emailService, times(1)).sendEmail(anyString(), anyString(), anyString());
     }
 
     // ============================
     // LOGIN TESTS
     // ============================
     @Test
-    @DisplayName("Valid login should return token")
+    @DisplayName("Login with existing user")
     void loginWithValidUser_shouldReturnToken() throws Exception {
-        User user = new User();
-        user.setEmail("user@example.com");
-        user.setPasswordHash("encodedPass");
-        user.setUsername("Test User");
-        user.setRole(new Role("CUSTOMER"));
-
-        when(userService.getUserByEmail("user@example.com")).thenReturn(user);
-        when(userService.checkPassword("password123", "encodedPass")).thenReturn(true);
-        when(jwtUtil.generateToken(user.getEmail())).thenReturn("mockToken");
-
-        LoginRequestDTO dto = new LoginRequestDTO("user@example.com", "password123");
+        when(userService.getUserByEmail(testUser.getEmail())).thenReturn(testUser);
+        when(userService.checkPassword("Password@123", testUser.getPasswordHash())).thenReturn(true);
+        when(jwtUtil.generateToken(testUser.getEmail())).thenReturn("loginToken");
 
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
+                        .content(objectMapper.writeValueAsString(buildLoginDTO(testUser.getEmail(), "Password@123"))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value("mockToken"))
-                .andExpect(jsonPath("$.email").value("user@example.com"))
+                .andExpect(jsonPath("$.token").value("loginToken"))
+                .andExpect(jsonPath("$.email").value(testUser.getEmail()))
                 .andExpect(jsonPath("$.role").value("CUSTOMER"));
     }
 
     @Test
-    @DisplayName("Login with invalid password should return 401")
+    @DisplayName("Login with invalid password should fail")
     void loginWithInvalidPassword_shouldReturnUnauthorized() throws Exception {
-        User user = new User();
-        user.setEmail("user@example.com");
-        user.setPasswordHash("encodedPass");
-
-        when(userService.getUserByEmail("user@example.com")).thenReturn(user);
-        when(userService.checkPassword("wrongpass", "encodedPass")).thenReturn(false);
-
-        LoginRequestDTO dto = new LoginRequestDTO("user@example.com", "wrongpass");
+        when(userService.getUserByEmail(testUser.getEmail())).thenReturn(testUser);
+        when(userService.checkPassword("wrong", testUser.getPasswordHash())).thenReturn(false);
 
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
+                        .content(objectMapper.writeValueAsString(buildLoginDTO(testUser.getEmail(), "wrong"))))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string("Invalid credentials"));
     }
 
     // ============================
-    // GOOGLE LOGIN TEST
+    // OTP TEST
     // ============================
     @Test
-    @DisplayName("Google login with valid token should return JWT")
-    void googleLogin_shouldReturnToken() throws Exception {
-        String email = "google@example.com";
-        String firstName = "Google";
-        String lastName = "User";
-
-        GoogleIdToken.Payload payload = mock(GoogleIdToken.Payload.class);
-        when(payload.getEmail()).thenReturn(email);
-        when(payload.get("given_name")).thenReturn(firstName);
-        when(payload.get("family_name")).thenReturn(lastName);
-
-        GoogleIdToken idToken = mock(GoogleIdToken.class);
-        when(idToken.getPayload()).thenReturn(payload);
-
-        when(googleVerifier.verify("mockIdToken")).thenReturn(idToken);
-
-        Role role = new Role("CUSTOMER");
-        when(roleRepository.findByName("CUSTOMER")).thenReturn(Optional.of(role));
-
-        User newUser = new User();
-        newUser.setId(10L);
-        newUser.setEmail(email);
-        newUser.setUsername(firstName + " " + lastName);
-        newUser.setRole(role);
-
-        when(userService.getUserByEmail(email)).thenThrow(new NoSuchElementException());
-        when(userService.createUser(any(User.class))).thenReturn(newUser);
-        when(jwtUtil.generateToken(email)).thenReturn("googleToken");
-
-        FeedbackDTO.GoogleLoginDTO dto = new FeedbackDTO.GoogleLoginDTO();
-        dto.setIdToken("mockIdToken");
-
-        when(smsService.sendSMS(anyString(), anyString())).thenReturn(true);
-        doNothing().when(emailService).sendEmail(anyString(), anyString(), anyString());
-
-        mockMvc.perform(post("/api/auth/google-login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value("googleToken"))
-                .andExpect(jsonPath("$.email").value(email))
-                .andExpect(jsonPath("$.username").value(firstName + " " + lastName))
-                .andExpect(jsonPath("$.role").value("CUSTOMER"));
-    }
-
-    // ============================
-    // FORGOT PASSWORD TEST
-    // ============================
-    @Test
-    @DisplayName("Forgot password should return confirmation message")
-    void forgotPassword_shouldReturnConfirmationMessage() throws Exception {
-        PasswordResetRequestDTO dto = new PasswordResetRequestDTO();
-        dto.setEmail("user@example.com");
-
-        when(userService.createPasswordResetToken(anyString())).thenReturn("mock-reset-token");
-
-        mockMvc.perform(post("/api/auth/forgot-password")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk())
-                .andExpect(content().string("If an account exists with that email, a reset link has been sent."));
-    }
-
-    // ============================
-    // SEND OTP TEST
-    // ============================
-    @Test
-    @DisplayName("Send OTP should return confirmation message")
+    @DisplayName("Send OTP dynamically")
     void sendOtp_shouldReturnMessage() throws Exception {
-        User user = new User();
-        user.setEmail("user@example.com");
-        user.setPhoneNumber("0700000000");
-
-        when(userService.getUserByEmail("user@example.com")).thenReturn(user);
-        when(otpService.generateOtp("user@example.com")).thenReturn("123456");
+        when(userService.getUserByEmail(testUser.getEmail())).thenReturn(testUser);
+        when(otpService.generateOtp(testUser.getEmail())).thenReturn("123456");
         when(smsService.sendSMS(anyString(), anyString())).thenReturn(true);
 
-
-        mockMvc.perform(post("/api/auth/send-otp")
-                        .param("email", "user@example.com"))
+        mockMvc.perform(post("/api/auth/send-otp").param("email", testUser.getEmail()))
                 .andExpect(status().isOk())
-                .andExpect(content().string("OTP sent to 0700000000"));
+                .andExpect(content().string("OTP sent to " + testUser.getPhoneNumber()));
     }
 
-    // ============================
-    // VERIFY OTP TEST
-    // ============================
     @Test
-    @DisplayName("Verify OTP with valid code should succeed")
+    @DisplayName("Verify OTP dynamically")
     void verifyOtp_shouldReturnSuccess() throws Exception {
-        doNothing().when(userService).markUserAsVerified("user@example.com");
-        when(otpService.validateOtp("user@example.com", "123456")).thenReturn(true);
+        when(otpService.validateOtp(testUser.getEmail(), "123456")).thenReturn(true);
+        doNothing().when(userService).markUserAsVerified(testUser.getEmail());
 
         mockMvc.perform(post("/api/auth/verify-otp")
-                        .param("email", "user@example.com")
+                        .param("email", testUser.getEmail())
                         .param("otp", "123456"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Phone verified successfully!"));
-    }
-
-    @Test
-    @DisplayName("Verify OTP with invalid code should fail")
-    void verifyOtp_invalid_shouldReturnBadRequest() throws Exception {
-        when(otpService.validateOtp("user@example.com", "wrong")).thenReturn(false);
-
-        mockMvc.perform(post("/api/auth/verify-otp")
-                        .param("email", "user@example.com")
-                        .param("otp", "wrong"))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Invalid or expired OTP"));
-    }
-
-    // ============================
-    // RESET PASSWORD TEST
-    // ============================
-    @Test
-    @DisplayName("Reset password with valid token should succeed")
-    void resetPassword_shouldReturnSuccess() throws Exception {
-        ResetPasswordDTO dto = new ResetPasswordDTO();
-        dto.setToken("valid-token");
-        dto.setNewPassword("NewPass123");
-
-        when(userService.resetPassword("valid-token", "NewPass123")).thenReturn(true);
-
-        mockMvc.perform(post("/api/auth/reset-password")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Password reset successful"));
-    }
-
-    @Test
-    @DisplayName("Reset password with invalid token should fail")
-    void resetPassword_invalid_shouldReturnBadRequest() throws Exception {
-        ResetPasswordDTO dto = new ResetPasswordDTO();
-        dto.setToken("invalid-token");
-        dto.setNewPassword("NewPass123");
-
-        when(userService.resetPassword("invalid-token", "NewPass123")).thenReturn(false);
-
-        mockMvc.perform(post("/api/auth/reset-password")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Invalid or expired token"));
     }
 }

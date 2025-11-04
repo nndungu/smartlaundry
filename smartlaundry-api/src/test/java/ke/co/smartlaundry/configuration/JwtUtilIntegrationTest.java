@@ -16,33 +16,27 @@ class JwtUtilIntegrationTest {
     private JwtUtil jwtUtil;
 
     @Test
-    @DisplayName("Should generate a valid token and extract the correct email")
-    void shouldGenerateAndValidateToken() {
-        // Arrange
+    @DisplayName("Should generate a valid token and extract correct email")
+    void generateAndValidateToken() {
         String email = "customer1@smartlaundry.ke";
 
-        // Act
         String token = jwtUtil.generateToken(email);
         boolean isValid = jwtUtil.validateToken(token);
         String extractedEmail = jwtUtil.extractEmail(token);
 
-        // Assert
         assertThat(token).isNotBlank();
         assertThat(isValid).isTrue();
         assertThat(extractedEmail).isEqualTo(email);
     }
 
     @Test
-    @DisplayName("Should invalidate a tampered token")
-    void shouldInvalidateTamperedToken() {
-        // Arrange
+    @DisplayName("Should invalidate tampered token")
+    void invalidateTamperedToken() {
         String token = jwtUtil.generateToken("customer1@smartlaundry.ke");
         String tampered = token.substring(0, token.length() - 1) + "X";
 
-        // Act
         boolean isValid = jwtUtil.validateToken(tampered);
 
-        // Assert
         assertThat(isValid).isFalse();
     }
 }

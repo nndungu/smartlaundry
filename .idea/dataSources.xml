@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="dev@localhost" uuid="1d314a78-2a90-4593-a2e6-685fcb86436a">
+    <data-source source="LOCAL" name="smartlaundry_dev@localhost" uuid="ae1dc1c5-d61e-46d0-bd36-8ea999ebfa32">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
@@ -13,7 +13,7 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="test@localhost" uuid="6eff29fe-de31-48e0-89df-6d5578240783">
+    <data-source source="LOCAL" name="smartlaundry_test@localhost" uuid="54dd7365-14df-4abc-9294-09075c1c10f8">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>

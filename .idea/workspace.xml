@@ -8,23 +8,62 @@
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/345a98c9-6a1a-489f-9195-81f6512a46c3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/345a98c9-6a1a-489f-9195-81f6512a46c3/storage_v2/_src_/database/LAUNDROMARTDB.h4vKIw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/345a98c9-6a1a-489f-9195-81f6512a46c3/storage_v2/_src_/database/LAUNDROMARTDB.h4vKIw/schema/INFORMATION_SCHEMA.NBgcMw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/345a98c9-6a1a-489f-9195-81f6512a46c3/storage_v2/_src_/database/LAUNDROMARTDB.h4vKIw/schema/PUBLIC.aaZQjQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/40e19070-61d4-4df3-bb16-d6caf1544e1f.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/40e19070-61d4-4df3-bb16-d6caf1544e1f/storage_v2/_src_/database/smartlaundry.NF7Ofw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/40e19070-61d4-4df3-bb16-d6caf1544e1f/storage_v2/_src_/database/smartlaundry.NF7Ofw/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/40e19070-61d4-4df3-bb16-d6caf1544e1f/storage_v2/_src_/database/smartlaundry.NF7Ofw/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/40e19070-61d4-4df3-bb16-d6caf1544e1f/storage_v2/_src_/database/smartlaundry.NF7Ofw/schema/public.abK9xQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/dc27e2b8-237a-47ba-8534-68d96d3195fb.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/dc27e2b8-237a-47ba-8534-68d96d3195fb/storage_v2/_src_/database/LAUNDROMARTDB.h4vKIw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/dc27e2b8-237a-47ba-8534-68d96d3195fb/storage_v2/_src_/database/LAUNDROMARTDB.h4vKIw/schema/INFORMATION_SCHEMA.NBgcMw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/dc27e2b8-237a-47ba-8534-68d96d3195fb/storage_v2/_src_/database/LAUNDROMARTDB.h4vKIw/schema/PUBLIC.aaZQjQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/df986d0b-ffe5-40d6-aae0-11841fbfa085.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/df986d0b-ffe5-40d6-aae0-11841fbfa085/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1d314a78-2a90-4593-a2e6-685fcb86436a.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1d314a78-2a90-4593-a2e6-685fcb86436a/storage_v2/_src_/database/smartlaundry_dev.itd4GA.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1d314a78-2a90-4593-a2e6-685fcb86436a/storage_v2/_src_/database/smartlaundry_dev.itd4GA/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1d314a78-2a90-4593-a2e6-685fcb86436a/storage_v2/_src_/database/smartlaundry_dev.itd4GA/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6eff29fe-de31-48e0-89df-6d5578240783.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6eff29fe-de31-48e0-89df-6d5578240783/storage_v2/_src_/database/smartlaundry_test.vV-p9g.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6eff29fe-de31-48e0-89df-6d5578240783/storage_v2/_src_/database/smartlaundry_test.vV-p9g/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6eff29fe-de31-48e0-89df-6d5578240783/storage_v2/_src_/database/smartlaundry_test.vV-p9g/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/gradlew" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log.2025-10-26.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log.2025-10-26.1.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log.2025-10-26.2.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log.2025-10-26.3.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log.2025-10-26.4.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log.2025-10-26.5.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log.2025-10-26.6.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log.2025-10-26.7.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log.2025-10-26.8.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log.2025-10-27.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/logs/smartlaundry-test.log.2025-10-27.1.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/configuration/GoogleConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/configuration/GoogleConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/repository/DeliveryRequestRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/repository/DeliveryRequestRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/repository/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/repository/OrderRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/AfricasTalkingSmsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/AfricasTalkingSmsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/CartService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/CustomUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/CustomUserDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/EmailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/PasswordResetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/PasswordResetService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/PaymentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/SMSService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/SMSService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/impl/MpesaServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/impl/MpesaServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/application-dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/application-dev.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/application-prod.properties" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/application-prod.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/V1__schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/V1__init_schema.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/dev-seed/V2__dev_seed.sql" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/V2__dev_seed.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/prod-seed/V3__prod_seed.sql" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/V3__prod_seed.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/configuration/JwtUtilIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/configuration/JwtUtilIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/configuration/JwtUtilTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/configuration/JwtUtilTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/AuthControllerIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/AuthControllerIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/CartControllerIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/CartControllerIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/DeliveryControllerIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/DeliveryControllerIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/OrderControllerIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/OrderControllerIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/PaymentControllerIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/PaymentControllerIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/UserControllerIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/UserControllerIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/service/CustomUserDetailsServiceUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/service/CustomUserDetailsServiceUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/service/UserServiceUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/service/UserServiceUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/resources/application-test.properties" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/resources/application-test.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/resources/db/migration/test-data/V2__test_seed.sql" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/resources/db/migration/V2__test_seed.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +94,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="com.intellij.jpb.FlywayMigrationScript" />
       </list>
     </option>
   </component>
@@ -95,62 +135,72 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Downloaded.Files.Path.Enabled": "false",
-    "Gradle.AuthControllerIntegrationTest.executor": "Run",
-    "Gradle.AuthControllerIntegrationTest.loginWithValidCustomer_shouldReturnToken.executor": "Run",
-    "Gradle.AuthControllerIntegrationTest.registerNewCustomer_shouldReturnTokenAndUser.executor": "Run",
-    "Gradle.AuthControllerUnitTest.executor": "Run",
-    "Gradle.AuthControllerUnitTest.registerCustomer_shouldReturnTokenAndUser.executor": "Run",
-    "Gradle.Build smartlaundry-api.executor": "Run",
-    "Gradle.CartControllerIntegrationTest.executor": "Run",
-    "Gradle.CartControllerIntegrationTest.getCartItems_returnsCartItems.executor": "Run",
-    "Gradle.Download Sources.executor": "Run",
-    "Gradle.JwtUtilIntegrationTest.executor": "Run",
-    "Gradle.JwtUtilIntegrationTest.shouldGenerateAndValidateToken.executor": "Run",
-    "Gradle.OrderControllerIntegrationTest.checkout_shouldReturnOrder.executor": "Run",
-    "Gradle.OrderControllerIntegrationTest.deleteOrder_shouldRemove.executor": "Debug",
-    "Gradle.OrderControllerIntegrationTest.executor": "Run",
-    "Gradle.OrderControllerIntegrationTest.getUserOrders_shouldReturnList.executor": "Run",
-    "Gradle.SmartlaundryApiApplicationTests.executor": "Run",
-    "Gradle.UserControllerIntegrationTest.executor": "Run",
-    "JUnit.AuthControllerUnitTest.executor": "Run",
-    "JUnit.AuthControllerUnitTest.googleLogin_shouldReturnTokenForValidToken.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.SmartlaundryApiApplication.executor": "Run",
-    "git-widget-placeholder": "nelson",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/m4in/IdeaProjects/smartlaundry",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "SDKs",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Database Script.V1__init_schema.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Database Script.V2__dev_seed.sql.executor&quot;: &quot;Run&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Gradle.AuthControllerIntegrationTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerIntegrationTest.loginWithValidCustomer_shouldReturnToken.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerIntegrationTest.registerNewCustomer_shouldReturnTokenAndUser.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.AuthControllerUnitTest.registerCustomer_shouldReturnTokenAndUser.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build smartlaundry-api.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.CartControllerIntegrationTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.CartControllerIntegrationTest.getCartItems_returnsCartItems.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.JwtUtilIntegrationTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.JwtUtilIntegrationTest.shouldGenerateAndValidateToken.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.OrderControllerIntegrationTest.checkout_shouldReturnOrder.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.OrderControllerIntegrationTest.deleteOrder_shouldRemove.executor&quot;: &quot;Debug&quot;,
+    &quot;Gradle.OrderControllerIntegrationTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.OrderControllerIntegrationTest.getUserOrders_shouldReturnList.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.PaymentControllerIntegrationTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SmartlaundryApiApplicationTests.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.UserControllerIntegrationTest.customerCanViewCartAndOrders.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.UserControllerIntegrationTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AuthControllerUnitTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.AuthControllerUnitTest.googleLogin_shouldReturnTokenForValidToken.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.SmartlaundryApiApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;nelson&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/m4in/IdeaProjects/smartlaundry&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;sql.rename.search.for.storage.occurrences&quot;: &quot;true&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
+    ],
+    &quot;RunConfigurationTargetLRU&quot;: [
+      &quot;ae1dc1c5-d61e-46d0-bd36-8ea999ebfa32&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -160,15 +210,15 @@
       <recent name="$PROJECT_DIR$/smartlaundry-api/src/test/resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\PC\IdeaProjects\smartlaundry\smartlaundry-api\src\test\resources\db\migration\" />
+      <recent name="C:\Users\PC\IdeaProjects\smartlaundry\smartlaundry-api\src\main\resources\db\migration" />
       <recent name="$PROJECT_DIR$/smartlaundry-api/src/test/resources/db/migration/test-data" />
       <recent name="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/dev-seed" />
       <recent name="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/prod-seed" />
-      <recent name="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration" />
-      <recent name="$PROJECT_DIR$/smartlaundry-api/src/test/resources/db/migration" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.SmartlaundryApiApplication">
-    <configuration name="AuthControllerIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.SmartlaundryApiApplicationTests">
+    <configuration name="CartControllerIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
@@ -181,7 +231,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;ke.co.smartlaundry.controller.AuthControllerIntegrationTest&quot;" />
+            <option value="&quot;ke.co.smartlaundry.controller.CartControllerIntegrationTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -192,7 +242,7 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="AuthControllerIntegrationTest.registerNewCustomer_shouldReturnTokenAndUser" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="PaymentControllerIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
@@ -205,31 +255,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;ke.co.smartlaundry.controller.AuthControllerIntegrationTest.registerNewCustomer_shouldReturnTokenAndUser&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="OrderControllerIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;ke.co.smartlaundry.controller.OrderControllerIntegrationTest&quot;" />
+            <option value="&quot;ke.co.smartlaundry.controller.PaymentControllerIntegrationTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -288,6 +314,30 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="UserControllerIntegrationTest.customerCanViewCartAndOrders" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;ke.co.smartlaundry.controller.UserControllerIntegrationTest.customerCanViewCartAndOrders&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="SmartlaundryApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="ke.co.smartlaundry.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ke.co.smartlaundry.SmartlaundryApiApplication" />
@@ -297,11 +347,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.AuthControllerIntegrationTest.registerNewCustomer_shouldReturnTokenAndUser" />
-        <item itemvalue="Gradle.AuthControllerIntegrationTest" />
-        <item itemvalue="Gradle.OrderControllerIntegrationTest" />
-        <item itemvalue="Gradle.UserControllerIntegrationTest" />
         <item itemvalue="Gradle.SmartlaundryApiApplicationTests" />
+        <item itemvalue="Gradle.UserControllerIntegrationTest" />
+        <item itemvalue="Gradle.UserControllerIntegrationTest.customerCanViewCartAndOrders" />
+        <item itemvalue="Gradle.PaymentControllerIntegrationTest" />
+        <item itemvalue="Gradle.CartControllerIntegrationTest" />
       </list>
     </recent_temporary>
   </component>
@@ -460,6 +510,13 @@
       <workItem from="1761872344009" duration="12289000" />
       <workItem from="1761956453885" duration="5624000" />
       <workItem from="1762150544953" duration="2474000" />
+      <workItem from="1762156732292" duration="436000" />
+      <workItem from="1762158642191" duration="6692000" />
+      <workItem from="1762165716724" duration="14146000" />
+      <workItem from="1762181450523" duration="2831000" />
+      <workItem from="1762186246607" duration="1327000" />
+      <workItem from="1762196121224" duration="7717000" />
+      <workItem from="1762223623914" duration="4966000" />
     </task>
     <servers />
   </component>

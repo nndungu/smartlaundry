@@ -21,6 +21,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mockStatic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -33,46 +35,46 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 class OrderControllerIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private MockMvc mockMvc;
+    @Autowired private OrderRepository orderRepository;
+    @Autowired private UserRepository userRepository;
 
     private User testUser;
+    private Long testUserId;
 
     @BeforeEach
     void setup() {
         testUser = userRepository.findByEmail("customer1@example.com")
-                .orElseThrow(() -> new IllegalStateException("Test user not found in test-data.sql"));
+                .orElseThrow(() -> new IllegalStateException("Test user not found"));
+        testUserId = testUser.getId();
     }
 
     @Test
     @WithMockUser(username = "customer1@example.com", roles = {"CUSTOMER"})
-    @DisplayName("GET /api/orders should return user's orders")
+    @DisplayName("GET /api/orders should return user's orders dynamically")
     void getUserOrders_shouldReturnList() throws Exception {
         try (MockedStatic<SecurityUtils> utilities = mockStatic(SecurityUtils.class)) {
-            utilities.when(SecurityUtils::getCurrentUserId).thenReturn(testUser.getId());
+            utilities.when(SecurityUtils::getCurrentUserId).thenReturn(testUserId);
 
-            var result = mockMvc.perform(get("/api/orders"))
+            List<Order> userOrders = orderRepository.findByUserId(testUserId);
+
+            mockMvc.perform(get("/api/orders"))
                     .andExpect(status().isOk())
-                    .andReturn();
-
-            String json = result.getResponse().getContentAsString();
-            System.out.println("✅ Response JSON: " + json);
-
-            assertThat(json).contains("status"); // ensure something returned
+                    .andExpect(jsonPath("$.length()").value(userOrders.size()))
+                    .andExpect(result -> {
+                        String json = result.getResponse().getContentAsString();
+                        for (Order order : userOrders) {
+                            assertThat(json).contains(order.getOrderNo());
+                            assertThat(json).contains(order.getStatus().name());
+                        }
+                    });
         }
     }
 
     @Test
-    @DisplayName("GET /api/orders/{id} should return specific order")
+    @DisplayName("GET /api/orders/{id} returns specific order")
     void getOrderById_shouldReturnOrder() throws Exception {
-        Order order = orderRepository.findAll().stream().findFirst()
-                .orElseThrow(() -> new IllegalStateException("No order found in DB"));
+        Order order = orderRepository.findAll().get(0);
 
         mockMvc.perform(get("/api/orders/{id}", order.getId()))
                 .andExpect(status().isOk())
@@ -82,15 +84,14 @@ class OrderControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "customer1@example.com", roles = {"CUSTOMER"})
-    @DisplayName("POST /api/orders/checkout should create a new order")
+    @DisplayName("POST /api/orders/checkout creates new order dynamically")
     void checkout_shouldCreateOrder() throws Exception {
         try (MockedStatic<SecurityUtils> utilities = mockStatic(SecurityUtils.class)) {
-            utilities.when(SecurityUtils::getCurrentUserId).thenReturn(testUser.getId());
+            utilities.when(SecurityUtils::getCurrentUserId).thenReturn(testUserId);
 
             long before = orderRepository.count();
 
-            mockMvc.perform(post("/api/orders/checkout")
-                            .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(post("/api/orders/checkout").contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").exists())
                     .andExpect(jsonPath("$.status").value("PENDING"));
@@ -101,10 +102,9 @@ class OrderControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("PATCH /api/orders/{id}/status should update order status")
+    @DisplayName("PATCH /api/orders/{id}/status updates order status dynamically")
     void updateOrderStatus_shouldUpdate() throws Exception {
-        Order order = orderRepository.findAll().stream().findFirst()
-                .orElseThrow(() -> new IllegalStateException("No order found"));
+        Order order = orderRepository.findAll().get(0);
 
         mockMvc.perform(patch("/api/orders/{id}/status", order.getId())
                         .param("status", "PAID"))
@@ -116,10 +116,9 @@ class OrderControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("DELETE /api/orders/{id} should remove order")
+    @DisplayName("DELETE /api/orders/{id} removes order dynamically")
     void deleteOrder_shouldRemove() throws Exception {
-        Order order = orderRepository.findAll().stream().findFirst()
-                .orElseThrow(() -> new IllegalStateException("No order found"));
+        Order order = orderRepository.findAll().get(0);
 
         mockMvc.perform(delete("/api/orders/{id}", order.getId()))
                 .andExpect(status().isNoContent());

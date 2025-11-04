@@ -12,10 +12,9 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 
 @Service
-@Profile("!test")
 public class MpesaServiceImpl implements MpesaService {
 
-    @Value("${mpesa.baseUrl}")
+    @Value("${mpesa.base.url}")
     private String baseUrl;
 
     @Value("${mpesa.shortcode}")

@@ -43,6 +43,8 @@ public class Order {
     @Column(updatable = false)
     private Timestamp createdAt;
 
+    private String orderNo;
+
     // -------------------------------
     // Getters & Setters
     // -------------------------------
@@ -76,4 +78,8 @@ public class Order {
                 .sum();
     }
     public void setTotalPrice(Double totalPrice) {this.totalPrice = totalPrice;  }
+
+    public String getOrderNo() { return orderNo; }
+    public void setOrderNo(String orderNo) { this.orderNo = orderNo; }
+
 }

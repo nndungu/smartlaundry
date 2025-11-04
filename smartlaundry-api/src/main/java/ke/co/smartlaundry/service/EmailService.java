@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
-    private final JavaMailSender mailSender;
+    private final JavaMailSender javaMailSender;
 
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+    public EmailService(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
     }
 
     /**
@@ -27,7 +27,7 @@ public class EmailService {
             message.setSubject(subject);
             message.setText(body);
             message.setFrom("no-reply@smartlaundry.co.ke"); // customize your domain sender
-            mailSender.send(message);
+            javaMailSender.send(message);
             log.info("✅ Email sent to {} | subject: {}", to, subject);
         } catch (MailException e) {
             log.error("❌ Failed to send email to {}: {}", to, e.getMessage());

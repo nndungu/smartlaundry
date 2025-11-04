@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/V1__init_schema.sql" value="ae1dc1c5-d61e-46d0-bd36-8ea999ebfa32" />
+    <file url="file://$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/V2__dev_seed.sql" value="ae1dc1c5-d61e-46d0-bd36-8ea999ebfa32" />
+  </component>
+</project>
