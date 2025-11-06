@@ -1,5 +1,6 @@
 package ke.co.smartlaundry.configuration;
 
+import ke.co.smartlaundry.security.JwtUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

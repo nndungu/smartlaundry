@@ -41,8 +41,21 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public AdminDTO getAdminProfile(Long adminId) {
-        User admin = userRepository.findById(adminId).orElseThrow(() -> new NoSuchElementException("Admin not found"));
-        return new AdminDTO(admin.getId(), admin.getUsername(), admin.getEmail(), admin.getPhoneNumber(), admin.getRole().getName());
+        if (adminId == null) {
+            throw new IllegalArgumentException("Admin ID must not be null");
+        }
+        User admin = userRepository.findById(adminId)
+                .orElseThrow(() -> new NoSuchElementException("Admin not found"));
+        return new AdminDTO(admin.getId(), admin.getUsername(), admin.getEmail(),
+                admin.getPhoneNumber(), admin.getRole().getName());
+    }
+
+    @Override
+    public AdminDTO getAdminProfileByEmail(String email) {
+        User admin = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("Admin not found with email: " + email));
+        return new AdminDTO(admin.getId(), admin.getUsername(), admin.getEmail(),
+                admin.getPhoneNumber(), admin.getRole().getName());
     }
 
     @Override
@@ -54,35 +67,32 @@ public class AdminServiceImpl implements AdminService {
     public AdminDashboardDTO getDashboardStats() {
         long totalUsers = userRepository.count();
         long totalOrders = orderRepository.count();
-        double totalEarnings = earningsLedgerRepository.findAll().stream().mapToDouble(EarningsLedger::getAmount).sum();
-
+        double totalEarnings = earningsLedgerRepository.findAll().stream()
+                .mapToDouble(EarningsLedger::getAmount).sum();
         return new AdminDashboardDTO(totalUsers, totalOrders, totalEarnings);
     }
 
     @Override
     public List<UserDTO> listAllUsers() {
-        return userRepository.findAll().stream().map(u -> {
-            UserDTO dto = new UserDTO();
-            dto.setId(u.getId());
-            dto.setUsername(u.getUsername());
-            dto.setEmail(u.getEmail());
-            dto.setPhoneNumber(u.getPhoneNumber());
-            dto.setRole(u.getRole() != null ? u.getRole().getName() : null);
-            return dto;
-        }).collect(Collectors.toList());
+        return userRepository.findAll().stream()
+                .map(u -> new UserDTO(u.getId(), u.getUsername(), u.getEmail(),
+                        u.getPhoneNumber(), u.getRole() != null ? u.getRole().getName() : null))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<OrderDTO> listAllOrders() {
         return orderRepository.findAll().stream()
-                .map(o -> new OrderDTO(o.getId(), o.getStatus(), o.getTotalPrice(), o.getCreatedAt()))
+                .map(o -> new OrderDTO(o.getId(), o.getStatus(),
+                        o.getTotalPrice(), o.getCreatedAt()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<ServiceTypeDTO> listServiceTypes() {
         return serviceTypeRepository.findAll().stream()
-                .map(s -> new ServiceTypeDTO(s.getId(), s.getCode(), s.getName(), s.getDescription(), s.getBasePrice()))
+                .map(s -> new ServiceTypeDTO(s.getId(), s.getCode(),
+                        s.getName(), s.getDescription(), s.getBasePrice()))
                 .collect(Collectors.toList());
     }
 
@@ -103,14 +113,22 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<CustomerDTO> getAllCustomers() {
-        Role role = roleRepository.findByName("CUSTOMER").orElseThrow(() -> new NoSuchElementException("Role CUSTOMER not found"));
-        return userRepository.findByRole(role).stream().map(u -> new CustomerDTO(u.getId(), u.getUsername(), u.getEmail(), u.getPhoneNumber(), u.isVerified())).collect(Collectors.toList());
+        Role role = roleRepository.findByName("CUSTOMER")
+                .orElseThrow(() -> new NoSuchElementException("Role CUSTOMER not found"));
+        return userRepository.findByRole(role).stream()
+                .map(u -> new CustomerDTO(u.getId(), u.getUsername(), u.getEmail(),
+                        u.getPhoneNumber(), u.isVerified()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<DriverDTO> getAllDrivers() {
-        Role role = roleRepository.findByName("DRIVER").orElseThrow(() -> new NoSuchElementException("Role DRIVER not found"));
-        return userRepository.findByRole(role).stream().map(u -> new DriverDTO(u.getId(), u.getUsername(), u.getEmail(), u.getPhoneNumber())).collect(Collectors.toList());
+        Role role = roleRepository.findByName("DRIVER")
+                .orElseThrow(() -> new NoSuchElementException("Role DRIVER not found"));
+        return userRepository.findByRole(role).stream()
+                .map(u -> new DriverDTO(u.getId(), u.getUsername(),
+                        u.getEmail(), u.getPhoneNumber()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -124,14 +142,16 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void suspendUser(Long userId) {
-        User u = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        User u = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
         u.setActive(false);
         userRepository.save(u);
     }
 
     @Override
     public void activateUser(Long userId) {
-        User u = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        User u = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
         u.setActive(true);
         userRepository.save(u);
     }
@@ -139,7 +159,9 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<EarningsDTO> getEarningsForDriver(Long driverId) {
         return earningsLedgerRepository.findByDriverId(driverId).stream()
-                .map(e -> new EarningsDTO(e.getId(), e.getDriver()!=null?e.getDriver().getId():null, e.getAmount(), e.getTransactionType(), e.getCreatedAt()))
+                .map(e -> new EarningsDTO(e.getId(),
+                        e.getDriver() != null ? e.getDriver().getId() : null,
+                        e.getAmount(), e.getTransactionType(), e.getCreatedAt()))
                 .collect(Collectors.toList());
     }
 
@@ -151,12 +173,15 @@ public class AdminServiceImpl implements AdminService {
         s.setDescription(dto.getDescription());
         s.setBasePrice(dto.getBasePrice());
         ServiceType saved = serviceTypeRepository.save(s);
-        return new ServiceTypeDTO(saved.getId(), saved.getCode(), saved.getName(), saved.getDescription(), saved.getBasePrice());
+        return new ServiceTypeDTO(saved.getId(), saved.getCode(),
+                saved.getName(), saved.getDescription(), saved.getBasePrice());
     }
 
     @Override
     public List<CategoryDTO> listCategories() {
-        return categoryRepository.findAll().stream().map(c -> new CategoryDTO(c.getId(), c.getName(), c.getDescription())).collect(Collectors.toList());
+        return categoryRepository.findAll().stream()
+                .map(c -> new CategoryDTO(c.getId(), c.getName(), c.getDescription()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -171,24 +196,29 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<PriceListDTO> listPriceLists() {
         return priceListRepository.findAll().stream()
-                .map(p -> new PriceListDTO(p.getId(), p.getServiceType().getId(), p.getCategory().getId(), p.getServiceType().getName(), p.getCategory().getName(), p.getUnitPrice()))
+                .map(p -> new PriceListDTO(p.getId(), p.getServiceType().getId(),
+                        p.getCategory().getId(), p.getServiceType().getName(),
+                        p.getCategory().getName(), p.getUnitPrice()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public PriceListDTO createPriceList(PriceListDTO dto) {
-        ServiceType s = serviceTypeRepository.findById(dto.getServiceTypeId()).orElseThrow(() -> new NoSuchElementException("ServiceType not found"));
-        Category c = categoryRepository.findById(dto.getCategoryId()).orElseThrow(() -> new NoSuchElementException("Category not found"));
+        ServiceType s = serviceTypeRepository.findById(dto.getServiceTypeId())
+                .orElseThrow(() -> new NoSuchElementException("ServiceType not found"));
+        Category c = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new NoSuchElementException("Category not found"));
         PriceList p = new PriceList();
         p.setServiceType(s);
         p.setCategory(c);
         p.setUnitPrice(dto.getUnitPrice());
         priceListRepository.save(p);
-        return new PriceListDTO(p.getId(), s.getId(), c.getId(), s.getName(), c.getName(), p.getUnitPrice());
+        return new PriceListDTO(p.getId(), s.getId(), c.getId(),
+                s.getName(), c.getName(), p.getUnitPrice());
     }
 
     @Override
     public void deletePriceList(Long id) {
-
+        priceListRepository.deleteById(id);
     }
 }

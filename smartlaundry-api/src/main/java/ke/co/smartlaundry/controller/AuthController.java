@@ -4,8 +4,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-
-import ke.co.smartlaundry.configuration.JwtUtil;
+import ke.co.smartlaundry.security.JwtUtil;
 import ke.co.smartlaundry.dto.*;
 import ke.co.smartlaundry.model.Role;
 import ke.co.smartlaundry.model.User;
@@ -13,12 +12,10 @@ import ke.co.smartlaundry.repository.RoleRepository;
 import ke.co.smartlaundry.service.AfricasTalkingSmsService;
 import ke.co.smartlaundry.service.OtpService;
 import ke.co.smartlaundry.service.UserService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-
 import jakarta.validation.Valid;
 import java.util.NoSuchElementException;
 
@@ -33,7 +30,7 @@ public class AuthController {
     private final AfricasTalkingSmsService smsService;
     private final GoogleIdTokenVerifier googleVerifier;
 
-    @Value("${google.client.id}")
+    @Value("${GOOGLE_CLIENT_ID}")
     private String googleClientId;
 
     private final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
@@ -78,7 +75,8 @@ public class AuthController {
         String otp = otpService.generateOtp(user.getEmail());
         smsService.sendSMS(user.getPhoneNumber(), "Your SmartLaundry OTP is: " + otp);
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        // ✅ FIXED: Include ID, email, and role in JWT
+        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole().getName());
 
         LoginResponseDTO response = new LoginResponseDTO(
                 token,
@@ -103,7 +101,8 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
             }
 
-            String token = jwtUtil.generateToken(user.getEmail());
+            // ✅ FIXED: Include ID, email, and role in JWT
+            String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole().getName());
 
             LoginResponseDTO response = new LoginResponseDTO(
                     token,
@@ -152,7 +151,8 @@ public class AuthController {
                 user = userService.createUser(user);
             }
 
-            String token = jwtUtil.generateToken(email);
+            // ✅ FIXED: Include ID, email, and role in JWT
+            String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole().getName());
 
             LoginResponseDTO response = new LoginResponseDTO(
                     token,

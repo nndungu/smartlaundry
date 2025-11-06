@@ -116,7 +116,7 @@ class UserControllerIntegrationTest {
             // --- Cart ---
             mockMvc.perform(get("/api/carts"))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.length()").value(2)) // matches V2__test_seed.sql
+                    .andExpect(jsonPath("$.length()").value(2)) // matches V3__test_seed.sql
                     .andExpect(jsonPath("$[0].itemName").value("Shirt"))
                     .andExpect(jsonPath("$[1].itemName").value("Trouser"));
 

@@ -21,7 +21,7 @@ public class User {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(unique = true, length = 20)
+    @Column(name = "phone", unique = true, length = 20)
     private String phoneNumber;
 
     @Column(name = "password_hash", nullable = false, length = 255)
@@ -46,7 +46,10 @@ public class User {
     @Column(nullable = false)
     private boolean verified = false;
 
+    @Transient
     private Double latitude;
+
+    @Transient
     private Double longitude;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {

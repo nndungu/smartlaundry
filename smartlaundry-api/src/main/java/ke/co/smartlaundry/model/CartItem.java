@@ -3,19 +3,18 @@ package ke.co.smartlaundry.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "cart_items")
+@Table(name = "cart_item") // singular, matches your schema
 public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Many items belong to one cart
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
-    @Column(nullable = false)
+    @Column(name = "item_name", nullable = false)
     private String itemName;
 
     @Column(nullable = false)

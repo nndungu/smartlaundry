@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal" created-in="IU-252.27397.103">
-    <data-source name="smartlaundry_dev@localhost" uuid="ae1dc1c5-d61e-46d0-bd36-8ea999ebfa32">
+    <data-source name="smartlaundry_test@localhost" uuid="3408a5b6-f181-4db2-8377-47de5257ece9">
       <database-info product="PostgreSQL" version="18.0" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="18.0" exact-driver-version="42.7">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
@@ -16,7 +16,22 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
-    <data-source name="smartlaundry_test@localhost" uuid="54dd7365-14df-4abc-9294-09075c1c10f8">
+    <data-source name="smartlaundry_dev@localhost" uuid="14cc2971-a9a0-4807-906e-38321c96d5f5">
+      <database-info product="PostgreSQL" version="18.0" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="18.0" exact-driver-version="42.7">
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>laundry_admin</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="database" qname="@">
+            <node kind="schema" qname="@" />
+          </node>
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
+    <data-source name="smartlaundry_db@localhost" uuid="10ffe622-111d-42b7-91b1-14c4f2fd1ae6">
       <database-info product="PostgreSQL" version="18.0" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="18.0" exact-driver-version="42.7">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>

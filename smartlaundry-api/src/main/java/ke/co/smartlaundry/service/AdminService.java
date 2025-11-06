@@ -7,6 +7,7 @@ public interface AdminService {
 
     // Profile
     AdminDTO getAdminProfile(Long adminId);
+    AdminDTO getAdminProfileByEmail(String email); // <-- add this
 
     // Dashboard
     AdminDashboardDTO getDashboardMetrics();
@@ -15,7 +16,6 @@ public interface AdminService {
     ServiceAnalyticsDTO getServiceAnalytics();
 
     void addServiceType(ServiceTypeDTO dto);
-
     void deleteServiceType(Long id);
 
     // Users
@@ -27,7 +27,6 @@ public interface AdminService {
     AdminDashboardDTO getDashboardStats();
 
     List<UserDTO> listAllUsers();
-
     List<OrderDTO> listAllOrders();
 
     // Services

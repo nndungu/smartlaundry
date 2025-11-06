@@ -1,21 +1,27 @@
 package ke.co.smartlaundry.security;
 
 import ke.co.smartlaundry.model.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
+
     private final Long id;
-    private final String username;
+    private final String email;
     private final String password;
-    private final Collection<? extends GrantedAuthority> authorities;
+    private final String roleName;
+    private final boolean active;
 
     public CustomUserDetails(User user) {
         this.id = user.getId();
-        this.username = user.getEmail(); // or user.getUsername()
+        this.email = user.getEmail();
         this.password = user.getPasswordHash();
-        this.authorities = user.getAuthorities();
+        this.roleName = user.getRole() != null ? user.getRole().getName() : "USER";
+        this.active = user.getActive();
     }
 
     public Long getId() {
@@ -24,7 +30,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return List.of(new SimpleGrantedAuthority("ROLE_" + roleName.toUpperCase()));
     }
 
     @Override
@@ -34,7 +40,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
@@ -54,7 +60,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return active;
     }
 }
-

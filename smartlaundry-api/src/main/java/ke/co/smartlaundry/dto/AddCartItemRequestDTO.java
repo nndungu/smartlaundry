@@ -1,26 +1,21 @@
 package ke.co.smartlaundry.dto;
 
-public class CartItemDTO {
-    private Long id;
+public class AddCartItemRequestDTO {
     private String itemName;
     private int quantity;
     private double price;
-    private String categoryName; // optional
+    private Long categoryId; // optional
 
-    public CartItemDTO() {}
+    public AddCartItemRequestDTO() {}
 
-    public CartItemDTO(Long id, String itemName, int quantity, double price, String categoryName) {
-        this.id = id;
+    public AddCartItemRequestDTO(String itemName, int quantity, double price, Long categoryId) {
         this.itemName = itemName;
         this.quantity = quantity;
         this.price = price;
-        this.categoryName = categoryName;
+        this.categoryId = categoryId;
     }
 
     // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
     public String getItemName() { return itemName; }
     public void setItemName(String itemName) { this.itemName = itemName; }
 
@@ -30,6 +25,6 @@ public class CartItemDTO {
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
 
-    public String getCategoryName() { return categoryName; }
-    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
+    public Long getCategoryId() { return categoryId; }
+    public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }
 }

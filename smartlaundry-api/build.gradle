@@ -1,7 +1,18 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.postgresql:postgresql:42.7.3"
+        classpath "org.flywaydb:flyway-database-postgresql:10.16.0"
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.5'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.flywaydb.flyway' version '10.16.0'
 }
 
 group = 'ke.co'
@@ -29,7 +40,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation "org.hibernate.orm:hibernate-spatial"
+
+    // --- Hibernate Spatial / PostGIS ---
+    implementation 'org.hibernate.orm:hibernate-spatial:6.6.1.Final'
+    runtimeOnly 'org.postgresql:postgresql:42.7.3'
 
     // --- OpenAPI / Swagger ---
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
@@ -56,10 +70,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
-    // --- PostgreSQL + PostGIS ---
-    runtimeOnly 'org.postgresql:postgresql:42.7.3'
-    implementation 'org.hibernate:hibernate-spatial:6.3.0.Final'
-
     // --- Environment Variables ---
     implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
@@ -72,6 +82,15 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.14.2'
     testImplementation 'com.h2database:h2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+flyway {
+    url = 'jdbc:postgresql://localhost:5432/smartlaundry_db'
+    user = 'laundry_admin'
+    password = '@Aw35omes'
+    schemas = ['public']
+    locations = ['filesystem:src/main/resources/db/migration']
+    cleanDisabled = false
 }
 
 tasks.named('test') {

@@ -12,22 +12,21 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 
 @Service
-@Profile("!test")
 public class MpesaServiceImpl implements MpesaService {
 
-    @Value("${mpesa.baseUrl}")
+    @Value("${MPESA_BASEURL}")
     private String baseUrl;
 
-    @Value("${mpesa.shortcode}")
+    @Value("${MPESA_SHORTCODE}")
     private String shortcode;
 
-    @Value("${mpesa.passkey}")
+    @Value("${MPESA_PASSKEY}")
     private String passkey;
 
-    @Value("${mpesa.consumerKey}")
+    @Value("${MPESA_CONSUMERKEY}")
     private String consumerKey;
 
-    @Value("${mpesa.consumerSecret}")
+    @Value("${MPESA_CONSUMERSECRET}")
     private String consumerSecret;
 
     private final RestTemplate rest = new RestTemplate();

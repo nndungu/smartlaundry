@@ -1,5 +1,6 @@
 package ke.co.smartlaundry.configuration;
 
+import ke.co.smartlaundry.security.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;

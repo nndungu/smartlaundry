@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ke.co.smartlaundry.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ke.co.smartlaundry.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/smartlaundry.iml" filepath="$PROJECT_DIR$/.idea/smartlaundry.iml" />
     </modules>
   </component>
 </project>
