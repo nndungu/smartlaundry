@@ -7,9 +7,6 @@
     <list default="true" id="a0311d6c-3642-4aea-86c7-8970c3eb78af" name="Changes" comment="">
       <change afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/V2__seed_data.sql" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/V3__prod_reference.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10ffe622-111d-42b7-91b1-14c4f2fd1ae6.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10ffe622-111d-42b7-91b1-14c4f2fd1ae6.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/smartlaundry.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/.env.local" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/.env.local" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/build.gradle" afterDir="false" />
@@ -253,7 +250,7 @@
       <recent name="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/prod-seed" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.SmartlaundryApiApplication">
+  <component name="RunManager" selected="Gradle.smartlaundry-api [test]">
     <configuration name="AuthControllerIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -326,26 +323,28 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="smartlaundry-api [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="SmartlaundryApiApplicationTests" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
+        <option name="scriptParameters" value="" />
         <option name="taskDescriptions">
           <list />
         </option>
         <option name="taskNames">
           <list>
-            <option value="dependencies" />
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;ke.co.smartlaundry.SmartlaundryApiApplicationTests&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
+      <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="smartlaundry-api [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -386,11 +385,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.smartlaundry-api [test]" />
+        <item itemvalue="Gradle.SmartlaundryApiApplicationTests" />
         <item itemvalue="Gradle.AuthControllerIntegrationTest" />
         <item itemvalue="Gradle.DriverControllerIntegrationTest" />
-        <item itemvalue="Gradle.smartlaundry-api [test]" />
         <item itemvalue="Gradle.CustomerControllerIntegrationTest" />
-        <item itemvalue="Gradle.smartlaundry-api [dependencies]" />
       </list>
     </recent_temporary>
   </component>
@@ -575,6 +574,7 @@
       <workItem from="1762678857085" duration="72000" />
       <workItem from="1762679011968" duration="9076000" />
       <workItem from="1762701938273" duration="3656000" />
+      <workItem from="1762706281447" duration="8552000" />
     </task>
     <servers />
   </component>
