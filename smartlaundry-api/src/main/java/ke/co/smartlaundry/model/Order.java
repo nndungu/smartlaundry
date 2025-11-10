@@ -31,7 +31,7 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
-    private Double totalPrice;
+    private Double totalPrice = 0.0;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -61,7 +61,33 @@ public class Order {
     public void setCustomer(User customer) { this.customer = customer; }
 
     public List<OrderItem> getItems() { return items; }
-    public void setItems(List<OrderItem> items) { this.items = items; }
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
+    }
+
+    // Add item and update total safely
+    public void addItem(OrderItem item) {
+        items.add(item);
+        item.setOrder(this);
+        recalculateTotal();
+    }
+
+    // Remove item and update total safely
+    public void removeItem(OrderItem item) {
+        items.remove(item);
+        item.setOrder(null);
+        recalculateTotal();
+    }
+
+    public Double getTotalPrice() { return totalPrice; }
+    public void setTotalPrice(double totalPrice) { this.totalPrice = totalPrice; }
+
+    // Called internally whenever items change
+    void recalculateTotal() {
+        this.totalPrice = items.stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
+    }
 
     public OrderStatus getStatus() { return status; }
     public void setStatus(OrderStatus status) { this.status = status; }
@@ -71,13 +97,6 @@ public class Order {
 
     public String getServiceType() { return serviceType; }
     public void setServiceType(String serviceType) { this.serviceType = serviceType; }
-
-    public Double getTotalPrice() {
-        return items.stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity())
-                .sum();
-    }
-    public void setTotalPrice(Double totalPrice) {this.totalPrice = totalPrice;  }
 
     public String getOrderNo() { return orderNo; }
     public void setOrderNo(String orderNo) { this.orderNo = orderNo; }

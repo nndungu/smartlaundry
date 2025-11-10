@@ -14,4 +14,6 @@ public interface DriverService {
     void updateLocation(Long driverId, double latitude, double longitude);
 
     List<DriverEarningsDetailDTO> getEarningsHistory(Long driverId);
+
+    DriverPerformanceDTO getPerformance(Long driverId);
 }

@@ -1,6 +1,7 @@
 package ke.co.smartlaundry.service.impl;
 
 import ke.co.smartlaundry.dto.*;
+import ke.co.smartlaundry.enums.OrderStatus;
 import ke.co.smartlaundry.model.*;
 import ke.co.smartlaundry.repository.*;
 import ke.co.smartlaundry.service.DriverService;
@@ -28,7 +29,8 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public DriverDTO getDriverProfile(Long driverId) {
-        User d = userRepository.findById(driverId).orElseThrow(() -> new IllegalArgumentException("Driver not found"));
+        User d = userRepository.findById(driverId)
+                .orElseThrow(() -> new IllegalArgumentException("Driver not found"));
         DriverDTO dto = new DriverDTO();
         dto.setId(d.getId());
         dto.setUsername(d.getUsername());
@@ -52,7 +54,8 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public void updateLocation(Long driverId, double latitude, double longitude) {
-        User d = userRepository.findById(driverId).orElseThrow(() -> new IllegalArgumentException("Driver not found"));
+        User d = userRepository.findById(driverId)
+                .orElseThrow(() -> new IllegalArgumentException("Driver not found"));
         d.setLatitude(latitude);
         d.setLongitude(longitude);
         userRepository.save(d);
@@ -60,6 +63,27 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public List<DriverEarningsDetailDTO> getEarningsHistory(Long driverId) {
-        return List.of();
+        return List.of(); // You can implement this later
+    }
+
+    @Override
+    public DriverPerformanceDTO getPerformance(Long driverId) {
+        // Fetch driver info
+        User driver = userRepository.findById(driverId)
+                .orElseThrow(() -> new IllegalArgumentException("Driver not found"));
+
+        // Total assigned orders
+        long totalOrders = orderRepository.countByDriverId(driverId);
+
+        // Completed orders
+        long completedOrders = orderRepository.countByDriverIdAndStatus(driverId, OrderStatus.valueOf("COMPLETED"));
+
+        // Earnings
+        double totalEarnings = earningsLedgerRepository.sumAmountByDriverId(driverId);
+
+        // Average earnings per completed order
+        double avgEarnings = completedOrders > 0 ? totalEarnings / completedOrders : 0.0;
+
+        return new DriverPerformanceDTO(driverId, driver.getUsername(), totalOrders, completedOrders, totalEarnings, avgEarnings);
     }
 }

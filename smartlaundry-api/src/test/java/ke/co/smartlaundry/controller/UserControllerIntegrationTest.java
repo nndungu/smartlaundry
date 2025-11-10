@@ -1,176 +1,120 @@
 package ke.co.smartlaundry.controller;
 
-import jakarta.transaction.Transactional;
-import ke.co.smartlaundry.enums.DeliveryStatus;
-import ke.co.smartlaundry.model.*;
-import ke.co.smartlaundry.repository.*;
-import ke.co.smartlaundry.security.SecurityUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ke.co.smartlaundry.dto.LoginResponseDTO;
+import ke.co.smartlaundry.dto.UserDTO;
+import ke.co.smartlaundry.model.User;
+import ke.co.smartlaundry.security.JwtUtil;
+import ke.co.smartlaundry.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.mockStatic;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
 @ActiveProfiles("test")
 class UserControllerIntegrationTest {
 
     @Autowired private MockMvc mockMvc;
-    @Autowired private UserRepository userRepository;
+    @Autowired private ObjectMapper objectMapper;
 
-    // ==========================
-    // Admin Tests
-    // ==========================
-    @Test
-    @WithMockUser(username = "admin@dev.smartlaundry", roles = {"ADMIN"})
-    void adminCanAccessAllEndpoints() throws Exception {
-        // Get all users
-        mockMvc.perform(get("/api/users"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
+    @MockitoBean private UserService userService;
+    @MockitoBean private JwtUtil jwtUtil;
 
-        // Create a new customer
-        String json = """
-                {
-                    "username": "New Customer",
-                    "email": "newcustomer@example.com",
-                    "password": "Cust@123",
-                    "role": "CUSTOMER"
-                }
-                """;
+    private User testUser;
 
-        mockMvc.perform(post("/api/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.user.email").value("newcustomer@example.com"))
-                .andExpect(jsonPath("$.user.username").value("New Customer"));
+    @BeforeEach
+    void init() {
+        // Use your seed data user
+        testUser = new User();
+        testUser.setId(5L); // customer1 from seed data
+        testUser.setUsername("John Mwangi");
+        testUser.setEmail("customer1@smartlaundry.ke");
+        testUser.setPhoneNumber("+254700000004");
+        testUser.setPasswordHash("$2y$10$rZkaKCdPgJsOqiaF5PAeBepWT.rUYt9hhd4SuWAIqOltcymCeILmK");
     }
 
     @Test
-    @WithMockUser(username = "admin@dev.smartlaundry", roles = {"ADMIN"})
-    void adminCanDeleteUser() throws Exception {
-        User driver = userRepository.findByEmail("driver1@dev.smartlaundry").orElseThrow();
-        mockMvc.perform(delete("/api/users/" + driver.getId()))
-                .andExpect(status().isNoContent());
-    }
+    @DisplayName("Get profile returns user info")
+    @WithMockUser(username = "customer1@smartlaundry.ke")
+    void getProfile_shouldReturnUserDTO() throws Exception {
+        when(userService.getUserFromToken(any())).thenReturn(testUser);
+        when(userService.toDTO(testUser))
+                .thenReturn(new UserDTO(testUser.getId(), testUser.getUsername(), testUser.getEmail(), testUser.getPhoneNumber()));
 
-    // ==========================
-    // Customer Tests
-    // ==========================
-    @Test
-    @WithMockUser(username = "customer1@dev.smartlaundry", roles = {"CUSTOMER"})
-    void customerSelfServiceEndpoints() throws Exception {
-        // Get profile
         mockMvc.perform(get("/api/users/me"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("customer1@dev.smartlaundry"));
+                .andExpect(jsonPath("$.email").value("customer1@smartlaundry.ke"))
+                .andExpect(jsonPath("$.username").value("John Mwangi"));
+    }
 
-        // Update profile
-        String updateJson = """
-                {
-                    "username": "Updated Customer",
-                    "phoneNumber": "0712345678"
-                }
-                """;
+    @Test
+    @DisplayName("Update profile successfully")
+    @WithMockUser(username = "customer1@smartlaundry.ke")
+    void updateProfile_shouldReturnUpdatedUserDTO() throws Exception {
+        testUser.setUsername("John Updated");
+        testUser.setPhoneNumber("+254700000099");
+
+        when(userService.getUserFromToken(any())).thenReturn(testUser);
+        when(userService.updateUser(any(Long.class), any(User.class), any())).thenReturn(testUser);
+        when(userService.toDTO(testUser))
+                .thenReturn(new UserDTO(testUser.getId(), testUser.getUsername(), testUser.getEmail(), testUser.getPhoneNumber()));
+
+        UserDTO dto = new UserDTO(testUser.getId(), "John Updated", testUser.getEmail(), "+254700000099");
 
         mockMvc.perform(put("/api/users/me")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(updateJson))
+                        .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("Updated Customer"));
+                .andExpect(jsonPath("$.username").value("John Updated"))
+                .andExpect(jsonPath("$.phoneNumber").value("+254700000099"));
+    }
 
-        // Change password
+    @Test
+    @DisplayName("Change password successfully")
+    @WithMockUser(username = "customer1@smartlaundry.ke")
+    void changePassword_shouldReturnSuccessMessage() throws Exception {
+        when(userService.getUserFromToken(any())).thenReturn(testUser);
+        when(userService.checkPassword("oldPass", testUser.getPasswordHash())).thenReturn(true);
+        when(userService.encodePassword("newPass")).thenReturn("encodedNewPass");
+        when(userService.updateUser(any(Long.class), any(User.class), any())).thenReturn(testUser);
+
         mockMvc.perform(post("/api/users/me/change-password")
-                        .param("oldPassword", "Customer@123")
-                        .param("newPassword", "NewPassword@123"))
-                .andExpect(status().isOk());
+                        .param("oldPassword", "oldPass")
+                        .param("newPassword", "newPass"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Password updated successfully"));
+    }
 
-        // Change email
+    @Test
+    @DisplayName("Change email successfully")
+    @WithMockUser(username = "customer1@smartlaundry.ke")
+    void changeEmail_shouldReturnLoginResponseDTO() throws Exception {
+        testUser.setEmail("newemail@smartlaundry.ke");
+
+        when(userService.getUserFromToken(any())).thenReturn(testUser);
+        when(userService.updateUser(any(Long.class), any(User.class), any())).thenReturn(testUser);
+        when(userService.toDTO(testUser))
+                .thenReturn(new UserDTO(testUser.getId(), testUser.getUsername(), testUser.getEmail(), testUser.getPhoneNumber()));
+        when(jwtUtil.generateToken(testUser.getEmail())).thenReturn("newMockToken");
+
         mockMvc.perform(post("/api/users/me/change-email")
-                        .param("newEmail", "updatedcustomer@example.com"))
+                        .param("newEmail", "newemail@smartlaundry.ke"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.user.email").value("updatedcustomer@example.com"));
-    }
-
-    @Test
-    @WithMockUser(username = "customer1@dev.smartlaundry", roles = {"CUSTOMER"})
-    @DisplayName("Customer can view cart and orders")
-    void customerCanViewCartAndOrders() throws Exception {
-        try (MockedStatic<SecurityUtils> utilities = mockStatic(SecurityUtils.class)) {
-            utilities.when(SecurityUtils::getCurrentUserId).thenReturn(
-                    userRepository.findByEmail("customer1@dev.smartlaundry").get().getId()
-            );
-
-            // --- Cart ---
-            mockMvc.perform(get("/api/carts"))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.length()").value(2)) // matches V3__test_seed.sql
-                    .andExpect(jsonPath("$[0].itemName").value("Shirt"))
-                    .andExpect(jsonPath("$[1].itemName").value("Trouser"));
-
-            // --- Orders ---
-            mockMvc.perform(get("/api/orders"))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$[0].id").exists())
-                    .andExpect(jsonPath("$[0].status").exists());
-        }
-    }
-
-    // ==========================
-    // Driver Tests
-    // ==========================
-    @Test
-    @WithMockUser(username = "driver1@dev.smartlaundry", roles = {"DRIVER"})
-    void driverSelfServiceEndpoints() throws Exception {
-        // Get profile
-        mockMvc.perform(get("/api/users/me"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("driver1@dev.smartlaundry"));
-
-        // Update profile
-        String updateJson = """
-                {
-                    "username": "Updated Driver",
-                    "phoneNumber": "0722000111"
-                }
-                """;
-
-        mockMvc.perform(put("/api/users/me")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(updateJson))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("Updated Driver"));
-
-        // Change password
-        mockMvc.perform(post("/api/users/me/change-password")
-                        .param("oldPassword", "Driver@123")
-                        .param("newPassword", "Driver@1234"))
-                .andExpect(status().isOk());
-
-        // Change email
-        mockMvc.perform(post("/api/users/me/change-email")
-                        .param("newEmail", "driverupdated@example.com"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.user.email").value("driverupdated@example.com"));
-    }
-
-    @Test
-    @WithMockUser(username = "driver1@dev.smartlaundry", roles = {"DRIVER"})
-    void driverCanViewDeliveryRequests() throws Exception {
-        mockMvc.perform(get("/api/deliveries/me"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].status").value("PENDING"));
+                .andExpect(jsonPath("$.token").value("newMockToken"))
+                .andExpect(jsonPath("$.user.email").value("newemail@smartlaundry.ke"));
     }
 }

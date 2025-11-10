@@ -1,6 +1,9 @@
 package ke.co.smartlaundry.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ke.co.smartlaundry.configuration.MockMpesaConfig;
+import ke.co.smartlaundry.dto.CheckoutRequestDTO;
+import ke.co.smartlaundry.dto.OrderItemRequestDTO;
 import ke.co.smartlaundry.enums.OrderStatus;
 import ke.co.smartlaundry.model.Order;
 import ke.co.smartlaundry.model.User;
@@ -21,6 +24,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,6 +42,7 @@ class OrderControllerIntegrationTest {
     @Autowired private MockMvc mockMvc;
     @Autowired private OrderRepository orderRepository;
     @Autowired private UserRepository userRepository;
+    @Autowired private ObjectMapper objectMapper;
 
     private User testUser;
     private Long testUserId;
@@ -91,10 +96,28 @@ class OrderControllerIntegrationTest {
 
             long before = orderRepository.count();
 
-            mockMvc.perform(post("/api/orders/checkout").contentType(MediaType.APPLICATION_JSON))
+            // Create checkout request DTO
+            OrderItemRequestDTO item1 = new OrderItemRequestDTO();
+            item1.setItemName("Shirt");
+            item1.setQuantity(2);
+            item1.setPrice(500);
+
+            OrderItemRequestDTO item2 = new OrderItemRequestDTO();
+            item2.setItemName("Pants");
+            item2.setQuantity(1);
+            item2.setPrice(700);
+
+            CheckoutRequestDTO checkoutRequest = new CheckoutRequestDTO();
+            checkoutRequest.setServiceType("Laundry");
+            checkoutRequest.setItems(Arrays.asList(item1, item2));
+
+            mockMvc.perform(post("/api/orders/checkout")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(checkoutRequest)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").exists())
-                    .andExpect(jsonPath("$.status").value("PENDING"));
+                    .andExpect(jsonPath("$.status").value("PENDING"))
+                    .andExpect(jsonPath("$.totalPrice").value(1700.0));
 
             long after = orderRepository.count();
             assertThat(after).isGreaterThan(before);

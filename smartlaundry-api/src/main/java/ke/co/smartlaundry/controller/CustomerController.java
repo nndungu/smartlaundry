@@ -1,7 +1,6 @@
 package ke.co.smartlaundry.controller;
 
 import ke.co.smartlaundry.dto.*;
-import ke.co.smartlaundry.repository.OrderRepository;
 import ke.co.smartlaundry.security.SecurityUtils;
 import ke.co.smartlaundry.service.CustomerService;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +38,6 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.listCategories());
     }
 
-    // Price list
     @GetMapping("/prices")
     public ResponseEntity<List<PriceListDTO>> listPrices() {
         return ResponseEntity.ok(customerService.getAvailablePrices());
@@ -93,7 +91,9 @@ public class CustomerController {
         return ResponseEntity.noContent().build();
     }
 
+    // ----------------------------
     // Payments
+    // ----------------------------
     @PostMapping("/pay")
     public ResponseEntity<PaymentDTO> pay(@RequestBody PaymentRequestDTO request,
                                           @RequestParam(defaultValue = "MPESA") String method) {
@@ -121,5 +121,14 @@ public class CustomerController {
     @GetMapping("/driver/{driverId}/location")
     public ResponseEntity<DriverLocationDTO> getDriverLocation(@PathVariable Long driverId) {
         return ResponseEntity.ok(customerService.getDriverLocation(driverId));
+    }
+
+    // ----------------------------
+    // Performance
+    // ----------------------------
+    @GetMapping("/performance")
+    public ResponseEntity<CustomerPerformanceDTO> getPerformance() {
+        Long userId = SecurityUtils.getCurrentUserId();
+        return ResponseEntity.ok(customerService.getPerformance(userId));
     }
 }

@@ -1,5 +1,6 @@
 package ke.co.smartlaundry.service;
 
+import ke.co.smartlaundry.dto.CheckoutRequestDTO;
 import ke.co.smartlaundry.dto.OrderDTO;
 import ke.co.smartlaundry.enums.OrderStatus;
 import ke.co.smartlaundry.model.*;
@@ -9,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.NoSuchElementException;
 
 @Service
 public class OrderService {
@@ -35,10 +35,13 @@ public class OrderService {
         this.smsService = smsService;
     }
 
+    // ✅ Checkout from user's cart
     @Transactional
     public OrderDTO checkout(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
-        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new NoSuchElementException("Cart not found"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        Cart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new NoSuchElementException("Cart not found"));
 
         Order order = new Order();
         order.setUser(user);
@@ -59,20 +62,58 @@ public class OrderService {
 
         sendOrderNotifications(user, order);
 
-        // return DTO
+        return toDTO(order);
+    }
+
+    // ✅ Checkout using a dynamic CheckoutRequestDTO
+    @Transactional
+    public OrderDTO createOrder(Long userId, CheckoutRequestDTO request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        Order order = new Order();
+        order.setUser(user);
+        order.setStatus(OrderStatus.PENDING);
+        order.setServiceType(request.getServiceType());
+
+        List<OrderItem> items = request.getItems().stream().map(itemReq -> {
+            OrderItem oi = new OrderItem();
+            oi.setOrder(order);
+            oi.setItemName(itemReq.getItemName());
+            oi.setQuantity(itemReq.getQuantity());
+            oi.setPrice(itemReq.getPrice());
+            // Optional: set category if provided
+            if (itemReq.getCategoryId() != null) {
+                Category category = new Category();
+                category.setId(itemReq.getCategoryId());
+                oi.setCategory(category);
+            }
+            return oi;
+        }).collect(Collectors.toList());
+
+        order.setItems(items);
+        orderRepository.save(order);
+
+        sendOrderNotifications(user, order);
+
         return toDTO(order);
     }
 
     public List<OrderDTO> getOrdersByUser(Long userId) {
-        return orderRepository.findByUserId(userId).stream().map(this::toDTO).collect(Collectors.toList());
+        return orderRepository.findByUserId(userId).stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
     public OrderDTO getOrderById(Long orderId) {
-        return orderRepository.findById(orderId).map(this::toDTO).orElseThrow(() -> new NoSuchElementException("Order not found"));
+        return orderRepository.findById(orderId)
+                .map(this::toDTO)
+                .orElseThrow(() -> new NoSuchElementException("Order not found"));
     }
 
     public OrderDTO updateOrderStatus(Long orderId, OrderStatus status) {
-        Order o = orderRepository.findById(orderId).orElseThrow(() -> new NoSuchElementException("Order not found"));
+        Order o = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NoSuchElementException("Order not found"));
         o.setStatus(status);
         orderRepository.save(o);
         return toDTO(o);
@@ -84,7 +125,8 @@ public class OrderService {
 
     private void sendOrderNotifications(User user, Order order) {
         String subject = "SmartLaundry Order Confirmation";
-        String body = String.format("Hi %s,\n\nYour order #%d has been placed.\nStatus: %s\n\nThanks!", user.getUsername(), order.getId(), order.getStatus());
+        String body = String.format("Hi %s,\n\nYour order #%d has been placed.\nStatus: %s\n\nThanks!",
+                user.getUsername(), order.getId(), order.getStatus());
         emailService.sendEmail(user.getEmail(), subject, body);
         smsService.sendSMS(user.getPhoneNumber(), "Order #" + order.getId() + " placed.");
     }
@@ -93,8 +135,9 @@ public class OrderService {
         OrderDTO dto = new OrderDTO();
         dto.setId(order.getId());
         dto.setStatus(order.getStatus());
-        dto.setCreatedAt(order.getCreatedAt()!=null ? order.getCreatedAt().toLocalDateTime() : null);
+        dto.setCreatedAt(order.getCreatedAt() != null ? order.getCreatedAt().toLocalDateTime() : null);
         dto.setTotalPrice(order.getTotalPrice());
+        dto.setServiceType(order.getServiceType());
         return dto;
     }
 }

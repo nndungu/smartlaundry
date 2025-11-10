@@ -17,6 +17,12 @@ public class UserDTO {
     private Double latitude;
     private Double longitude;
 
+    public UserDTO(Long id, String username, String email, String phoneNumber) {
+        this.id = id;
+        this.username = username;
+        this.phoneNumber = phoneNumber;
+    }
+
     public enum Status {
         ACTIVE,
         SUSPENDED

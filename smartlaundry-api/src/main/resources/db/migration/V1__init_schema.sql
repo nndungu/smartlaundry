@@ -137,7 +137,6 @@ CREATE TABLE cart (
                       user_id BIGINT NOT NULL UNIQUE REFERENCES app_user(id) ON DELETE CASCADE
 );
 
-
 CREATE TABLE cart_item (
                            id BIGSERIAL PRIMARY KEY,
                            cart_id BIGINT NOT NULL REFERENCES cart(id) ON DELETE CASCADE,
@@ -288,6 +287,18 @@ CREATE TABLE delivery (
                           CONSTRAINT chk_delivery_status CHECK (status IN ('PENDING', 'ASSIGNED', 'PICKED_UP', 'IN_TRANSIT', 'DELIVERED', 'FAILED'))
 );
 
+CREATE TABLE delivery_request (
+                                  id BIGSERIAL PRIMARY KEY,
+                                  order_id BIGINT NOT NULL,
+                                  driver_id BIGINT,
+                                  status VARCHAR(50) DEFAULT 'PENDING',
+                                  created_at TIMESTAMP DEFAULT NOW(),
+                                  accepted_at TIMESTAMP,
+                                  completed_at TIMESTAMP,
+                                  CONSTRAINT fk_order FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE,
+                                  CONSTRAINT fk_driver FOREIGN KEY(driver_id) REFERENCES app_user(id) ON DELETE SET NULL
+);
+
 CREATE TABLE driver_location (
                                  id BIGSERIAL PRIMARY KEY,
                                  driver_id BIGINT NOT NULL REFERENCES app_user(id),
@@ -295,6 +306,16 @@ CREATE TABLE driver_location (
                                  longitude DOUBLE PRECISION NOT NULL,
                                  location geometry(Point, 4326),
                                  recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE earnings_ledger (
+                                 id SERIAL PRIMARY KEY,
+                                 driver_id INT REFERENCES app_user(id),
+                                 order_id INT REFERENCES orders(id),
+                                 service_type_id INT REFERENCES service_type(id),
+                                 transaction_type VARCHAR(50),
+                                 amount NUMERIC(10,2),
+                                 created_at TIMESTAMP DEFAULT NOW()
 );
 
 -- ===============================

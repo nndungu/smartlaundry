@@ -1,4 +1,4 @@
-package ke.co.smartlaundry.controller;
+package ke.co.smartlaundry.service;
 
 import ke.co.smartlaundry.enums.OrderStatus;
 import ke.co.smartlaundry.enums.PaymentStatus;

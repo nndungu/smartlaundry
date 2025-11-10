@@ -28,16 +28,13 @@ public class AdminController {
     }
 
     // ----------------------------
-    // Dashboard Metrics
+    // Dashboard / Analytics
     // ----------------------------
     @GetMapping("/dashboard")
     public ResponseEntity<AdminDashboardDTO> getDashboardMetrics() {
         return ResponseEntity.ok(adminService.getDashboardMetrics());
     }
 
-    // ----------------------------
-    // Analytics
-    // ----------------------------
     @GetMapping("/analytics")
     public ResponseEntity<ServiceAnalyticsDTO> getServiceAnalytics() {
         return ResponseEntity.ok(adminService.getServiceAnalytics());
@@ -69,7 +66,7 @@ public class AdminController {
     }
 
     // ----------------------------
-    // Service Types
+    // Services, Categories, Pricing
     // ----------------------------
     @GetMapping("/services")
     public ResponseEntity<List<ServiceTypeDTO>> listServices() {
@@ -81,9 +78,6 @@ public class AdminController {
         return ResponseEntity.ok(adminService.createServiceType(dto));
     }
 
-    // ----------------------------
-    // Categories
-    // ----------------------------
     @GetMapping("/categories")
     public ResponseEntity<List<CategoryDTO>> listCategories() {
         return ResponseEntity.ok(adminService.listCategories());
@@ -94,9 +88,6 @@ public class AdminController {
         return ResponseEntity.ok(adminService.createCategory(dto));
     }
 
-    // ----------------------------
-    // Pricing Management
-    // ----------------------------
     @GetMapping("/prices")
     public ResponseEntity<List<PriceListDTO>> listPrices() {
         return ResponseEntity.ok(adminService.listPriceLists());
@@ -114,10 +105,15 @@ public class AdminController {
     }
 
     // ----------------------------
-    // Driver Earnings
+    // Driver Earnings / Performance
     // ----------------------------
     @GetMapping("/driver/{id}/earnings")
     public ResponseEntity<List<EarningsDTO>> getDriverEarnings(@PathVariable Long id) {
         return ResponseEntity.ok(adminService.getEarningsForDriver(id));
+    }
+
+    @GetMapping("/driver/{id}/performance")
+    public ResponseEntity<DriverPerformanceDTO> getDriverPerformance(@PathVariable Long id) {
+        return ResponseEntity.ok(adminService.getDriverPerformance(id));
     }
 }

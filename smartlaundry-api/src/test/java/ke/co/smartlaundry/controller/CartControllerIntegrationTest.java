@@ -42,24 +42,25 @@ class CartControllerIntegrationTest {
 
     @BeforeEach
     void setup() {
-        // Use seeded user from test-data.sql
-        testUser = userRepository.findByEmail("customer1@example.com")
+        testUser = userRepository.findByEmail("test1@example.com")
                 .orElseThrow(() -> new IllegalStateException("Test user not found"));
         testUserId = testUser.getId();
     }
 
     @Test
-    @DisplayName("GET /api/carts should return all cart items for user")
+    @DisplayName("GET /api/cart should return all cart items for the user")
     void getCartItems_returnsCartItems() throws Exception {
         try (MockedStatic<SecurityUtils> utilities = mockStatic(SecurityUtils.class)) {
             utilities.when(SecurityUtils::getCurrentUserId).thenReturn(testUserId);
 
-            List<String> expectedItemNames = cartRepository.findByUserId(testUserId).stream()
-                    .flatMap(c -> c.getItems().stream())
+            Cart cart = cartRepository.findByUserId(testUserId)
+                    .orElseThrow(() -> new IllegalStateException("Cart not found"));
+
+            List<String> expectedItemNames = cart.getItems().stream()
                     .map(CartItem::getItemName)
                     .collect(Collectors.toList());
 
-            mockMvc.perform(get("/api/carts"))
+            mockMvc.perform(get("/api/cart"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.length()").value(expectedItemNames.size()))
                     .andExpect(result -> {
@@ -72,50 +73,57 @@ class CartControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/carts/add should add a new item")
+    @DisplayName("POST /api/cart/add should add a new item to the cart")
     void addItem_addsItemToCart() throws Exception {
         try (MockedStatic<SecurityUtils> utilities = mockStatic(SecurityUtils.class)) {
             utilities.when(SecurityUtils::getCurrentUserId).thenReturn(testUserId);
 
-            mockMvc.perform(post("/api/carts/add")
+            mockMvc.perform(post("/api/cart/add")
                             .param("itemName", "Jacket")
                             .param("quantity", "2")
                             .param("price", "500"))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.itemName").value("Jacket"))
-                    .andExpect(jsonPath("$.quantity").value(2));
+                    .andExpect(jsonPath("$.quantity").value(2))
+                    .andExpect(jsonPath("$.price").value(500.0));
 
-            // Verify persisted
-            Cart cart = cartRepository.findByUserId(testUserId).get();
-            assertThat(cart.getItems().stream().anyMatch(i -> i.getItemName().equals("Jacket"))).isTrue();
+            // Verify persisted in DB
+            Cart cart = cartRepository.findByUserId(testUserId)
+                    .orElseThrow(() -> new IllegalStateException("Cart not found"));
+            assertThat(cart.getItems().stream()
+                    .anyMatch(i -> i.getItemName().equals("Jacket") && i.getQuantity() == 2))
+                    .isTrue();
         }
     }
 
     @Test
-    @DisplayName("DELETE /api/carts/item/{id} should remove an item")
+    @DisplayName("DELETE /api/cart/item/{itemId} should remove the item from cart")
     void removeItem_removesItem() throws Exception {
-        CartItem item = cartRepository.findByUserId(testUserId).get().getItems().get(0);
+        Cart cart = cartRepository.findByUserId(testUserId)
+                .orElseThrow(() -> new IllegalStateException("Cart not found"));
 
-        mockMvc.perform(delete("/api/carts/item/{itemId}", item.getId()))
+        CartItem item = cart.getItems().get(0);
+
+        mockMvc.perform(delete("/api/cart/item/{itemId}", item.getId()))
                 .andExpect(status().isNoContent());
 
-        Cart cart = cartRepository.findByUserId(testUserId).get();
-        assertThat(cart.getItems().stream().noneMatch(i -> i.getId().equals(item.getId()))).isTrue();
+        Cart updatedCart = cartRepository.findByUserId(testUserId)
+                .orElseThrow(() -> new IllegalStateException("Cart not found"));
+        assertThat(updatedCart.getItems().stream().noneMatch(i -> i.getId().equals(item.getId()))).isTrue();
     }
 
     @Test
-    @DisplayName("DELETE /api/carts/clear should clear all items")
+    @DisplayName("DELETE /api/cart/clear should remove all items from cart")
     void clearCart_clearsCart() throws Exception {
         try (MockedStatic<SecurityUtils> utilities = mockStatic(SecurityUtils.class)) {
             utilities.when(SecurityUtils::getCurrentUserId).thenReturn(testUserId);
 
-            mockMvc.perform(delete("/api/carts/clear"))
+            mockMvc.perform(delete("/api/cart/clear"))
                     .andExpect(status().isNoContent());
 
-            List<CartItem> items = cartRepository.findByUserId(testUserId).stream()
-                    .flatMap(c -> c.getItems().stream())
-                    .collect(Collectors.toList());
-            assertThat(items).isEmpty();
+            Cart cart = cartRepository.findByUserId(testUserId)
+                    .orElseThrow(() -> new IllegalStateException("Cart not found"));
+            assertThat(cart.getItems()).isEmpty();
         }
     }
 }

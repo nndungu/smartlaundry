@@ -15,6 +15,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.mockito.Mockito.mockStatic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -33,21 +35,29 @@ class DeliveryControllerIntegrationTest {
 
     @BeforeEach
     void init() {
-        driver = userRepository.findByEmail("driver1@example.com")
+        // Safely fetch driver
+        driver = userRepository.findByEmail("driver1@smartlaundry.ke")
                 .orElseThrow(() -> new IllegalStateException("Driver not found"));
-        deliveryRequest = deliveryRequestRepository.findAllByDriverId(driver.getId()).get(0);
+
+        // Safely fetch a delivery request for this driver
+        List<DeliveryRequest> requests = deliveryRequestRepository.findAllByDriverId(driver.getId());
+        if (requests.isEmpty()) {
+            throw new IllegalStateException("No delivery requests found for driver");
+        }
+        deliveryRequest = requests.get(0);
     }
 
     @Test
-    @WithMockUser(username = "driver1@example.com", roles = {"DRIVER"})
+    @WithMockUser(username = "driver1@smartlaundry.ke", roles = {"DRIVER"})
     void createDeliveryRequest_returnsDelivery() throws Exception {
         mockMvc.perform(post("/api/delivery/request/" + deliveryRequest.getOrder().getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.orderId").value(deliveryRequest.getOrder().getId()));
+                // JSON path matches the structure of DeliveryRequest
+                .andExpect(jsonPath("$.order.id").value(deliveryRequest.getOrder().getId()));
     }
 
     @Test
-    @WithMockUser(username = "driver1@example.com", roles = {"DRIVER"})
+    @WithMockUser(username = "driver1@smartlaundry.ke", roles = {"DRIVER"})
     void getPendingRequests_returnsArray() throws Exception {
         try (MockedStatic<SecurityUtils> security = mockStatic(SecurityUtils.class)) {
             security.when(SecurityUtils::getCurrentUserId).thenReturn(driver.getId());
@@ -59,7 +69,7 @@ class DeliveryControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "driver1@example.com", roles = {"DRIVER"})
+    @WithMockUser(username = "driver1@smartlaundry.ke", roles = {"DRIVER"})
     void acceptDeliveryRequest_updatesDriverId() throws Exception {
         try (MockedStatic<SecurityUtils> security = mockStatic(SecurityUtils.class)) {
             security.when(SecurityUtils::getCurrentUserId).thenReturn(driver.getId());
@@ -67,12 +77,12 @@ class DeliveryControllerIntegrationTest {
             mockMvc.perform(post("/api/delivery/" + deliveryRequest.getId() + "/accept")
                             .param("driverId", driver.getId().toString()))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.driverId").value(driver.getId()));
+                    .andExpect(jsonPath("$.driver.id").value(driver.getId()));
         }
     }
 
     @Test
-    @WithMockUser(username = "driver1@example.com", roles = {"DRIVER"})
+    @WithMockUser(username = "driver1@smartlaundry.ke", roles = {"DRIVER"})
     void declineDeliveryRequest_keepsPendingStatus() throws Exception {
         mockMvc.perform(post("/api/delivery/" + deliveryRequest.getId() + "/decline")
                         .param("driverId", driver.getId().toString()))
@@ -81,7 +91,7 @@ class DeliveryControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "driver1@example.com", roles = {"DRIVER"})
+    @WithMockUser(username = "driver1@smartlaundry.ke", roles = {"DRIVER"})
     void completeDeliveryRequest_updatesStatus() throws Exception {
         mockMvc.perform(post("/api/delivery/" + deliveryRequest.getId() + "/complete"))
                 .andExpect(status().isOk())

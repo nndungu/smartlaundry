@@ -20,4 +20,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     long countByDriverIdAndStatus(Long driverId, OrderStatus status);
 
     List<Order> findAllByUserId(Long id);
+
+    int countByDriverId(Long driverId);
+
+    int countByUserId(Long customerId);
 }

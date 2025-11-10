@@ -36,9 +36,13 @@ public class CustomerServiceImpl implements CustomerService {
         this.priceListRepository = priceListRepository;
     }
 
+    // ---------------------------
+    // Profile
+    // ---------------------------
     @Override
     public CustomerDTO getCustomerProfile(Long customerId) {
-        User u = userRepository.findById(customerId).orElseThrow(() -> new NoSuchElementException("Customer not found"));
+        User u = userRepository.findById(customerId)
+                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
         return new CustomerDTO(u.getId(), u.getUsername(), u.getEmail(), u.getPhoneNumber(), u.isVerified());
     }
 
@@ -56,18 +60,41 @@ public class CustomerServiceImpl implements CustomerService {
         userRepository.deleteById(customerId);
     }
 
+    // ---------------------------
+    // Orders
+    // ---------------------------
     @Override
     public List<OrderDTO> getOrdersByCustomer(Long customerId) {
-        return List.of();
-    }
-
-    @Override
-    public List<OrderDTO> getCustomerOrders(Long customerId) {
         return orderRepository.findByUserId(customerId).stream()
                 .map(o -> new OrderDTO(o.getId(), o.getStatus(), o.getTotalPrice(), o.getCreatedAt()))
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<OrderDTO> getCustomerOrders(Long customerId) {
+        return getOrdersByCustomer(customerId);
+    }
+
+    @Override
+    public OrderDTO placeOrder(OrderRequestDTO request) {
+        // Implement order creation logic here
+        return null;
+    }
+
+    @Override
+    public void cancelOrder(Long id) {
+        // Implement order cancellation here
+    }
+
+    @Override
+    public PaymentDTO makePayment(PaymentRequestDTO request, String method) {
+        // Implement payment logic
+        return null;
+    }
+
+    // ---------------------------
+    // Loyalty
+    // ---------------------------
     @Override
     public LoyaltyStatusDTO getLoyaltyStatus(Long customerId) {
         var opt = loyaltyLedgerRepository.findTopByCustomerIdOrderByCreatedAtDesc(customerId);
@@ -75,20 +102,32 @@ public class CustomerServiceImpl implements CustomerService {
         LoyaltyLedger ledger = opt.get();
         String tierName = "Bronze";
         if (ledger.getTier() != null && ledger.getTier().getTierName() != null) tierName = ledger.getTier().getTierName();
-        int points = (ledger.getPointsEarned() != null ? ledger.getPointsEarned() : 0) - (ledger.getPointsRedeemed() != null ? ledger.getPointsRedeemed() : 0);
+        int points = (ledger.getPointsEarned() != null ? ledger.getPointsEarned() : 0)
+                - (ledger.getPointsRedeemed() != null ? ledger.getPointsRedeemed() : 0);
         return new LoyaltyStatusDTO(tierName, points);
     }
 
     @Override
     public LoyaltyLedgerDTO getLoyaltyLedger(Long customerId) {
         List<LoyaltyLedger> entries = loyaltyLedgerRepository.findByCustomerId(customerId);
-        double total = entries.stream().mapToDouble(e -> (e.getPointsEarned() != null ? e.getPointsEarned() : 0) - (e.getPointsRedeemed()!=null ? e.getPointsRedeemed():0)).sum();
+        double total = entries.stream()
+                .mapToDouble(e -> (e.getPointsEarned() != null ? e.getPointsEarned() : 0)
+                        - (e.getPointsRedeemed() != null ? e.getPointsRedeemed() : 0))
+                .sum();
         List<LoyaltyEntryDTO> dtoEntries = entries.stream()
-                .map(e -> new LoyaltyEntryDTO(e.getId(), e.getOrder() != null ? e.getOrder().getId() : null, e.getPointsEarned(), e.getPointsRedeemed(), e.getCreatedAt()))
+                .map(e -> new LoyaltyEntryDTO(
+                        e.getId(),
+                        e.getOrder() != null ? e.getOrder().getId() : null,
+                        e.getPointsEarned(),
+                        e.getPointsRedeemed(),
+                        e.getCreatedAt()))
                 .collect(Collectors.toList());
         return new LoyaltyLedgerDTO(customerId, total, dtoEntries);
     }
 
+    // ---------------------------
+    // Services & Pricing
+    // ---------------------------
     @Override
     public List<ServiceTypeDTO> listServiceTypes() {
         return serviceTypeRepository.findAll().stream()
@@ -104,45 +143,61 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public List<ServiceTypeDTO> listServiceTypeName() {
+        return serviceTypeRepository.findAll().stream()
+                .map(s -> new ServiceTypeDTO(s.getId(), s.getName(), null, null, null))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<CategoryDTO> listCategories() {
-        return categoryRepository.findAll().stream().map(c -> new CategoryDTO(c.getId(), c.getName(), c.getDescription())).collect(Collectors.toList());
+        return categoryRepository.findAll().stream()
+                .map(c -> new CategoryDTO(c.getId(), c.getName(), c.getDescription()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<PriceListDTO> getPriceListForService(Long serviceTypeId) {
         return priceListRepository.findByServiceTypeId(serviceTypeId).stream()
-                .map(p -> new PriceListDTO(p.getId(), p.getServiceType().getId(), p.getCategory().getId(), p.getServiceType().getName(), p.getCategory().getName(), p.getUnitPrice()))
+                .map(p -> new PriceListDTO(p.getId(), p.getServiceType().getId(),
+                        p.getCategory().getId(), p.getServiceType().getName(), p.getCategory().getName(), p.getUnitPrice()))
                 .collect(Collectors.toList());
     }
 
     @Override
+    public List<PriceListDTO> getAvailablePrices() {
+        return priceListRepository.findAll().stream()
+                .map(p -> new PriceListDTO(p.getId(), p.getServiceType().getId(),
+                        p.getCategory().getId(), p.getServiceType().getName(),
+                        p.getCategory().getName(), p.getUnitPrice()))
+                .collect(Collectors.toList());
+    }
+
+    // ---------------------------
+    // Driver Location
+    // ---------------------------
+    @Override
     public DriverLocationDTO getDriverLocation(Long driverId) {
-        User d = userRepository.findById(driverId).orElseThrow(() -> new NoSuchElementException("Driver not found"));
+        User d = userRepository.findById(driverId)
+                .orElseThrow(() -> new NoSuchElementException("Driver not found"));
         return new DriverLocationDTO(d.getId(), d.getLatitude(), d.getLongitude());
     }
 
+    // ---------------------------
+    // Customer Performance
+    // ---------------------------
     @Override
-    public List<ServiceTypeDTO> listServiceTypeName() {
-        return List.of();
-    }
+    public CustomerPerformanceDTO getPerformance(Long customerId) {
+        int totalOrdersPlaced = orderRepository.countByUserId(customerId);
+        double totalSpent = orderRepository.findByUserId(customerId).stream()
+                .mapToDouble(Order::getTotalPrice)
+                .sum();
+        double averageOrderValue = totalOrdersPlaced > 0 ? totalSpent / totalOrdersPlaced : 0;
 
-    @Override
-    public List<PriceListDTO> getAvailablePrices() {
-        return List.of();
-    }
-
-    @Override
-    public OrderDTO placeOrder(OrderRequestDTO request) {
-        return null;
-    }
-
-    @Override
-    public void cancelOrder(Long id) {
-
-    }
-
-    @Override
-    public PaymentDTO makePayment(PaymentRequestDTO request, String method) {
-        return null;
+        CustomerPerformanceDTO dto = new CustomerPerformanceDTO();
+        dto.setTotalOrdersPlaced(totalOrdersPlaced);
+        dto.setTotalSpent(totalSpent);
+        dto.setAverageOrderValue(averageOrderValue);
+        return dto;
     }
 }

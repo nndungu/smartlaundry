@@ -11,28 +11,22 @@ public class EarningsLedger {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** The driver associated with this earning entry */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id", nullable = false)
     private User driver;
 
-    /** The related order (if applicable) */
     @Column(name = "order_id")
     private Long orderId;
 
-    /** The specific service type performed (washing, delivery, etc.) */
     @Column(name = "service_type_id")
     private Long serviceTypeId;
 
-    /** The amount earned or debited */
     @Column(nullable = false)
     private Double amount;
 
-    /** Transaction type: "CREDIT" for earnings, "DEBIT" for deductions */
     @Column(name = "transaction_type", length = 20, nullable = false)
     private String transactionType;
 
-    /** Timestamp of the transaction */
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 

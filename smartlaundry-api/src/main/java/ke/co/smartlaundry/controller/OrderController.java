@@ -1,10 +1,10 @@
 package ke.co.smartlaundry.controller;
 
-import ke.co.smartlaundry.dto.OrderDTO;
-import ke.co.smartlaundry.dto.PaymentDTO;
-import ke.co.smartlaundry.dto.PaymentRequestDTO;
-import ke.co.smartlaundry.dto.UserDTO;
+import ke.co.smartlaundry.dto.*;
 import ke.co.smartlaundry.enums.OrderStatus;
+import ke.co.smartlaundry.model.Order;
+import ke.co.smartlaundry.model.OrderItem;
+import ke.co.smartlaundry.model.User;
 import ke.co.smartlaundry.security.SecurityUtils;
 import ke.co.smartlaundry.service.OrderService;
 import ke.co.smartlaundry.service.PaymentService;
@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -30,51 +31,41 @@ public class OrderController {
         this.userService = userService;
     }
 
-    // ✅ Create order (checkout)
     @PostMapping("/checkout")
-    public ResponseEntity<OrderDTO> checkout() {
+    public ResponseEntity<OrderDTO> checkout(@RequestBody CheckoutRequestDTO request) {
         Long userId = SecurityUtils.getCurrentUserId();
-        if (userId == null) {
-            return ResponseEntity.status(401).build();
-        }
-        OrderDTO order = orderService.checkout(userId);
+        if (userId == null) return ResponseEntity.status(401).build();
+
+        OrderDTO order = orderService.createOrder(userId, request);
         return ResponseEntity.ok(order);
     }
 
-    // ✅ Checkout and initiate payment
     @PostMapping("/checkout/pay")
     public ResponseEntity<PaymentDTO> checkoutAndPay(@RequestBody PaymentRequestDTO paymentRequest) {
         Long userId = SecurityUtils.getCurrentUserId();
-        if (userId == null) {
-            return ResponseEntity.status(401).build();
-        }
+        if (userId == null) return ResponseEntity.status(401).build();
 
         OrderDTO order = orderService.checkout(userId);
         paymentRequest.setOrderId(order.getId());
 
-        UserDTO user = userService.getUserById(userId);
         PaymentDTO payment = paymentService.initiatePayment(paymentRequest);
         return ResponseEntity.ok(payment);
     }
 
-    // ✅ Get all orders for current user
     @GetMapping
     public ResponseEntity<List<OrderDTO>> getUserOrders() {
         Long userId = SecurityUtils.getCurrentUserId();
-        if (userId == null) {
-            return ResponseEntity.status(401).build();
-        }
+        if (userId == null) return ResponseEntity.status(401).build();
+
         List<OrderDTO> orders = orderService.getOrdersByUser(userId);
         return ResponseEntity.ok(orders);
     }
 
-    // ✅ Get specific order
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long orderId) {
         return ResponseEntity.ok(orderService.getOrderById(orderId));
     }
 
-    // ✅ Update order status
     @PatchMapping("/{orderId}/status")
     public ResponseEntity<OrderDTO> updateOrderStatus(
             @PathVariable Long orderId,
@@ -83,7 +74,6 @@ public class OrderController {
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, status));
     }
 
-    // ✅ Delete order
     @DeleteMapping("/{orderId}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId) {
         orderService.deleteOrder(orderId);

@@ -16,18 +16,23 @@ INSERT INTO country (iso2, name) VALUES
     ('KE', 'Kenya')
 ON CONFLICT (iso2) DO NOTHING;
 
-INSERT INTO county (name, country_id) VALUES
-                                          ('Nairobi', 1),
-                                          ('Mombasa', 1),
-                                          ('Kiambu', 1)
+INSERT INTO county (name, country_id)
+SELECT 'Nairobi', c.id FROM country c WHERE c.iso2 = 'KE'
+UNION ALL
+SELECT 'Mombasa', c.id FROM country c WHERE c.iso2 = 'KE'
+UNION ALL
+SELECT 'Kiambu', c.id FROM country c WHERE c.iso2 = 'KE'
 ON CONFLICT (name) DO NOTHING;
 
-INSERT INTO township (name, county_id) VALUES
-                                           ('Nairobi CBD', 1),
-                                           ('Westlands', 1),
-                                           ('Parklands', 1),
-                                           ('Nyali', 2)
-ON CONFLICT (name, county_id) DO NOTHING;
+INSERT INTO township (name, county_id)
+SELECT 'Nairobi CBD', ct.id FROM county ct WHERE ct.name = 'Nairobi'
+UNION ALL
+SELECT 'Westlands', ct.id FROM county ct WHERE ct.name = 'Nairobi'
+UNION ALL
+SELECT 'Parklands', ct.id FROM county ct WHERE ct.name = 'Nairobi'
+UNION ALL
+SELECT 'Nyali', ct.id FROM county ct WHERE ct.name = 'Mombasa'
+ON CONFLICT DO NOTHING;
 
 -- ============================
 -- 3. ROLES
@@ -98,7 +103,6 @@ INSERT INTO customer_profile (id, customer_id, full_name, street, township_id, c
                                                                                                                      (7, 7, 'Test User Two', 'Test Avenue 456', 1, 'Nairobi', 1, 0)
 ON CONFLICT (customer_id) DO NOTHING;
 
-
 INSERT INTO loyalty_tier (code, name, min_points, multiplier, benefits) VALUES
                                                                             ('BRONZE', 'Bronze', 0, 1.000, 'Basic membership'),
                                                                             ('SILVER', 'Silver', 500, 1.100, '+10% loyalty bonus'),
@@ -157,7 +161,31 @@ INSERT INTO driver_location (driver_id, latitude, longitude, location) VALUES
 ON CONFLICT DO NOTHING;
 
 -- ============================
--- 11. UPDATE SEQUENCES
+-- 11. EARNINGS LEDGER (Driver Transactions)
+-- ============================
+INSERT INTO earnings_ledger (driver_id, order_id, service_type_id, transaction_type, amount) VALUES
+                                                                                                 (4, 1, 1, 'DELIVERY', 300.00),
+                                                                                                 (4, 1, 1, 'BONUS', 100.00),
+                                                                                                 (4, 1, 2, 'COMMISSION', 150.00)
+ON CONFLICT DO NOTHING;
+
+-- ============================
+-- 12. TEST DELIVERY REQUESTS FOR DRIVER1
+-- ============================
+-- Ensure driver1 has at least one delivery request for testing
+INSERT INTO delivery_request (order_id, driver_id, status, created_at)
+SELECT o.id, u.id, 'PENDING', NOW()
+FROM orders o
+         JOIN app_user u ON u.email = 'driver1@smartlaundry.ke'
+WHERE NOT EXISTS (
+    SELECT 1 FROM delivery_request dr
+                      JOIN app_user du ON dr.driver_id = du.id
+    WHERE du.email = 'driver1@smartlaundry.ke'
+)
+LIMIT 1;
+
+-- ============================
+-- 13. UPDATE SEQUENCES
 -- ============================
 SELECT setval('app_user_id_seq', COALESCE((SELECT MAX(id) FROM app_user), 1));
 SELECT setval('branch_id_seq', COALESCE((SELECT MAX(id) FROM branch), 1));

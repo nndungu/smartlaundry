@@ -1,22 +1,22 @@
-2025-11-06T07:08:32.683+03:00  INFO 4432 --- [SmartLaundry] [main] k.c.s.SmartlaundryApiApplication         : Starting SmartlaundryApiApplication using Java 21.0.9 with PID 4432 (C:\Users\PC\IdeaProjects\smartlaundry\smartlaundry-api\build\classes\java\main started by PC in C:\Users\PC\IdeaProjects\smartlaundry)
-2025-11-06T07:08:32.686+03:00 DEBUG 4432 --- [SmartLaundry] [main] k.c.s.SmartlaundryApiApplication         : Running with Spring Boot v3.5.5, Spring v6.2.10
-2025-11-06T07:08:32.688+03:00  INFO 4432 --- [SmartLaundry] [main] k.c.s.SmartlaundryApiApplication         : The following 1 profile is active: "dev"
-2025-11-06T07:08:38.194+03:00  INFO 4432 --- [SmartLaundry] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-11-06T07:08:38.585+03:00  INFO 4432 --- [SmartLaundry] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 375 ms. Found 19 JPA repository interfaces.
-2025-11-06T07:08:39.851+03:00  INFO 4432 --- [SmartLaundry] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
-2025-11-06T07:08:39.875+03:00  INFO 4432 --- [SmartLaundry] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2025-11-06T07:08:39.876+03:00  INFO 4432 --- [SmartLaundry] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.44]
-2025-11-06T07:08:40.000+03:00  INFO 4432 --- [SmartLaundry] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2025-11-06T07:08:40.001+03:00  INFO 4432 --- [SmartLaundry] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 7173 ms
-2025-11-06T07:08:40.305+03:00  INFO 4432 --- [SmartLaundry] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-11-06T07:08:40.481+03:00  INFO 4432 --- [SmartLaundry] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.26.Final
-2025-11-06T07:08:40.501+03:00  INFO 4432 --- [SmartLaundry] [main] o.h.spatial.integration.SpatialService   : HHH80000001: hibernate-spatial integration enabled : true
-2025-11-06T07:08:40.570+03:00  INFO 4432 --- [SmartLaundry] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2025-11-06T07:08:40.818+03:00  INFO 4432 --- [SmartLaundry] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-11-06T07:08:41.183+03:00  INFO 4432 --- [SmartLaundry] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@720c8f80
-2025-11-06T07:08:41.188+03:00  INFO 4432 --- [SmartLaundry] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-11-06T07:08:41.264+03:00  WARN 4432 --- [SmartLaundry] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-11-06T07:08:41.298+03:00  INFO 4432 --- [SmartLaundry] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+2025-11-10T04:15:34.223+03:00  INFO 5644 --- [SmartLaundry] [main] k.c.s.SmartlaundryApiApplication         : Starting SmartlaundryApiApplication using Java 21.0.9 with PID 5644 (C:\Users\PC\IdeaProjects\smartlaundry\smartlaundry-api\build\classes\java\main started by PC in C:\Users\PC\IdeaProjects\smartlaundry)
+2025-11-10T04:15:34.236+03:00 DEBUG 5644 --- [SmartLaundry] [main] k.c.s.SmartlaundryApiApplication         : Running with Spring Boot v3.5.5, Spring v6.2.10
+2025-11-10T04:15:34.237+03:00  INFO 5644 --- [SmartLaundry] [main] k.c.s.SmartlaundryApiApplication         : The following 1 profile is active: "dev"
+2025-11-10T04:15:39.497+03:00  INFO 5644 --- [SmartLaundry] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-10T04:15:40.477+03:00  INFO 5644 --- [SmartLaundry] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 958 ms. Found 20 JPA repository interfaces.
+2025-11-10T04:15:42.277+03:00  INFO 5644 --- [SmartLaundry] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-11-10T04:15:42.312+03:00  INFO 5644 --- [SmartLaundry] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-10T04:15:42.312+03:00  INFO 5644 --- [SmartLaundry] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.44]
+2025-11-10T04:15:42.674+03:00  INFO 5644 --- [SmartLaundry] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-11-10T04:15:42.676+03:00  INFO 5644 --- [SmartLaundry] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 8261 ms
+2025-11-10T04:15:43.328+03:00  INFO 5644 --- [SmartLaundry] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-10T04:15:43.593+03:00  INFO 5644 --- [SmartLaundry] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.26.Final
+2025-11-10T04:15:43.649+03:00  INFO 5644 --- [SmartLaundry] [main] o.h.spatial.integration.SpatialService   : HHH80000001: hibernate-spatial integration enabled : true
+2025-11-10T04:15:43.745+03:00  INFO 5644 --- [SmartLaundry] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-10T04:15:44.016+03:00  INFO 5644 --- [SmartLaundry] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-10T04:15:44.483+03:00  INFO 5644 --- [SmartLaundry] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@430aae8e
+2025-11-10T04:15:44.486+03:00  INFO 5644 --- [SmartLaundry] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-10T04:15:44.750+03:00  WARN 5644 --- [SmartLaundry] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-11-10T04:15:44.788+03:00  INFO 5644 --- [SmartLaundry] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
 	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
 	Database driver: undefined/unknown
 	Database version: 18.0
@@ -24,27 +24,85 @@
 	Isolation level: undefined/unknown
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2025-11-06T07:08:41.320+03:00  INFO 4432 --- [SmartLaundry] [main] org.hibernate.spatial                    : HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
-2025-11-06T07:08:41.873+03:00  INFO 4432 --- [SmartLaundry] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-11-06T07:08:41.956+03:00  INFO 4432 --- [SmartLaundry] [main] org.hibernate.spatial                    : HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
-2025-11-06T07:08:42.872+03:00  INFO 4432 --- [SmartLaundry] [main] org.hibernate.spatial                    : HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
-2025-11-06T07:08:44.633+03:00  INFO 4432 --- [SmartLaundry] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-11-06T07:08:44.638+03:00  INFO 4432 --- [SmartLaundry] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-11-06T07:08:45.336+03:00 DEBUG 4432 --- [SmartLaundry] [main] k.c.s.security.JwtAuthenticationFilter   : Filter 'jwtAuthenticationFilter' configured for use
-2025-11-06T07:08:45.577+03:00  INFO 4432 --- [SmartLaundry] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2025-11-06T07:08:47.182+03:00  INFO 4432 --- [SmartLaundry] [main] k.c.s.service.AfricasTalkingSmsService   : Africa's Talking SMS service initialized (username=${AFRICASTALKING_USERNAME})
-2025-11-06T07:08:48.520+03:00  WARN 4432 --- [SmartLaundry] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-11-06T07:08:48.765+03:00  INFO 4432 --- [SmartLaundry] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2025-11-06T07:08:50.134+03:00  INFO 4432 --- [SmartLaundry] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
-2025-11-06T07:08:50.135+03:00  INFO 4432 --- [SmartLaundry] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@9b9a322]]
-2025-11-06T07:08:50.136+03:00  INFO 4432 --- [SmartLaundry] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
-2025-11-06T07:08:50.248+03:00  INFO 4432 --- [SmartLaundry] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
-2025-11-06T07:08:50.261+03:00  INFO 4432 --- [SmartLaundry] [main] k.c.s.SmartlaundryApiApplication         : Started SmartlaundryApiApplication in 18.839 seconds (process running for 20.914)
-2025-11-06T07:08:58.379+03:00  INFO 4432 --- [SmartLaundry] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
-2025-11-06T07:08:58.389+03:00  INFO 4432 --- [SmartLaundry] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
-2025-11-06T07:08:58.393+03:00  INFO 4432 --- [SmartLaundry] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
-2025-11-06T07:08:58.394+03:00  INFO 4432 --- [SmartLaundry] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@9b9a322]]
-2025-11-06T07:08:58.394+03:00  INFO 4432 --- [SmartLaundry] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
-2025-11-06T07:08:58.687+03:00  INFO 4432 --- [SmartLaundry] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2025-11-06T07:08:58.690+03:00  INFO 4432 --- [SmartLaundry] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2025-11-06T07:08:58.702+03:00  INFO 4432 --- [SmartLaundry] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-11-10T04:15:44.856+03:00  INFO 5644 --- [SmartLaundry] [main] org.hibernate.spatial                    : HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-11-10T04:15:45.518+03:00  INFO 5644 --- [SmartLaundry] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-10T04:15:45.580+03:00  INFO 5644 --- [SmartLaundry] [main] org.hibernate.spatial                    : HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-11-10T04:15:46.569+03:00  INFO 5644 --- [SmartLaundry] [main] org.hibernate.spatial                    : HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-11-10T04:15:48.502+03:00  INFO 5644 --- [SmartLaundry] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-10T04:15:48.507+03:00  INFO 5644 --- [SmartLaundry] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-10T04:15:56.072+03:00 DEBUG 5644 --- [SmartLaundry] [main] k.c.s.security.JwtAuthenticationFilter   : Filter 'jwtAuthenticationFilter' configured for use
+2025-11-10T04:15:56.965+03:00  INFO 5644 --- [SmartLaundry] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-11-10T04:16:02.201+03:00  INFO 5644 --- [SmartLaundry] [main] k.c.s.service.AfricasTalkingSmsService   : Africa's Talking SMS service initialized (username=${AFRICASTALKING_USERNAME})
+2025-11-10T04:16:03.974+03:00  WARN 5644 --- [SmartLaundry] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-10T04:16:04.276+03:00  INFO 5644 --- [SmartLaundry] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-11-10T04:16:05.875+03:00  INFO 5644 --- [SmartLaundry] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-11-10T04:16:05.876+03:00  INFO 5644 --- [SmartLaundry] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5ae93815]]
+2025-11-10T04:16:05.878+03:00  INFO 5644 --- [SmartLaundry] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-11-10T04:16:06.123+03:00  INFO 5644 --- [SmartLaundry] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-11-10T04:16:06.145+03:00  INFO 5644 --- [SmartLaundry] [main] k.c.s.SmartlaundryApiApplication         : Started SmartlaundryApiApplication in 33.623 seconds (process running for 43.611)
+2025-11-10T04:17:05.865+03:00  INFO 5644 --- [SmartLaundry] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-11-10T04:17:28.549+03:00  INFO 5644 --- [SmartLaundry] [http-nio-0.0.0.0-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-10T04:17:28.550+03:00  INFO 5644 --- [SmartLaundry] [http-nio-0.0.0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-11-10T04:17:28.553+03:00  INFO 5644 --- [SmartLaundry] [http-nio-0.0.0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-11-10T04:19:23.883+03:00  INFO 5644 --- [SmartLaundry] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-11-10T04:19:23.890+03:00  INFO 5644 --- [SmartLaundry] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-11-10T04:19:23.919+03:00  INFO 5644 --- [SmartLaundry] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-11-10T04:19:23.920+03:00  INFO 5644 --- [SmartLaundry] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5ae93815]]
+2025-11-10T04:19:23.920+03:00  INFO 5644 --- [SmartLaundry] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-11-10T04:19:25.088+03:00  INFO 5644 --- [SmartLaundry] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-11-10T04:19:25.092+03:00  INFO 5644 --- [SmartLaundry] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-11-10T04:19:25.101+03:00  INFO 5644 --- [SmartLaundry] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-11-10T04:43:54.974+03:00  INFO 13712 --- [SmartLaundry] [main] k.c.s.SmartlaundryApiApplication         : Starting SmartlaundryApiApplication using Java 21.0.9 with PID 13712 (C:\Users\PC\IdeaProjects\smartlaundry\smartlaundry-api\build\classes\java\main started by PC in C:\Users\PC\IdeaProjects\smartlaundry)
+2025-11-10T04:43:54.976+03:00 DEBUG 13712 --- [SmartLaundry] [main] k.c.s.SmartlaundryApiApplication         : Running with Spring Boot v3.5.5, Spring v6.2.10
+2025-11-10T04:43:54.977+03:00  INFO 13712 --- [SmartLaundry] [main] k.c.s.SmartlaundryApiApplication         : The following 1 profile is active: "dev"
+2025-11-10T04:43:58.350+03:00  INFO 13712 --- [SmartLaundry] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-10T04:43:58.770+03:00  INFO 13712 --- [SmartLaundry] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 389 ms. Found 20 JPA repository interfaces.
+2025-11-10T04:44:00.326+03:00  INFO 13712 --- [SmartLaundry] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-11-10T04:44:00.377+03:00  INFO 13712 --- [SmartLaundry] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-10T04:44:00.377+03:00  INFO 13712 --- [SmartLaundry] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.44]
+2025-11-10T04:44:00.591+03:00  INFO 13712 --- [SmartLaundry] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-11-10T04:44:00.593+03:00  INFO 13712 --- [SmartLaundry] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5549 ms
+2025-11-10T04:44:00.908+03:00  INFO 13712 --- [SmartLaundry] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-10T04:44:01.161+03:00  INFO 13712 --- [SmartLaundry] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.26.Final
+2025-11-10T04:44:01.190+03:00  INFO 13712 --- [SmartLaundry] [main] o.h.spatial.integration.SpatialService   : HHH80000001: hibernate-spatial integration enabled : true
+2025-11-10T04:44:01.285+03:00  INFO 13712 --- [SmartLaundry] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-10T04:44:01.520+03:00  INFO 13712 --- [SmartLaundry] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-10T04:44:01.834+03:00  INFO 13712 --- [SmartLaundry] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3f1d6a13
+2025-11-10T04:44:01.836+03:00  INFO 13712 --- [SmartLaundry] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-10T04:44:01.937+03:00  WARN 13712 --- [SmartLaundry] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-11-10T04:44:01.972+03:00  INFO 13712 --- [SmartLaundry] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 18.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-11-10T04:44:01.992+03:00  INFO 13712 --- [SmartLaundry] [main] org.hibernate.spatial                    : HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-11-10T04:44:02.492+03:00  INFO 13712 --- [SmartLaundry] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-10T04:44:02.554+03:00  INFO 13712 --- [SmartLaundry] [main] org.hibernate.spatial                    : HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-11-10T04:44:03.612+03:00  INFO 13712 --- [SmartLaundry] [main] org.hibernate.spatial                    : HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2025-11-10T04:44:05.614+03:00  INFO 13712 --- [SmartLaundry] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-10T04:44:05.620+03:00  INFO 13712 --- [SmartLaundry] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-10T04:44:06.342+03:00 DEBUG 13712 --- [SmartLaundry] [main] k.c.s.security.JwtAuthenticationFilter   : Filter 'jwtAuthenticationFilter' configured for use
+2025-11-10T04:44:06.631+03:00  INFO 13712 --- [SmartLaundry] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-11-10T04:44:08.529+03:00  INFO 13712 --- [SmartLaundry] [main] k.c.s.service.AfricasTalkingSmsService   : Africa's Talking SMS service initialized (username=${AFRICASTALKING_USERNAME})
+2025-11-10T04:44:09.936+03:00  WARN 13712 --- [SmartLaundry] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-10T04:44:10.154+03:00  INFO 13712 --- [SmartLaundry] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-11-10T04:44:11.429+03:00  INFO 13712 --- [SmartLaundry] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-11-10T04:44:11.430+03:00  INFO 13712 --- [SmartLaundry] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5599d304]]
+2025-11-10T04:44:11.432+03:00  INFO 13712 --- [SmartLaundry] [main] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-11-10T04:44:11.552+03:00  INFO 13712 --- [SmartLaundry] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-11-10T04:44:11.566+03:00  INFO 13712 --- [SmartLaundry] [main] k.c.s.SmartlaundryApiApplication         : Started SmartlaundryApiApplication in 17.451 seconds (process running for 20.186)
+2025-11-10T04:44:18.550+03:00  INFO 13712 --- [SmartLaundry] [http-nio-0.0.0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-10T04:44:18.550+03:00  INFO 13712 --- [SmartLaundry] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-11-10T04:44:18.553+03:00  INFO 13712 --- [SmartLaundry] [http-nio-0.0.0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-11-10T04:45:11.431+03:00  INFO 13712 --- [SmartLaundry] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-11-10T05:12:24.279+03:00  INFO 13712 --- [SmartLaundry] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-11-10T05:12:24.288+03:00  INFO 13712 --- [SmartLaundry] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-11-10T05:12:24.294+03:00  INFO 13712 --- [SmartLaundry] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-11-10T05:12:24.295+03:00  INFO 13712 --- [SmartLaundry] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@5599d304]]
+2025-11-10T05:12:24.295+03:00  INFO 13712 --- [SmartLaundry] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-11-10T05:12:24.349+03:00  INFO 13712 --- [SmartLaundry] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-11-10T05:12:24.351+03:00  INFO 13712 --- [SmartLaundry] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-11-10T05:12:24.361+03:00  INFO 13712 --- [SmartLaundry] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

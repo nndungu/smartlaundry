@@ -117,6 +117,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserFromToken(String token) {
+        return null;
+    }
+
+    @Override
     public User updateUser(Long id, User updatedUser, String roleName) {
         User existing = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));

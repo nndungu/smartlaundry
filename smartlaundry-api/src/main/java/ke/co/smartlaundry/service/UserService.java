@@ -33,4 +33,6 @@ public interface UserService {
     boolean resetPassword(String token, String newPassword);
 
     User findUserByEmail(String mail);
+
+    User getUserFromToken(String token);
 }

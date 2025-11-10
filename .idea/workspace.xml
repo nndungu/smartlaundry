@@ -7,38 +7,9 @@
     <list default="true" id="a0311d6c-3642-4aea-86c7-8970c3eb78af" name="Changes" comment="">
       <change afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/V2__seed_data.sql" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/db/migration/V3__prod_reference.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env.local" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/10ffe622-111d-42b7-91b1-14c4f2fd1ae6.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/10ffe622-111d-42b7-91b1-14c4f2fd1ae6.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-dev.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-dev.log.2025-10-30.0.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-10-26.0.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-10-26.1.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-10-26.2.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-10-26.3.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-10-26.4.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-10-26.5.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-10-26.6.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-10-26.7.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-10-26.8.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-10-27.0.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-10-27.1.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-10-30.0.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-10-30.1.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-10-31.0.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-11-01.0.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry-test.log.2025-11-01.1.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/smartlaundry.log.2025-10-30.0.gz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/smartlaundry.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/smartlaundry.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/.env.local" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/.env.local" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/build.gradle" afterDir="false" />
@@ -60,12 +31,25 @@
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/configuration/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/security/JwtAuthenticationFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/configuration/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/security/JwtUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/configuration/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/controller/AdminController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/controller/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/controller/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/controller/CartController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/controller/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/controller/CustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/controller/DriverController.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/controller/DriverController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/controller/OrderController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/controller/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/dto/CartItemDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/dto/CartItemDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/dto/DriverEarningsDetailDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/dto/DriverEarningsDetailDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/dto/DriverLocationDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/dto/DriverLocationDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/dto/OrderDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/dto/OrderDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/dto/OrderItemDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/dto/OrderItemDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/dto/OrderRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/dto/OrderRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/dto/UserDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/dto/UserDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/CartItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/CartItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/EarningsLedger.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/EarningsLedger.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/OrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/OrderItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/Role.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/model/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/repository/DeliveryRequestRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/repository/DeliveryRequestRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/repository/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/repository/OrderRepository.java" afterDir="false" />
@@ -75,6 +59,8 @@
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/AfricasTalkingSmsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/AfricasTalkingSmsService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/CartService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/CustomUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/CustomUserDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/CustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/CustomerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/DriverService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/DriverService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/EmailService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/OrderService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/PasswordResetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/PasswordResetService.java" afterDir="false" />
@@ -82,7 +68,10 @@
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/SMSService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/SMSService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/impl/AdminServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/impl/AdminServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/impl/CustomerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/impl/CustomerServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/impl/DriverServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/impl/DriverServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/impl/MpesaServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/impl/MpesaServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/java/ke/co/smartlaundry/service/impl/UserServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/application-dev.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/application-prod.properties" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/application-prod.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/main/resources/application.properties" afterDir="false" />
@@ -98,175 +87,10 @@
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/PaymentControllerIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/PaymentControllerIntegrationTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/UserControllerIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/controller/UserControllerIntegrationTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/service/CustomUserDetailsServiceUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/service/CustomUserDetailsServiceUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/service/PaymentServiceUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/service/PaymentServiceUnitTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/service/UserServiceUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartlaundry-api/src/test/java/ke/co/smartlaundry/service/UserServiceUnitTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/resources/application-test.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/smartlaundry-api/src/test/resources/db/migration/test-data/V2__test_seed.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/SmartlaundryApiApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/configuration/CorsConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/configuration/GoogleConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/configuration/JwtAuthenticationFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/configuration/JwtUtil.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/configuration/SecurityConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/configuration/SwaggerConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/configuration/WebSocketConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/AdminController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/AuthController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/CartController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/CustomerController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/DeliveryController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/DriverController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/DriverEarningsController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/DriverTrackingController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/FeedbackController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/OrderController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/PasswordResetController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/PaymentController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/PaymentMethodController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/PaymentProviderController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/TestSwagger.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/controller/UserController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/AddOrderItemRequestDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/AdminDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/AdminDashboardDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/CartItemDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/CategoryDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/CreateOrderRequestDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/CustomerDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/DriverDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/DriverEarningsDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/DriverEarningsDetailDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/DriverLocationDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/EarningsDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/FeedbackDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/GoogleLoginDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/LoginRequestDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/LoginResponseDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/LoyaltyEntryDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/LoyaltyLedgerDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/LoyaltyStatusDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/LoyaltySummaryDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/LoyaltyTierDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/OrderDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/OrderItemDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/OrderRequestDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/OrderStatusUpdateDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/PasswordResetDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/PasswordResetRequestDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/PaymentDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/PaymentRequestDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/PriceListDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/RegisterRequestDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/RegisterResponseDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/ResetPasswordDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/RoleDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/ServiceAnalyticsDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/ServiceTypeDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/UpdateLocationRequestDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/UpdateOrderStatusRequestDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/dto/UserDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/enums/DeliveryStatus.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/enums/OrderStatus.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/enums/PaymentStatus.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/exceptions/ApiErrorHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/exceptions/Error.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/exceptions/ErrorCode.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/exceptions/ErrorUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/Branch.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/BranchStaff.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/Cart.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/CartItem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/Category.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/CustomerProfile.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/Delivery.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/DeliveryRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/DeliveryStatus.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/DriverLocation.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/DriverLocationLog.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/EarningsLedger.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/Feedback.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/LoyaltyLedger.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/LoyaltyTier.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/Order.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/OrderItem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/PasswordResetToken.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/Payment.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/PaymentMethod.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/PaymentProvider.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/PriceList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/Role.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/ServiceType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/model/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/CartItemRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/CartRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/CategoryRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/DeliveryRequestRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/DriverLocationLogRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/DriverLocationRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/EarningsLedgerRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/FeedbackRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/LoyaltyLedgerRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/LoyaltyTierRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/OrderRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/PasswordResetTokenRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/PaymentMethodRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/PaymentProviderRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/PaymentRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/PriceListRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/RoleRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/ServiceTypeRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/repository/UserRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/security/CustomUserDetails.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/security/SecurityUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/AdminService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/AfricasTalkingSmsService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/CartService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/CustomUserDetailsService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/CustomerService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/DeliveryRequestService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/DriverEarningsService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/DriverService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/DriverTrackingService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/EmailService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/MpesaService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/OrderService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/OtpService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/PasswordResetService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/PaymentService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/SMSService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/TrackingService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/UserService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/impl/AdminServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/impl/CustomerServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/impl/DriverEarningsServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/impl/DriverServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/impl/DriverTrackingServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/impl/FeedbackService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/impl/FeedbackServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/impl/MpesaServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/impl/PaymentServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ke/co/smartlaundry/service/impl/UserServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-prod.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V1__schema.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/dev-seed/V2__dev_seed.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db/migration/prod-seed/V3__prod_seed.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ke/co/smartlaundry/SmartlaundryApiApplicationTests.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ke/co/smartlaundry/configuration/JwtUtilIntegrationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ke/co/smartlaundry/configuration/JwtUtilTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ke/co/smartlaundry/configuration/MockGoogleConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ke/co/smartlaundry/configuration/MockMpesaConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ke/co/smartlaundry/controller/AuthControllerIntegrationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ke/co/smartlaundry/controller/CartControllerIntegrationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ke/co/smartlaundry/controller/DeliveryControllerIntegrationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ke/co/smartlaundry/controller/OrderControllerIntegrationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ke/co/smartlaundry/controller/PaymentControllerIntegrationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ke/co/smartlaundry/controller/UserControllerIntegrationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ke/co/smartlaundry/service/CustomUserDetailsServiceUnitTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ke/co/smartlaundry/service/PaymentServiceUnitTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ke/co/smartlaundry/service/UserServiceUnitTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/application-test.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/db/migration/test-data/V2__test_seed.sql" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -354,7 +178,10 @@
     &quot;Gradle.Build smartlaundry-api.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.CartControllerIntegrationTest.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.CartControllerIntegrationTest.getCartItems_returnsCartItems.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.CustomerControllerIntegrationTest.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.DeliveryControllerIntegrationTest.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.DriverControllerIntegrationTest.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.JwtUtilIntegrationTest.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.JwtUtilIntegrationTest.shouldGenerateAndValidateToken.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.OrderControllerIntegrationTest.checkout_shouldReturnOrder.executor&quot;: &quot;Run&quot;,
@@ -366,6 +193,8 @@
     &quot;Gradle.UserControllerIntegrationTest.customerCanViewCartAndOrders.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.UserControllerIntegrationTest.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.smartlaundry-api [dependencies].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.smartlaundry-api [test].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.smartlaundry-api.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.AuthControllerUnitTest.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.AuthControllerUnitTest.googleLogin_shouldReturnTokenForValidToken.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
@@ -394,7 +223,7 @@
     &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.database.main&quot;,
     &quot;sql.rename.search.for.storage.occurrences&quot;: &quot;true&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -425,7 +254,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.SmartlaundryApiApplication">
-    <configuration name="PaymentControllerIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="AuthControllerIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
@@ -438,7 +267,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;ke.co.smartlaundry.controller.PaymentControllerIntegrationTest&quot;" />
+            <option value="&quot;ke.co.smartlaundry.controller.AuthControllerIntegrationTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -449,7 +278,7 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="SmartlaundryApiApplicationTests" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="CustomerControllerIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
@@ -462,7 +291,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;ke.co.smartlaundry.SmartlaundryApiApplicationTests&quot;" />
+            <option value="&quot;ke.co.smartlaundry.controller.CustomerControllerIntegrationTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -473,7 +302,7 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="UserControllerIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="DriverControllerIntegrationTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
@@ -486,31 +315,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;ke.co.smartlaundry.controller.UserControllerIntegrationTest&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="UserControllerIntegrationTest.customerCanViewCartAndOrders" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;ke.co.smartlaundry.controller.UserControllerIntegrationTest.customerCanViewCartAndOrders&quot;" />
+            <option value="&quot;ke.co.smartlaundry.controller.DriverControllerIntegrationTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -543,6 +348,28 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="smartlaundry-api [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="SmartlaundryApiApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="smartlaundry.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ke.co.smartlaundry.SmartlaundryApiApplication" />
@@ -559,11 +386,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.UserControllerIntegrationTest" />
-        <item itemvalue="Gradle.SmartlaundryApiApplicationTests" />
+        <item itemvalue="Gradle.AuthControllerIntegrationTest" />
+        <item itemvalue="Gradle.DriverControllerIntegrationTest" />
+        <item itemvalue="Gradle.smartlaundry-api [test]" />
+        <item itemvalue="Gradle.CustomerControllerIntegrationTest" />
         <item itemvalue="Gradle.smartlaundry-api [dependencies]" />
-        <item itemvalue="Gradle.UserControllerIntegrationTest.customerCanViewCartAndOrders" />
-        <item itemvalue="Gradle.PaymentControllerIntegrationTest" />
       </list>
     </recent_temporary>
   </component>
@@ -738,7 +565,16 @@
       <workItem from="1762307287147" duration="4212000" />
       <workItem from="1762326889092" duration="20802000" />
       <workItem from="1762393739760" duration="7332000" />
-      <workItem from="1762401344043" duration="1059000" />
+      <workItem from="1762401344043" duration="2572000" />
+      <workItem from="1762404176082" duration="169000" />
+      <workItem from="1762460427078" duration="1620000" />
+      <workItem from="1762490208211" duration="25513000" />
+      <workItem from="1762584395745" duration="664000" />
+      <workItem from="1762626999976" duration="330000" />
+      <workItem from="1762652060531" duration="14789000" />
+      <workItem from="1762678857085" duration="72000" />
+      <workItem from="1762679011968" duration="9076000" />
+      <workItem from="1762701938273" duration="3656000" />
     </task>
     <servers />
   </component>

@@ -19,6 +19,11 @@ public class DriverLocationDTO {
         this.longitude = longitude;
     }
 
+    public DriverLocationDTO(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public Long getDriverId() { return driverId; }
     public void setDriverId(Long driverId) { this.driverId = driverId; }
 

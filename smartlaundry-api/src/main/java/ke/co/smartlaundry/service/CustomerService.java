@@ -35,4 +35,6 @@ public interface CustomerService {
     void cancelOrder(Long id);
 
     PaymentDTO makePayment(PaymentRequestDTO request, String method);
+
+    CustomerPerformanceDTO getPerformance(Long userId);
 }

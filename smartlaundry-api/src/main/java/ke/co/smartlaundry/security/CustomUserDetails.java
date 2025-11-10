@@ -13,14 +13,14 @@ public class CustomUserDetails implements UserDetails {
     private final Long id;
     private final String email;
     private final String password;
-    private final String roleName;
+    private final String role;
     private final boolean active;
 
     public CustomUserDetails(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
         this.password = user.getPasswordHash();
-        this.roleName = user.getRole() != null ? user.getRole().getName() : "USER";
+        this.role = user.getRole() != null ? user.getRole().getName() : "USER";
         this.active = user.getActive();
     }
 
@@ -30,7 +30,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + roleName.toUpperCase()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
     }
 
     @Override

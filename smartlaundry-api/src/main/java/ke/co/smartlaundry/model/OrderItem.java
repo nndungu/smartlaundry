@@ -10,12 +10,10 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Many items belong to one order
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    // For now, store item name and price. Later can link to Product/Service entity.
     @Column(nullable = false)
     private String itemName;
 
@@ -25,26 +23,45 @@ public class OrderItem {
     @Column(nullable = false)
     private double price;
 
-    // Optional: category (e.g., Clothing, Bedding)
+    @Column(nullable = false)
+    private double totalPrice;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public Order getOrder() { return order; }
-    public void setOrder(Order order) { this.order = order; }
+    public void setOrder(Order order) {
+        if (this.order != null) {
+            this.order.getItems().remove(this);
+            this.order.recalculateTotal();
+        }
+        this.order = order;
+        if (order != null && !order.getItems().contains(this)) {
+            order.getItems().add(this);
+            order.recalculateTotal();
+        }
+    }
 
     public String getItemName() { return itemName; }
     public void setItemName(String itemName) { this.itemName = itemName; }
 
     public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+        if (order != null) order.recalculateTotal();
+    }
 
     public double getPrice() { return price; }
-    public void setPrice(double price) { this.price = price; }
+    public void setPrice(double price) {
+        this.price = price;
+        if (order != null) order.recalculateTotal();
+    }
+
+    public double getTotalPrice() { return totalPrice; }
 
     public Category getCategory() { return category; }
     public void setCategory(Category category) { this.category = category; }
