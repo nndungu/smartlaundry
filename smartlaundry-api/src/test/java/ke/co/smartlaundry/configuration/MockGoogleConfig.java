@@ -1,3 +1,4 @@
+/*
 package ke.co.smartlaundry.configuration;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -31,3 +32,4 @@ public class MockGoogleConfig {
         return mockVerifier;
     }
 }
+*/

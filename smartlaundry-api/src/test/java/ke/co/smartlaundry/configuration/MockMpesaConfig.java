@@ -1,3 +1,4 @@
+/*
 package ke.co.smartlaundry.configuration;
 
 import ke.co.smartlaundry.service.MpesaService;
@@ -12,3 +13,4 @@ public class MockMpesaConfig {
         return Mockito.mock(MpesaService.class);
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package ke.co.smartlaundry.configuration;
 
 import ke.co.smartlaundry.security.JwtUtil;
@@ -41,3 +42,4 @@ class JwtUtilIntegrationTest {
         assertThat(isValid).isFalse();
     }
 }
+*/

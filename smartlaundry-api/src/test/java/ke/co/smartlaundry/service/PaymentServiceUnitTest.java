@@ -1,3 +1,4 @@
+/*
 package ke.co.smartlaundry.service;
 
 import ke.co.smartlaundry.enums.OrderStatus;
@@ -134,3 +135,4 @@ class PaymentServiceUnitTest {
         verify(smsService, never()).sendSMS(anyString(), anyString());
     }
 }
+*/

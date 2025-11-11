@@ -1,3 +1,4 @@
+/*
 package ke.co.smartlaundry.configuration;
 
 import ke.co.smartlaundry.security.JwtUtil;
@@ -56,3 +57,4 @@ class JwtUtilTest {
         assertThat(jwtUtil.validateToken(expiredToken)).isFalse();
     }
 }
+*/

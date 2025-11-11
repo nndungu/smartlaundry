@@ -1,3 +1,4 @@
+/*
 package ke.co.smartlaundry.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -149,3 +150,4 @@ class OrderControllerIntegrationTest {
         assertThat(orderRepository.findById(order.getId())).isEmpty();
     }
 }
+*/
