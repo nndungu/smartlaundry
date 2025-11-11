@@ -20,7 +20,7 @@ public class PaymentController {
     }
 
     /**
-     * ✅ Initiate a payment (e.g., MPESA STK Push)
+     * Initiate a payment (e.g., MPESA STK Push)
      */
     @PostMapping("/initiate")
     public ResponseEntity<PaymentDTO> initiatePayment(@RequestBody PaymentRequestDTO request) {
@@ -31,7 +31,7 @@ public class PaymentController {
     }
 
     /**
-     * ✅ Get all payments for a specific order
+     * Get all payments for a specific order
      */
     @GetMapping("/order/{orderId}")
     public ResponseEntity<List<PaymentDTO>> getPaymentsByOrder(@PathVariable Long orderId) {
@@ -39,7 +39,7 @@ public class PaymentController {
     }
 
     /**
-     * ✅ Get payment by transaction reference
+     * Get payment by transaction reference
      */
     @GetMapping("/transaction/{transactionRef}")
     public ResponseEntity<PaymentDTO> getPaymentByTransactionRef(@PathVariable String transactionRef) {
@@ -56,7 +56,7 @@ public class PaymentController {
     }
 
     /**
-     * ✅ Refund (future extension)
+     * Refund (future extension)
      */
     @PostMapping("/refund/{paymentId}")
     public ResponseEntity<String> refundPayment(@PathVariable Long paymentId) {
