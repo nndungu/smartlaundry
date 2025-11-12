@@ -9,7 +9,12 @@ public class PasswordResetRequestDTO {
     @NotBlank
     private String email;
 
-    // Getter & Setter
+    public PasswordResetRequestDTO() {}
+
+    public PasswordResetRequestDTO(String email) {
+        this.email = email;
+    }
+
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 }

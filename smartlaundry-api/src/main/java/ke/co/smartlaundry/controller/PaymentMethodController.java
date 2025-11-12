@@ -1,9 +1,7 @@
 package ke.co.smartlaundry.controller;
 
 import ke.co.smartlaundry.model.PaymentMethod;
-import ke.co.smartlaundry.model.PaymentProvider;
 import ke.co.smartlaundry.repository.PaymentMethodRepository;
-import ke.co.smartlaundry.repository.PaymentProviderRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,21 +13,22 @@ import java.util.NoSuchElementException;
 public class PaymentMethodController {
 
     private final PaymentMethodRepository methodRepository;
-    private final PaymentProviderRepository providerRepository;
 
-    public PaymentMethodController(PaymentMethodRepository methodRepository,
-                                   PaymentProviderRepository providerRepository) {
+    public PaymentMethodController(PaymentMethodRepository methodRepository) {
         this.methodRepository = methodRepository;
-        this.providerRepository = providerRepository;
     }
 
-    // ✅ Get all methods
+    // ----------------------------
+    // List all payment methods
+    // ----------------------------
     @GetMapping
     public ResponseEntity<List<PaymentMethod>> getAllMethods() {
         return ResponseEntity.ok(methodRepository.findAll());
     }
 
-    // ✅ Get method by ID
+    // ----------------------------
+    // Get one payment method
+    // ----------------------------
     @GetMapping("/{id}")
     public ResponseEntity<PaymentMethod> getMethodById(@PathVariable Long id) {
         PaymentMethod method = methodRepository.findById(id)
@@ -37,38 +36,45 @@ public class PaymentMethodController {
         return ResponseEntity.ok(method);
     }
 
-    // ✅ Create new method
+    // ----------------------------
+    // Create a new payment method
+    // ----------------------------
     @PostMapping
     public ResponseEntity<PaymentMethod> createMethod(@RequestBody PaymentMethod method) {
-        if (method.getProvider() == null || method.getProvider().getId() == null) {
-            throw new IllegalArgumentException("Provider must be specified");
+        if (method.getCode() == null || method.getCode().isBlank()) {
+            throw new IllegalArgumentException("Payment code is required (e.g. MPESA, CARD)");
         }
 
-        PaymentProvider provider = providerRepository.findById(method.getProvider().getId())
-                .orElseThrow(() -> new NoSuchElementException("Provider not found"));
+        if (methodRepository.findByCode(method.getCode()).isPresent()) {
+            throw new IllegalArgumentException("Payment method with code '" + method.getCode() + "' already exists");
+        }
 
-        method.setProvider(provider);
         return ResponseEntity.ok(methodRepository.save(method));
     }
 
-    // ✅ Update method
+    // ----------------------------
+    // Update an existing payment method
+    // ----------------------------
     @PutMapping("/{id}")
     public ResponseEntity<PaymentMethod> updateMethod(@PathVariable Long id, @RequestBody PaymentMethod updated) {
         PaymentMethod existing = methodRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Payment method not found"));
 
-        existing.setType(updated.getType());
+        if (updated.getDisplayName() != null)
+            existing.setDisplayName(updated.getDisplayName());
 
-        if (updated.getProvider() != null && updated.getProvider().getId() != null) {
-            PaymentProvider provider = providerRepository.findById(updated.getProvider().getId())
-                    .orElseThrow(() -> new NoSuchElementException("Provider not found"));
-            existing.setProvider(provider);
-        }
+        if (updated.getProvider() != null)
+            existing.setProvider(updated.getProvider());
+
+        if (updated.getIsActive() != null)
+            existing.setIsActive(updated.getIsActive());
 
         return ResponseEntity.ok(methodRepository.save(existing));
     }
 
-    // ✅ Delete method
+    // ----------------------------
+    // Delete payment method
+    // ----------------------------
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMethod(@PathVariable Long id) {
         if (!methodRepository.existsById(id)) {
@@ -78,3 +84,4 @@ public class PaymentMethodController {
         return ResponseEntity.noContent().build();
     }
 }
+

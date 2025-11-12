@@ -1,7 +1,18 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.postgresql:postgresql:42.7.3"
+        classpath "org.flywaydb:flyway-database-postgresql:10.16.0"
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.5'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.flywaydb.flyway' version '10.16.0'
 }
 
 group = 'ke.co'
@@ -16,26 +27,38 @@ java {
 
 repositories {
     mavenCentral()
+    google()
 }
 
 dependencies {
+    // --- Spring Boot Starters ---
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-    implementation 'me.paulschwarz:spring-dotenv:4.0.0'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-    // JWT
+    // --- Hibernate Spatial / PostGIS ---
+    implementation 'org.hibernate.orm:hibernate-spatial:6.6.1.Final'
+    runtimeOnly 'org.postgresql:postgresql:42.7.3'
+
+    // --- OpenAPI / Swagger ---
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+    // --- Google API ---
+    implementation 'com.google.api-client:google-api-client:2.2.0'
+    implementation 'com.google.oauth-client:google-oauth-client:1.34.1'
+    implementation 'com.google.http-client:google-http-client-jackson2:1.43.3'
+
+    // --- JWT ---
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 
-    // Optional: force all transitive dependencies to 0.12.6
-    configurations.all {
+    configurations.configureEach {
         resolutionStrategy.eachDependency { details ->
             if (details.requested.group == 'io.jsonwebtoken') {
                 details.useVersion '0.12.6'
@@ -43,25 +66,31 @@ dependencies {
         }
     }
 
+    // --- Lombok ---
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
-    // PostgreSQL
-    runtimeOnly 'org.postgresql:postgresql:42.7.3'
+    // --- Environment Variables ---
+    implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
-    // --- SMS ---
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-
-    // --- TEST DEPENDENCIES ---
+    // --- Test Dependencies ---
     testImplementation platform('org.junit:junit-bom:5.12.1')
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-
-    // Test: H2 in-memory database
-    testImplementation 'com.h2database:h2'
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.mockito:mockito-core:5.14.2'
+    testImplementation 'com.h2database:h2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+flyway {
+    url = 'jdbc:postgresql://localhost:5432/smartlaundry_db'
+    user = 'laundry_admin'
+    password = '@Aw35omes'
+    schemas = ['public']
+    locations = ['filesystem:src/main/resources/db/migration']
+    cleanDisabled = false
 }
 
 tasks.named('test') {

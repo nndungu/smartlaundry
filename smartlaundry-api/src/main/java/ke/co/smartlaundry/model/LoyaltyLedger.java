@@ -16,7 +16,7 @@ public class LoyaltyLedger {
     private User customer;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name = "order_id")
     private Order order;
 
     @Column(name = "points_earned", nullable = false)
@@ -28,55 +28,37 @@ public class LoyaltyLedger {
     @Column(name = "created_at", updatable = false, insertable = false)
     private LocalDateTime createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "tier_id")
+    private LoyaltyTier tier;
+
     // ============================
     // Getters and Setters
     // ============================
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public User getCustomer() { return customer; }
+    public void setCustomer(User customer) { this.customer = customer; }
 
-    public User getCustomer() {
-        return customer;
-    }
+    public Order getOrder() { return order; }
+    public void setOrder(Order order) { this.order = order; }
 
-    public void setCustomer(User customer) {
-        this.customer = customer;
-    }
+    public Integer getPointsEarned() { return pointsEarned; }
+    public void setPointsEarned(Integer pointsEarned) { this.pointsEarned = pointsEarned; }
 
-    public Order getOrder() {
-        return order;
-    }
+    public Integer getPointsRedeemed() { return pointsRedeemed; }
+    public void setPointsRedeemed(Integer pointsRedeemed) { this.pointsRedeemed = pointsRedeemed; }
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public Integer getPointsEarned() {
-        return pointsEarned;
-    }
+    public LoyaltyTier getTier() { return tier; }
+    public void setTier(LoyaltyTier tier) { this.tier = tier; }
 
-    public void setPointsEarned(Integer pointsEarned) {
-        this.pointsEarned = pointsEarned;
-    }
-
-    public Integer getPointsRedeemed() {
-        return pointsRedeemed;
-    }
-
-    public void setPointsRedeemed(Integer pointsRedeemed) {
-        this.pointsRedeemed = pointsRedeemed;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    // ✅ Computed total points
+    public Double getPoints() {
+        return (double) (pointsEarned - pointsRedeemed);
     }
 }

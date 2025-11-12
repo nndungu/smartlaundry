@@ -1,6 +1,10 @@
 HELP.md
 .gradle/
 .env
+.env.local
+.env.properties
+src/main/resources/application*
+src/main/resources/*.local
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -11,7 +15,6 @@ build/
 .classpath
 .factorypath
 .project
-.settings
 .springBeans
 .sts4-cache
 bin/
@@ -23,7 +26,9 @@ bin/
 *.iws
 *.iml
 *.ipr
+.idea/
 out/
+logs/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
@@ -36,3 +41,4 @@ out/
 
 ### VS Code ###
 .vscode/
+

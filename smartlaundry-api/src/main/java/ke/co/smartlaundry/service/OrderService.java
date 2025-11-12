@@ -1,16 +1,14 @@
 package ke.co.smartlaundry.service;
 
+import ke.co.smartlaundry.dto.CheckoutRequestDTO;
 import ke.co.smartlaundry.dto.OrderDTO;
-import ke.co.smartlaundry.dto.OrderItemDTO;
+import ke.co.smartlaundry.enums.OrderStatus;
 import ke.co.smartlaundry.model.*;
-import ke.co.smartlaundry.repository.CartRepository;
-import ke.co.smartlaundry.repository.OrderRepository;
-import ke.co.smartlaundry.repository.UserRepository;
+import ke.co.smartlaundry.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,36 +17,36 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
+    private final PaymentService paymentService;
     private final EmailService emailService;
     private final SMSService smsService;
 
     public OrderService(OrderRepository orderRepository,
                         CartRepository cartRepository,
                         UserRepository userRepository,
+                        PaymentService paymentService,
                         EmailService emailService,
                         SMSService smsService) {
         this.orderRepository = orderRepository;
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
+        this.paymentService = paymentService;
         this.emailService = emailService;
         this.smsService = smsService;
     }
 
-    /**
-     * Checkout: convert user's cart to an order
-     */
+    // ✅ Checkout from user's cart
     @Transactional
     public OrderDTO checkout(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
-
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new NoSuchElementException("Cart not found"));
 
         Order order = new Order();
         order.setUser(user);
+        order.setStatus(OrderStatus.PENDING);
 
-        // Copy cart items into order
         for (CartItem ci : cart.getItems()) {
             OrderItem oi = new OrderItem();
             oi.setOrder(order);
@@ -59,98 +57,87 @@ public class OrderService {
         }
 
         orderRepository.save(order);
-
-        // Clear cart after checkout
         cart.getItems().clear();
         cartRepository.save(cart);
 
-        // Send notifications
-        sendNotifications(user, order);
+        sendOrderNotifications(user, order);
 
         return toDTO(order);
     }
 
-    /**
-     * Get all orders of a user
-     */
-    @Transactional(readOnly = true)
+    // ✅ Checkout using a dynamic CheckoutRequestDTO
+    @Transactional
+    public OrderDTO createOrder(Long userId, CheckoutRequestDTO request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        Order order = new Order();
+        order.setUser(user);
+        order.setStatus(OrderStatus.PENDING);
+        order.setServiceType(request.getServiceType());
+
+        List<OrderItem> items = request.getItems().stream().map(itemReq -> {
+            OrderItem oi = new OrderItem();
+            oi.setOrder(order);
+            oi.setItemName(itemReq.getItemName());
+            oi.setQuantity(itemReq.getQuantity());
+            oi.setPrice(itemReq.getPrice());
+            // Optional: set category if provided
+            if (itemReq.getCategoryId() != null) {
+                Category category = new Category();
+                category.setId(itemReq.getCategoryId());
+                oi.setCategory(category);
+            }
+            return oi;
+        }).collect(Collectors.toList());
+
+        order.setItems(items);
+        orderRepository.save(order);
+
+        sendOrderNotifications(user, order);
+
+        return toDTO(order);
+    }
+
     public List<OrderDTO> getOrdersByUser(Long userId) {
-        return orderRepository.findByUserId(userId)
-                .stream()
+        return orderRepository.findByUserId(userId).stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get a single order by ID
-     */
-    @Transactional(readOnly = true)
     public OrderDTO getOrderById(Long orderId) {
-        Order order = orderRepository.findById(orderId)
+        return orderRepository.findById(orderId)
+                .map(this::toDTO)
                 .orElseThrow(() -> new NoSuchElementException("Order not found"));
-        return toDTO(order);
     }
 
-    /**
-     * Update order status
-     */
-    @Transactional
     public OrderDTO updateOrderStatus(Long orderId, OrderStatus status) {
-        Order order = orderRepository.findById(orderId)
+        Order o = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NoSuchElementException("Order not found"));
-        order.setStatus(status);
-        orderRepository.save(order);
-        return toDTO(order);
+        o.setStatus(status);
+        orderRepository.save(o);
+        return toDTO(o);
     }
 
-    /**
-     * Delete (cancel) an order
-     */
-    @Transactional
     public void deleteOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new NoSuchElementException("Order not found"));
-        orderRepository.delete(order);
+        orderRepository.deleteById(orderId);
     }
 
-    /**
-     * Convert Order entity to DTO
-     */
-    public OrderDTO toDTO(Order order) {
+    private void sendOrderNotifications(User user, Order order) {
+        String subject = "SmartLaundry Order Confirmation";
+        String body = String.format("Hi %s,\n\nYour order #%d has been placed.\nStatus: %s\n\nThanks!",
+                user.getUsername(), order.getId(), order.getStatus());
+        emailService.sendEmail(user.getEmail(), subject, body);
+        smsService.sendSMS(user.getPhoneNumber(), "Order #" + order.getId() + " placed.");
+    }
+
+    private OrderDTO toDTO(Order order) {
         OrderDTO dto = new OrderDTO();
         dto.setId(order.getId());
-        dto.setUserId(order.getUser().getId());
         dto.setStatus(order.getStatus());
-        dto.setCreatedAt(order.getCreatedAt());
-
-        List<OrderItemDTO> itemDTOs = order.getItems().stream().map(oi -> {
-            OrderItemDTO itemDTO = new OrderItemDTO();
-            itemDTO.setId(oi.getId());
-            itemDTO.setItemName(oi.getItemName());
-            itemDTO.setQuantity(oi.getQuantity());
-            itemDTO.setPrice(oi.getPrice());
-            return itemDTO;
-        }).collect(Collectors.toList());
-
-        dto.setItems(itemDTOs);
+        dto.setCreatedAt(order.getCreatedAt() != null ? order.getCreatedAt().toLocalDateTime() : null);
+        dto.setTotalPrice(order.getTotalPrice());
+        dto.setServiceType(order.getServiceType());
         return dto;
-    }
-
-    /**
-     * Send email and SMS notifications after checkout
-     */
-    private void sendNotifications(User user, Order order) {
-        String subject = "Order Confirmation";
-        String body = "Hi " + user.getUsername() + ",\n\n" +
-                "Your order #" + order.getId() + " has been successfully placed.\n" +
-                "Total items: " + order.getItems().size() + "\n" +
-                "Status: " + order.getStatus() + "\n\n" +
-                "Thank you for using SmartLaundry!";
-
-        emailService.sendEmail(user.getEmail(), subject, body);
-
-        String smsMessage = "Hi " + user.getUsername() + ", your order #" +
-                order.getId() + " is placed successfully!";
-        smsService.sendSMS(user.getPhone(), smsMessage);
     }
 }
