@@ -116,4 +116,31 @@ public class AdminController {
     public ResponseEntity<DriverPerformanceDTO> getDriverPerformance(@PathVariable Long id) {
         return ResponseEntity.ok(adminService.getDriverPerformance(id));
     }
+
+    // ----------------------------
+    // Notifications
+    // ----------------------------
+    @PostMapping("/notifications")
+    public ResponseEntity<String> sendNotification(@RequestBody NotificationRequestDTO dto) {
+        adminService.sendNotification(dto);
+        return ResponseEntity.ok("Notification sent successfully");
+    }
+
+    @GetMapping("/notifications")
+    public ResponseEntity<List<NotificationDTO>> getAllNotifications() {
+        return ResponseEntity.ok(adminService.getAllNotifications());
+    }
+
+    // ----------------------------
+    // Revenue Reports
+    // ----------------------------
+    @GetMapping("/revenue")
+    public ResponseEntity<RevenueReportDTO> getTotalRevenue() {
+        return ResponseEntity.ok(adminService.getTotalRevenue());
+    }
+
+    @GetMapping("/revenue/{period}")
+    public ResponseEntity<RevenueReportDTO> getRevenueByPeriod(@PathVariable String period) {
+        return ResponseEntity.ok(adminService.getRevenueByPeriod(period));
+    }
 }

@@ -100,6 +100,12 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.makePayment(request, method));
     }
 
+    @GetMapping("/me/spending")
+    public ResponseEntity<RevenueReportDTO> getSpendingSummary() {
+        Long customerId = SecurityUtils.getCurrentUserId();
+        return ResponseEntity.ok(customerService.getCustomerSpending(customerId));
+    }
+
     // ----------------------------
     // Loyalty
     // ----------------------------
@@ -131,4 +137,11 @@ public class CustomerController {
         Long userId = SecurityUtils.getCurrentUserId();
         return ResponseEntity.ok(customerService.getPerformance(userId));
     }
+
+    @GetMapping("/notifications")
+    public ResponseEntity<List<NotificationDTO>> getNotifications() {
+        Long customerId = SecurityUtils.getCurrentUserId();
+        return ResponseEntity.ok(customerService.getCustomerNotifications(customerId));
+    }
+
 }

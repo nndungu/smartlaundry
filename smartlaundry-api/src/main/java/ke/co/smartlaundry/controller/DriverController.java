@@ -69,4 +69,17 @@ public class DriverController {
         driverService.updateLocation(driverId, latitude, longitude);
         return ResponseEntity.ok("Location updated successfully");
     }
+
+    @GetMapping("/notifications")
+    public ResponseEntity<List<NotificationDTO>> getNotifications() {
+        Long driverId = SecurityUtils.getCurrentUserId();
+        return ResponseEntity.ok(driverService.getDriverNotifications(driverId));
+    }
+
+    @GetMapping("/me/revenue")
+    public ResponseEntity<RevenueReportDTO> getRevenueSummary() {
+        Long driverId = SecurityUtils.getCurrentUserId();
+        return ResponseEntity.ok(driverService.getDriverRevenue(driverId));
+    }
+
 }

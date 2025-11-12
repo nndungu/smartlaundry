@@ -32,9 +32,13 @@ public interface CustomerService {
 
     OrderDTO placeOrder(OrderRequestDTO request);
 
+    RevenueReportDTO getCustomerSpending(Long customerId);
+
     void cancelOrder(Long id);
 
     PaymentDTO makePayment(PaymentRequestDTO request, String method);
+
+    List<NotificationDTO> getCustomerNotifications(Long customerId);
 
     CustomerPerformanceDTO getPerformance(Long userId);
 }

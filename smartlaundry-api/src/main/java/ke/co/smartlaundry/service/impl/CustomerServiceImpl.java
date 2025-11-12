@@ -7,6 +7,8 @@ import ke.co.smartlaundry.service.CustomerService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.NoSuchElementException;
@@ -182,6 +184,43 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(() -> new NoSuchElementException("Driver not found"));
         return new DriverLocationDTO(d.getId(), d.getLatitude(), d.getLongitude());
     }
+
+    @Override
+    public List<NotificationDTO> getCustomerNotifications(Long customerId) {
+        User customer = userRepository.findById(customerId)
+                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
+        // Later replace with NotificationRepository results
+        return List.of(new NotificationDTO(1L, "Order Update",
+                "Your laundry order #1234 is ready for delivery.",
+                "EMAIL", customer.getUsername(), LocalDateTime.now()));
+    }
+
+    @Override
+    public RevenueReportDTO getCustomerSpending(Long customerId) {
+        List<Order> orders = orderRepository.findByUserId(customerId);
+
+        double total = orders.stream()
+                .mapToDouble(Order::getTotalPrice)
+                .sum();
+
+        LocalDate now = LocalDate.now();
+
+        double monthly = orders.stream()
+                .filter(o -> o.getCreatedAt() != null)
+                .filter(o -> {
+                    LocalDate orderDate = o.getCreatedAt().toLocalDateTime().toLocalDate();
+                    return orderDate.getMonth() == now.getMonth() &&
+                            orderDate.getYear() == now.getYear();
+                })
+                .mapToDouble(Order::getTotalPrice)
+                .sum();
+
+        return RevenueReportDTO.builder()
+                .totalRevenue(total)
+                .revenueThisMonth(monthly)
+                .build();
+    }
+
 
     // ---------------------------
     // Customer Performance

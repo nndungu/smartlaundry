@@ -15,5 +15,9 @@ public interface DriverService {
 
     List<DriverEarningsDetailDTO> getEarningsHistory(Long driverId);
 
+    RevenueReportDTO getDriverRevenue(Long driverId);
+
+    List<NotificationDTO> getDriverNotifications(Long driverId);
+
     DriverPerformanceDTO getPerformance(Long driverId);
 }

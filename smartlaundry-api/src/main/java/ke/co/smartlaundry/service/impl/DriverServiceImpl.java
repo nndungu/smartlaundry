@@ -8,7 +8,10 @@ import ke.co.smartlaundry.service.DriverService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,6 +63,31 @@ public class DriverServiceImpl implements DriverService {
         d.setLongitude(longitude);
         userRepository.save(d);
     }
+
+    @Override
+    public List<NotificationDTO> getDriverNotifications(Long driverId) {
+        User driver = userRepository.findById(driverId)
+                .orElseThrow(() -> new NoSuchElementException("Driver not found"));
+        // Future: pull from NotificationRepository
+        return List.of(new NotificationDTO(1L, "Performance Bonus",
+                "You earned a weekly performance bonus!", "SYSTEM",
+                driver.getUsername(), LocalDateTime.now()));
+    }
+
+    @Override
+    public RevenueReportDTO getDriverRevenue(Long driverId) {
+        List<EarningsLedger> earnings = earningsLedgerRepository.findByDriverId(driverId);
+        double total = earnings.stream().mapToDouble(EarningsLedger::getAmount).sum();
+        double weekly = earnings.stream()
+                .filter(e -> e.getCreatedAt().isAfter(LocalDate.now().minusDays(7).atStartOfDay()))
+                .mapToDouble(EarningsLedger::getAmount).sum();
+
+        return RevenueReportDTO.builder()
+                .totalRevenue(total)
+                .revenueThisWeek(weekly)
+                .build();
+    }
+
 
     @Override
     public List<DriverEarningsDetailDTO> getEarningsHistory(Long driverId) {

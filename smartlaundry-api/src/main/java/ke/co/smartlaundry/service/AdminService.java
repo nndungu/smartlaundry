@@ -47,4 +47,13 @@ public interface AdminService {
     // Performance
     DriverPerformanceDTO getDriverPerformance(Long driverId);
     CustomerPerformanceDTO getCustomerPerformance(Long customerId);
+
+    // Notification
+    void sendNotification(NotificationRequestDTO dto);
+    List<NotificationDTO> getAllNotifications();
+
+    // Revenues
+    public RevenueReportDTO getTotalRevenue();
+    public RevenueReportDTO getRevenueByPeriod(String period);
+
 }
