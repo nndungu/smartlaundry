@@ -3,8 +3,8 @@ FROM gradle:8.8-jdk21-jammy AS build
 
 WORKDIR /app
 
-# Copy Gradle wrapper and config first for caching
-COPY --chown=gradle:gradle gradlew .
+# Copy Gradle wrapper and config first
+COPY --chown=gradle:gradle gradlew ./
 COPY --chown=gradle:gradle gradle ./gradle
 COPY --chown=gradle:gradle build.gradle settings.gradle gradle.properties ./
 
@@ -12,10 +12,9 @@ COPY --chown=gradle:gradle build.gradle settings.gradle gradle.properties ./
 RUN ./gradlew build -x test --no-daemon --stacktrace || true
 
 # Copy the rest of the source code
-COPY --chown=gradle:gradle . .
+COPY --chown=gradle:gradle src ./src
 
 # Build the project
-# If you want to run tests, remove '-x test'
 ARG RUN_TESTS=false
 RUN if [ "$RUN_TESTS" = "true" ] ; then ./gradlew clean build --no-daemon ; else ./gradlew clean build -x test --no-daemon ; fi
 
