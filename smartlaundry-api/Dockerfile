@@ -8,6 +8,9 @@ COPY --chown=gradle:gradle gradlew ./
 COPY --chown=gradle:gradle gradle ./gradle
 COPY --chown=gradle:gradle build.gradle settings.gradle gradle.properties ./
 
+# Make gradlew executable
+RUN chmod +x gradlew
+
 # Pre-cache dependencies (optional, fails gracefully)
 RUN ./gradlew build -x test --no-daemon --stacktrace || true
 
