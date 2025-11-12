@@ -1,7 +1,5 @@
 HELP.md
 .gradle/
-.env
-.env.local
 src/main/resources/application*
 src/main/resources/*.local
 build/
