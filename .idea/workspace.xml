@@ -4,17 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a0311d6c-3642-4aea-86c7-8970c3eb78af" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
+    <list default="true" id="a0311d6c-3642-4aea-86c7-8970c3eb78af" name="Changes" comment="Merge branch 'nelson'&#10;&#10;# Conflicts:&#10;#&#9;.idea/compiler.xml&#10;#&#9;.idea/dataSources.local.xml&#10;#&#9;.idea/dataSources/345a98c9-6a1a-489f-9195-81f6512a46c3.xml&#10;#&#9;.idea/dataSources/df986d0b-ffe5-40d6-aae0-11841fbfa085.xml&#10;#&#9;.idea/workspace.xml">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ed7c3ec8-56a4-4182-ba6e-bbae6f51b476.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ed7c3ec8-56a4-4182-ba6e-bbae6f51b476/storage_v2/_src_/database/smartlaundry_db.afZF8A.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ed7c3ec8-56a4-4182-ba6e-bbae6f51b476/storage_v2/_src_/database/smartlaundry_db.afZF8A/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ed7c3ec8-56a4-4182-ba6e-bbae6f51b476/storage_v2/_src_/database/smartlaundry_db.afZF8A/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/ke.co.smartlaundry.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/ke.co.smartlaundry.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/smartlaundry.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/smartlaundry.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/smartlaundry.log.2025-11-06.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/smartlaundry.log.2025-11-07.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/smartlaundry.log.2025-11-08.0.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/smartlaundry.log.2025-11-09.0.gz" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,6 +84,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Gradle.AdminControllerUnitTest.executor": "Run",
     "Gradle.Build smartlaundry-api.executor": "Run",
     "Gradle.Download Sources.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
@@ -95,6 +96,8 @@
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.SmartlaundryApiApplication.executor": "Run",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "nelson",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
@@ -107,7 +110,7 @@
     "project.structure.last.edited": "SDKs",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   },
@@ -128,7 +131,31 @@
       <recent name="C:\Users\ma1n\IdeaProjects\smartlaundry\smartlaundry-api\src\main\resources\db\migration\mysql" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Gradle.AdminControllerUnitTest">
+    <configuration name="AdminControllerUnitTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/smartlaundry-api" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;ke.co.smartlaundry.controller.AdminControllerUnitTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
     <configuration name="SmartlaundryApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="ke.co.smartlaundry.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="ke.co.smartlaundry.SmartlaundryApiApplication" />
@@ -136,12 +163,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.AdminControllerUnitTest" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169" />
-        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-IU-252.26199.169" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
       </set>
     </attachedChunks>
   </component>
@@ -224,6 +256,10 @@
       <workItem from="1760317019758" duration="14259000" />
       <workItem from="1760338698700" duration="284000" />
       <workItem from="1760350565177" duration="13036000" />
+      <workItem from="1762947670591" duration="7088000" />
+      <workItem from="1762970300378" duration="170000" />
+      <workItem from="1763398021857" duration="2109000" />
+      <workItem from="1763400204627" duration="4100000" />
     </task>
     <servers />
   </component>

@@ -1,0 +1,17 @@
+.git
+.gitignore
+.gradle
+build
+logs
+bin
+out
+*.iml
+*.ipr
+*.iws
+
+# Node modules (if frontend included)
+node_modules
+
+# OS files
+.DS_Store
+Thumbs.db

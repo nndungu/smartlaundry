@@ -1,16 +1,44 @@
+# =====================================
+# GENERAL
+# =====================================
 HELP.md
+
+# =====================================
+# GRADLE
+# =====================================
 .gradle/
-src/main/resources/application*
-src/main/resources/*.local
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+# Skip local env files (NEVER PUSH)
+.env
+src/main/resources/.env.properties
+*.local
+*.env
 .env.properties
 
+# =====================================
+# SPRING RESOURCES
+# =====================================
+# KEEP application.properties for Render
+src/main/resources/*.local
+src/main/resources/*.secret.properties
+src/main/resources/application-local.properties
 
-### STS ###
+# =====================================
+# IDE FILES
+# =====================================
+
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+### Eclipse / STS ###
 .apt_generated
 .classpath
 .factorypath
@@ -18,19 +46,9 @@ build/
 .springBeans
 .sts4-cache
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-.idea/
-out/
-logs/
-!**/src/main/**/out/
-!**/src/test/**/out/
+### VS Code ###
+.vscode/
 
 ### NetBeans ###
 /nbproject/private/
@@ -39,6 +57,44 @@ logs/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
+# =====================================
+# OS / TEMP
+# =====================================
+.DS_Store
+Thumbs.db
 
+###############################################
+# BUILD & DEPENDENCIES
+###############################################
+target/
+
+###############################################
+# LOG FILES (IGNORE ALL LOGS)
+###############################################
+*.log.*
+*.out
+*.err
+logs/
+*.log
+
+# Spring Boot default logs
+spring.log
+smartlaundry.log
+
+###############################################
+# OS / JUNK FILES
+###############################################
+*.swp
+*.tmp
+
+###############################################
+# NODE (IF FRONTEND CO-LOCATED)
+###############################################
+node_modules/
+
+###############################################
+# COVERAGE / REPORTS
+###############################################
+coverage/
+reports/
+test-results/
