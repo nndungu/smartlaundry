@@ -8,7 +8,6 @@ import ke.co.smartlaundry.repository.RoleRepository;
 import ke.co.smartlaundry.security.JwtUtil;
 import ke.co.smartlaundry.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +23,6 @@ public class AuthController {
     private final OtpService otpService;
     private final AfricasTalkingSmsService smsService;
     private final EmailService emailService;
-
-    @Value("${GOOGLE_CLIENT_ID}")
-    private String googleClientId;
 
     @Autowired
     public AuthController(
@@ -49,26 +45,15 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterRequestDTO dto) {
 
-        // Password confirmation
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             return ResponseEntity.badRequest().body("Passwords do not match");
         }
 
-        // Role lookup
-        Role role = roleRepository.findByName(dto.getRole().toUpperCase())
-                .orElseThrow(() -> new NoSuchElementException("Role not found: " + dto.getRole()));
-
-        // Admin passcode check
-        if ("ADMIN".equalsIgnoreCase(role.getName())) {
-            String expectedPasscode = System.getenv("ADMIN_REGISTRATION_PASSCODE");
-            if (dto.getPasscode() == null || !dto.getPasscode().equals(expectedPasscode)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Invalid admin passcode");
-            }
-        }
-
         try {
-            // Create user via service (includes duplicate email/phone check)
+            Role role = roleRepository.findByName(dto.getRole().toUpperCase())
+                    .orElseThrow(() -> new NoSuchElementException("Role not found: " + dto.getRole()));
+
+            // User creation + admin passcode validation inside service
             User user = userService.fromRegisterDTO(dto, role, dto.getPasscode());
             user = userService.createUser(user);
 
@@ -80,20 +65,15 @@ public class AuthController {
                 smsService.sendSMS(user.getPhoneNumber(),
                         "Your SmartLaundry OTP is: " + otp + ". It expires in 5 minutes.");
             } catch (Exception ex) {
-                System.out.println("⚠ SMS failed, fallback on email. Error: " + ex.getMessage());
+                System.out.println("⚠ SMS failed: " + ex.getMessage());
             }
 
             // Send Email
             emailService.sendOtpEmail(user.getEmail(), otp);
 
-            // JWT token
-            String token = jwtUtil.generateToken(
-                    user.getId(),
-                    user.getEmail(),
-                    role.getName()
-            );
+            // Generate JWT token
+            String token = jwtUtil.generateToken(user.getId(), user.getEmail(), role.getName());
 
-            // Response
             LoginResponseDTO response = new LoginResponseDTO(
                     token,
                     user.getId(),
@@ -109,6 +89,8 @@ public class AuthController {
 
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        } catch (NoSuchElementException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
 
@@ -122,25 +104,20 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
             }
 
-            String token = jwtUtil.generateToken(
-                    user.getId(),
-                    user.getEmail(),
-                    user.getRole().getName()
-            );
+            String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole().getName());
 
-            return ResponseEntity.ok(
-                    new LoginResponseDTO(
-                            token,
-                            user.getId(),
-                            user.getUsername(),
-                            user.getEmail(),
-                            user.getPhoneNumber(),
-                            user.getRole().getName(),
-                            "Login successful",
-                            null
-                    )
-            );
-        } catch (Exception ignored) {
+            return ResponseEntity.ok(new LoginResponseDTO(
+                    token,
+                    user.getId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getPhoneNumber(),
+                    user.getRole().getName(),
+                    "Login successful",
+                    null
+            ));
+
+        } catch (NoSuchElementException ignored) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
@@ -152,9 +129,15 @@ public class AuthController {
             User user = userService.getUserByEmail(email);
             String otp = otpService.generateOtp(email);
 
-            smsService.sendSMS(user.getPhoneNumber(),
-                    "Your SmartLaundry verification code is: " + otp);
+            // Send SMS
+            try {
+                smsService.sendSMS(user.getPhoneNumber(),
+                        "Your SmartLaundry verification code is: " + otp);
+            } catch (Exception ex) {
+                System.out.println("⚠ SMS failed: " + ex.getMessage());
+            }
 
+            // Send Email
             emailService.sendOtpEmail(email, otp);
 
             return ResponseEntity.ok("OTP sent to email & SMS");
@@ -173,7 +156,6 @@ public class AuthController {
         }
 
         userService.markUserAsVerified(email);
-
         return ResponseEntity.ok("Verification successful!");
     }
 }

@@ -10,6 +10,7 @@ import ke.co.smartlaundry.repository.RoleRepository;
 import ke.co.smartlaundry.repository.UserRepository;
 import ke.co.smartlaundry.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,9 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final PasswordResetTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${admin.registration.passcode}")
+    private String adminRegistrationPasscode;
 
     // ----------------------------
     // DTO conversions
@@ -56,15 +60,9 @@ public class UserServiceImpl implements UserService {
     // Registration helpers
     // ----------------------------
     @Override
-    public User fromRegisterDTO(RegisterRequestDTO dto, Role role) {
-        return fromRegisterDTO(dto, role, dto.getPasscode());
-    }
-
-    @Override
     public User fromRegisterDTO(RegisterRequestDTO dto, Role role, String adminPasscode) {
         if ("ADMIN".equalsIgnoreCase(dto.getRole())) {
-            String expectedPasscode = System.getenv("ADMIN_REGISTRATION_PASSCODE");
-            if (adminPasscode == null || !adminPasscode.equals(expectedPasscode)) {
+            if (adminPasscode == null || !adminPasscode.equals(adminRegistrationPasscode)) {
                 throw new IllegalArgumentException("Invalid admin passcode");
             }
         }
@@ -75,11 +73,17 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(dto.getPhone());
         user.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
         user.setRole(role);
+
         user.setStatus(User.Status.ACTIVE);
         user.setActive(true);
         user.setVerified(false);
 
         return user;
+    }
+
+    @Override
+    public User fromRegisterDTO(RegisterRequestDTO dto, Role role) {
+        return fromRegisterDTO(dto, role, dto.getPasscode());
     }
 
     // ----------------------------

@@ -29,7 +29,7 @@ public class RegisterRequestDTO {
     @NotBlank
     private String role; // ADMIN, CUSTOMER, DRIVER
 
-    @NotBlank(message = "Passcode is required for admin registration")
+    @NotBlank(message = "Passcode required for ADMIN")
     private String passcode;
 
     // Getters & Setters
