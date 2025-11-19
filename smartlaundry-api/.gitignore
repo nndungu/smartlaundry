@@ -8,25 +8,26 @@ HELP.md
 # =====================================
 .gradle/
 build/
-gradle/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-# Skip local env files (NEVER PUSH)
+# Local environment files (never commit)
 .env
-src/main/resources/.env.properties
+.env.*
 *.local
-*.env
-.env.properties
+*.secret
+*.env.properties
+src/main/resources/.env*
+src/main/resources/*.local.properties
 
 # =====================================
-# SPRING RESOURCES
+# SPRING RESOURCES (KEEP EVERYTHING ELSE)
+# DO NOT IGNORE: application.properties, db/migration, static/, templates/
 # =====================================
-# KEEP application.properties for Render
-src/main/resources/*.local
-src/main/resources/*.secret.properties
+# Only ignore personal/local variants
 src/main/resources/application-local.properties
+src/main/resources/application-test.properties
 
 # =====================================
 # IDE FILES
@@ -39,11 +40,6 @@ src/main/resources/application-local.properties
 *.iws
 out/
 
-# JARs
-*.jar
-*.war
-*.zip
-
 ### Eclipse / STS ###
 .apt_generated
 .classpath
@@ -52,9 +48,6 @@ out/
 .springBeans
 .sts4-cache
 bin/
-
-# Spring Boot
-*.bak
 
 ### VS Code ###
 .vscode/
@@ -67,53 +60,42 @@ bin/
 /.nb-gradle/
 
 # =====================================
-# OS / TEMP
+# JAR/WAR PACKAGING
 # =====================================
-.DS_Store
-Thumbs.db
+*.jar
+*.war
+*.zip
 
-###############################################
-# BUILD & DEPENDENCIES
-###############################################
-target/
-
-###############################################
-# LOG FILES (IGNORE ALL LOGS)
-###############################################
-*.log.*
-*.out
-*.err
-logs/
+# =====================================
+# LOGS
+# =====================================
 *.log
-
-# Spring Boot default logs
+*.log.*
+logs/
 spring.log
 smartlaundry.log
 
-###############################################
-# OS / JUNK FILES
-###############################################
+# =====================================
+# OS / TEMP FILES
+# =====================================
+.DS_Store
+Thumbs.db
 *.swp
 *.tmp
 
-###############################################
-# NODE (IF FRONTEND CO-LOCATED)
-###############################################
+# =====================================
+# NODE (if co-located)
+# =====================================
 node_modules/
 
-###############################################
+# =====================================
 # COVERAGE / REPORTS
-###############################################
+# =====================================
 coverage/
 reports/
 test-results/
 
-
-
-
-
-
-
-
-
-
+# =====================================
+# MAVEN (if ever used)
+# =====================================
+target/
