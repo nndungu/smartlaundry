@@ -52,8 +52,23 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
+    // ----------------------------
+    // Registration helpers
+    // ----------------------------
     @Override
     public User fromRegisterDTO(RegisterRequestDTO dto, Role role) {
+        return fromRegisterDTO(dto, role, dto.getPasscode());
+    }
+
+    @Override
+    public User fromRegisterDTO(RegisterRequestDTO dto, Role role, String adminPasscode) {
+        if ("ADMIN".equalsIgnoreCase(dto.getRole())) {
+            String expectedPasscode = System.getenv("ADMIN_PASSCODE");
+            if (adminPasscode == null || !adminPasscode.equals(expectedPasscode)) {
+                throw new IllegalArgumentException("Invalid admin passcode");
+            }
+        }
+
         User user = new User();
         user.setUsername(dto.getFirstName() + " " + dto.getLastName());
         user.setEmail(dto.getEmail());
@@ -63,6 +78,7 @@ public class UserServiceImpl implements UserService {
         user.setStatus(User.Status.ACTIVE);
         user.setActive(true);
         user.setVerified(false);
+
         return user;
     }
 
@@ -93,12 +109,6 @@ public class UserServiceImpl implements UserService {
         if (user.getPhoneNumber() != null && userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
             throw new IllegalArgumentException("Phone number already in use");
         }
-
-        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
-        user.setStatus(User.Status.ACTIVE);
-        user.setActive(true);
-        user.setVerified(false);
-
         return userRepository.save(user);
     }
 
@@ -112,13 +122,17 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        return getUserByEmail(email);
     }
 
     @Override
     public User getUserFromToken(String token) {
         return null;
+    }
+
+    @Override
+    public UserRepository getUserRepository() {
+        return this.userRepository;
     }
 
     @Override
@@ -128,29 +142,21 @@ public class UserServiceImpl implements UserService {
 
         if (updatedUser.getUsername() != null)
             existing.setUsername(updatedUser.getUsername());
-
         if (updatedUser.getPhoneNumber() != null)
             existing.setPhoneNumber(updatedUser.getPhoneNumber());
-
         if (updatedUser.getEmail() != null)
             existing.setEmail(updatedUser.getEmail());
-
-        if (updatedUser.getPasswordHash() != null && !updatedUser.getPasswordHash().isBlank()) {
+        if (updatedUser.getPasswordHash() != null && !updatedUser.getPasswordHash().isBlank())
             existing.setPasswordHash(passwordEncoder.encode(updatedUser.getPasswordHash()));
-        }
-
         if (roleName != null) {
             Role role = roleRepository.findByName(roleName)
                     .orElseThrow(() -> new NoSuchElementException("Role not found"));
             existing.setRole(role);
         }
-
         if (updatedUser.getStatus() != null)
             existing.setStatus(updatedUser.getStatus());
-
         if (updatedUser.getLatitude() != null)
             existing.setLatitude(updatedUser.getLatitude());
-
         if (updatedUser.getLongitude() != null)
             existing.setLongitude(updatedUser.getLongitude());
 

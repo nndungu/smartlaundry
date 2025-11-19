@@ -1,9 +1,5 @@
 package ke.co.smartlaundry.controller;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
 import jakarta.validation.Valid;
 import ke.co.smartlaundry.dto.*;
 import ke.co.smartlaundry.model.Role;
@@ -32,8 +28,6 @@ public class AuthController {
     @Value("${GOOGLE_CLIENT_ID}")
     private String googleClientId;
 
-    private final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-
     @Autowired
     public AuthController(
             UserService userService,
@@ -41,8 +35,7 @@ public class AuthController {
             JwtUtil jwtUtil,
             OtpService otpService,
             AfricasTalkingSmsService smsService,
-            EmailService emailService,
-            GoogleIdTokenVerifier googleVerifier
+            EmailService emailService
     ) {
         this.userService = userService;
         this.roleRepository = roleRepository;
@@ -56,60 +49,68 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterRequestDTO dto) {
 
+        // Password confirmation
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             return ResponseEntity.badRequest().body("Passwords do not match");
         }
 
+        // Role lookup
         Role role = roleRepository.findByName(dto.getRole().toUpperCase())
                 .orElseThrow(() -> new NoSuchElementException("Role not found: " + dto.getRole()));
 
         // Admin passcode check
         if ("ADMIN".equalsIgnoreCase(role.getName())) {
-            String expectedPasscode = System.getenv("ADMIN_REGISTRATION_PASSCODE");
-            if (expectedPasscode == null || !expectedPasscode.equals(dto.getPasscode())) {
+            String expectedPasscode = System.getenv("ADMIN_PASSCODE");
+            if (dto.getPasscode() == null || !dto.getPasscode().equals(expectedPasscode)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body("Invalid admin passcode");
             }
         }
 
-        User user = new User();
-        user.setUsername(dto.getFirstName() + " " + dto.getLastName());
-        user.setEmail(dto.getEmail());
-        user.setPhoneNumber(dto.getPhone());
-        user.setPasswordHash(userService.encodePassword(dto.getPassword()));
-        user.setRole(role);
-        user.setVerified(false);
-
-        user = userService.createUser(user);
-
-        // Generate OTP
-        String otp = otpService.generateOtp(user.getEmail());
-
         try {
-            smsService.sendSMS(user.getPhoneNumber(),
-                    "Your SmartLaundry OTP is: " + otp + ". It expires in 5 minutes.");
-        } catch (Exception ex) {
-            System.out.println("⚠ SMS failed, fallback on email. Error: " + ex.getMessage());
+            // Create user via service (includes duplicate email/phone check)
+            User user = userService.fromRegisterDTO(dto, role, dto.getPasscode());
+            user = userService.createUser(user);
+
+            // Generate OTP
+            String otp = otpService.generateOtp(user.getEmail());
+
+            // Send SMS (non-blocking)
+            try {
+                smsService.sendSMS(user.getPhoneNumber(),
+                        "Your SmartLaundry OTP is: " + otp + ". It expires in 5 minutes.");
+            } catch (Exception ex) {
+                System.out.println("⚠ SMS failed, fallback on email. Error: " + ex.getMessage());
+            }
+
+            // Send Email
+            emailService.sendOtpEmail(user.getEmail(), otp);
+
+            // JWT token
+            String token = jwtUtil.generateToken(
+                    user.getId(),
+                    user.getEmail(),
+                    role.getName()
+            );
+
+            // Response
+            LoginResponseDTO response = new LoginResponseDTO(
+                    token,
+                    user.getId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getPhoneNumber(),
+                    role.getName(),
+                    "Registration successful — OTP sent",
+                    null
+            );
+
+            return ResponseEntity.ok(response);
+
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
-
-        emailService.sendOtpEmail(user.getEmail(), otp);
-
-        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), role.getName());
-
-        LoginResponseDTO response = new LoginResponseDTO(
-                token,
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getPhoneNumber(),
-                role.getName(),
-                "Registration successful — OTP sent",
-                null
-        );
-
-        return ResponseEntity.ok(response);
     }
-
 
     // ====================== LOGIN ======================
     @PostMapping("/login")
