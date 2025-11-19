@@ -21,6 +21,11 @@ build/
 src/main/resources/.env*
 src/main/resources/*.local.properties
 
+# ==== Allow Flyway migration files ====
+!src/main/resources/db/**
+!src/main/resources/db/migration/**
+
+
 # =====================================
 # SPRING RESOURCES (KEEP EVERYTHING ELSE)
 # DO NOT IGNORE: application.properties, db/migration, static/, templates/
