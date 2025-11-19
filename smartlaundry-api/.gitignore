@@ -8,6 +8,7 @@ HELP.md
 # =====================================
 .gradle/
 build/
+gradle/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
@@ -38,6 +39,11 @@ src/main/resources/application-local.properties
 *.iws
 out/
 
+# JARs
+*.jar
+*.war
+*.zip
+
 ### Eclipse / STS ###
 .apt_generated
 .classpath
@@ -46,6 +52,9 @@ out/
 .springBeans
 .sts4-cache
 bin/
+
+# Spring Boot
+*.bak
 
 ### VS Code ###
 .vscode/
@@ -98,3 +107,13 @@ node_modules/
 coverage/
 reports/
 test-results/
+
+
+
+
+
+
+
+
+
+
