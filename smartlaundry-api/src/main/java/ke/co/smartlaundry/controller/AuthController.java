@@ -63,6 +63,15 @@ public class AuthController {
         Role role = roleRepository.findByName(dto.getRole().toUpperCase())
                 .orElseThrow(() -> new NoSuchElementException("Role not found: " + dto.getRole()));
 
+        // Admin passcode check
+        if ("ADMIN".equalsIgnoreCase(role.getName())) {
+            String expectedPasscode = System.getenv("ADMIN_REGISTRATION_PASSCODE");
+            if (expectedPasscode == null || !expectedPasscode.equals(dto.getPasscode())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Invalid admin passcode");
+            }
+        }
+
         User user = new User();
         user.setUsername(dto.getFirstName() + " " + dto.getLastName());
         user.setEmail(dto.getEmail());
@@ -76,7 +85,6 @@ public class AuthController {
         // Generate OTP
         String otp = otpService.generateOtp(user.getEmail());
 
-        // Send SMS (non-blocking)
         try {
             smsService.sendSMS(user.getPhoneNumber(),
                     "Your SmartLaundry OTP is: " + otp + ". It expires in 5 minutes.");
@@ -84,15 +92,9 @@ public class AuthController {
             System.out.println("⚠ SMS failed, fallback on email. Error: " + ex.getMessage());
         }
 
-        // Send Email
         emailService.sendOtpEmail(user.getEmail(), otp);
 
-        // JWT
-        String token = jwtUtil.generateToken(
-                user.getId(),
-                user.getEmail(),
-                user.getRole().getName()
-        );
+        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), role.getName());
 
         LoginResponseDTO response = new LoginResponseDTO(
                 token,
@@ -107,6 +109,7 @@ public class AuthController {
 
         return ResponseEntity.ok(response);
     }
+
 
     // ====================== LOGIN ======================
     @PostMapping("/login")
