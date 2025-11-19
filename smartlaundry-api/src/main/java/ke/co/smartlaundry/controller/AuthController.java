@@ -60,7 +60,7 @@ public class AuthController {
 
         // Admin passcode check
         if ("ADMIN".equalsIgnoreCase(role.getName())) {
-            String expectedPasscode = System.getenv("ADMIN_PASSCODE");
+            String expectedPasscode = System.getenv("ADMIN_REGISTRATION_PASSCODE");
             if (dto.getPasscode() == null || !dto.getPasscode().equals(expectedPasscode)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body("Invalid admin passcode");

@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User fromRegisterDTO(RegisterRequestDTO dto, Role role, String adminPasscode) {
         if ("ADMIN".equalsIgnoreCase(dto.getRole())) {
-            String expectedPasscode = System.getenv("ADMIN_PASSCODE");
+            String expectedPasscode = System.getenv("ADMIN_REGISTRATION_PASSCODE");
             if (adminPasscode == null || !adminPasscode.equals(expectedPasscode)) {
                 throw new IllegalArgumentException("Invalid admin passcode");
             }
