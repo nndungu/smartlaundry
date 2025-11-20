@@ -30,10 +30,13 @@ public class DriverServiceImpl implements DriverService {
         this.earningsLedgerRepository = earningsLedgerRepository;
     }
 
+    // ---------------------------
+    // Profile
+    // ---------------------------
     @Override
     public DriverDTO getDriverProfile(Long driverId) {
         User d = userRepository.findById(driverId)
-                .orElseThrow(() -> new IllegalArgumentException("Driver not found"));
+                .orElseThrow(() -> new NoSuchElementException("Driver not found"));
         DriverDTO dto = new DriverDTO();
         dto.setId(d.getId());
         dto.setUsername(d.getUsername());
@@ -42,6 +45,9 @@ public class DriverServiceImpl implements DriverService {
         return dto;
     }
 
+    // ---------------------------
+    // Assigned Orders
+    // ---------------------------
     @Override
     public List<OrderDTO> getAssignedOrders(Long driverId) {
         return orderRepository.findByDriverId(driverId).stream()
@@ -49,6 +55,9 @@ public class DriverServiceImpl implements DriverService {
                 .collect(Collectors.toList());
     }
 
+    // ---------------------------
+    // Earnings
+    // ---------------------------
     @Override
     public DriverEarningsDTO getEarnings(Long driverId) {
         double total = earningsLedgerRepository.sumAmountByDriverId(driverId);
@@ -56,22 +65,9 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public void updateLocation(Long driverId, double latitude, double longitude) {
-        User d = userRepository.findById(driverId)
-                .orElseThrow(() -> new IllegalArgumentException("Driver not found"));
-        d.setLatitude(latitude);
-        d.setLongitude(longitude);
-        userRepository.save(d);
-    }
-
-    @Override
-    public List<NotificationDTO> getDriverNotifications(Long driverId) {
-        User driver = userRepository.findById(driverId)
-                .orElseThrow(() -> new NoSuchElementException("Driver not found"));
-        // Future: pull from NotificationRepository
-        return List.of(new NotificationDTO(1L, "Performance Bonus",
-                "You earned a weekly performance bonus!", "SYSTEM",
-                driver.getUsername(), LocalDateTime.now()));
+    public List<DriverEarningsDetailDTO> getEarningsHistory(Long driverId) {
+        // Placeholder: return empty list until repository implementation
+        return List.of();
     }
 
     @Override
@@ -88,30 +84,46 @@ public class DriverServiceImpl implements DriverService {
                 .build();
     }
 
-
+    // ---------------------------
+    // Notifications
+    // ---------------------------
     @Override
-    public List<DriverEarningsDetailDTO> getEarningsHistory(Long driverId) {
-        return List.of(); // You can implement this later
+    public List<NotificationDTO> getDriverNotifications(Long driverId) {
+        User driver = userRepository.findById(driverId)
+                .orElseThrow(() -> new NoSuchElementException("Driver not found"));
+
+        return List.of(new NotificationDTO(1L, "Performance Bonus",
+                "You earned a weekly performance bonus!", "SYSTEM",
+                driver.getUsername(), LocalDateTime.now()));
     }
 
+    // ---------------------------
+    // Performance
+    // ---------------------------
     @Override
     public DriverPerformanceDTO getPerformance(Long driverId) {
-        // Fetch driver info
         User driver = userRepository.findById(driverId)
-                .orElseThrow(() -> new IllegalArgumentException("Driver not found"));
+                .orElseThrow(() -> new NoSuchElementException("Driver not found"));
 
-        // Total assigned orders
         long totalOrders = orderRepository.countByDriverId(driverId);
+        long completedOrders = orderRepository.countByDriverIdAndStatus(driverId, OrderStatus.COMPLETED);
 
-        // Completed orders
-        long completedOrders = orderRepository.countByDriverIdAndStatus(driverId, OrderStatus.valueOf("COMPLETED"));
-
-        // Earnings
         double totalEarnings = earningsLedgerRepository.sumAmountByDriverId(driverId);
-
-        // Average earnings per completed order
         double avgEarnings = completedOrders > 0 ? totalEarnings / completedOrders : 0.0;
 
-        return new DriverPerformanceDTO(driverId, driver.getUsername(), totalOrders, completedOrders, totalEarnings, avgEarnings);
+        return new DriverPerformanceDTO(driverId, driver.getUsername(), totalOrders,
+                completedOrders, totalEarnings, avgEarnings);
+    }
+
+    // ---------------------------
+    // Location
+    // ---------------------------
+    @Override
+    public void updateLocation(Long driverId, double latitude, double longitude) {
+        User d = userRepository.findById(driverId)
+                .orElseThrow(() -> new NoSuchElementException("Driver not found"));
+        d.setLatitude(latitude);
+        d.setLongitude(longitude);
+        userRepository.save(d);
     }
 }

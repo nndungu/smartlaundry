@@ -14,7 +14,6 @@ public interface UserService {
     UserDTO toDTO(User user);
 
     // --- Registration helpers ---
-    User fromRegisterDTO(RegisterRequestDTO dto, Role role);
     User fromRegisterDTO(RegisterRequestDTO dto, Role role, String adminPasscode) throws IllegalArgumentException;
 
     // --- CRUD operations ---
@@ -29,7 +28,7 @@ public interface UserService {
     void markUserAsVerified(String email);
 
     // --- Password handling ---
-    boolean checkPassword(String raw, String encoded);
+    boolean checkPassword(String rawPassword, String encodedPassword);
     String encodePassword(String rawPassword);
 
     // --- Password reset ---
@@ -37,7 +36,6 @@ public interface UserService {
     boolean resetPassword(String token, String newPassword);
 
     // --- Utility methods ---
-    User findUserByEmail(String email);
     User getUserFromToken(String token);
     UserRepository getUserRepository();
 }

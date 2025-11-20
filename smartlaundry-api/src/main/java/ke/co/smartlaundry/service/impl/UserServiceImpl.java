@@ -1,5 +1,6 @@
 package ke.co.smartlaundry.service.impl;
 
+import ke.co.smartlaundry.configuration.AdminConfig;
 import ke.co.smartlaundry.dto.RegisterRequestDTO;
 import ke.co.smartlaundry.dto.UserDTO;
 import ke.co.smartlaundry.model.PasswordResetToken;
@@ -10,7 +11,6 @@ import ke.co.smartlaundry.repository.RoleRepository;
 import ke.co.smartlaundry.repository.UserRepository;
 import ke.co.smartlaundry.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,9 +30,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final PasswordResetTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
-
-    @Value("${admin.registration.passcode}")
-    private String adminRegistrationPasscode;
+    private final AdminConfig adminConfig; // inject config
 
     // ----------------------------
     // DTO conversions
@@ -62,7 +60,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User fromRegisterDTO(RegisterRequestDTO dto, Role role, String adminPasscode) {
         if ("ADMIN".equalsIgnoreCase(dto.getRole())) {
-            if (adminPasscode == null || !adminPasscode.equals(adminRegistrationPasscode)) {
+            if (adminPasscode == null || !adminPasscode.equals(adminConfig.getPasscode())) {
                 throw new IllegalArgumentException("Invalid admin passcode");
             }
         }
@@ -73,7 +71,6 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(dto.getPhone());
         user.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
         user.setRole(role);
-
         user.setStatus(User.Status.ACTIVE);
         user.setActive(true);
         user.setVerified(false);
@@ -81,13 +78,8 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public User fromRegisterDTO(RegisterRequestDTO dto, Role role) {
-        return fromRegisterDTO(dto, role, dto.getPasscode());
-    }
-
     // ----------------------------
-    // CRUD
+    // CRUD operations
     // ----------------------------
     @Override
     @Transactional(readOnly = true)
@@ -121,22 +113,6 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public User findUserByEmail(String email) {
-        return getUserByEmail(email);
-    }
-
-    @Override
-    public User getUserFromToken(String token) {
-        return null;
-    }
-
-    @Override
-    public UserRepository getUserRepository() {
-        return this.userRepository;
     }
 
     @Override
@@ -189,8 +165,8 @@ public class UserServiceImpl implements UserService {
     // Password handling
     // ----------------------------
     @Override
-    public boolean checkPassword(String raw, String encoded) {
-        return passwordEncoder.matches(raw, encoded);
+    public boolean checkPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
     @Override
@@ -230,5 +206,19 @@ public class UserServiceImpl implements UserService {
 
         tokenRepository.delete(resetToken);
         return true;
+    }
+
+    // ----------------------------
+    // Utility
+    // ----------------------------
+    @Override
+    public User getUserFromToken(String token) {
+        // TODO: implement decoding JWT to get user email or ID
+        return null;
+    }
+
+    @Override
+    public UserRepository getUserRepository() {
+        return this.userRepository;
     }
 }

@@ -26,6 +26,9 @@ public class PaymentDTO {
         this.createdAt = createdAt;
     }
 
+    public PaymentDTO(String txn12345, String method, Double amount, String success) {
+    }
+
     // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

@@ -100,7 +100,7 @@ public class AuthController {
         try {
             User user = userService.getUserByEmail(dto.getEmail());
 
-            if (!userService.checkPassword(dto.getPassword(), user.getPasswordHash())) {
+            if (userService.checkPassword(dto.getPassword(), user.getPasswordHash())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
             }
 

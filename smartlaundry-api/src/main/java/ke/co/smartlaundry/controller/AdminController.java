@@ -22,19 +22,20 @@ public class AdminController {
     // Profile
     // ----------------------------
     @GetMapping("/me")
-    public ResponseEntity<AdminDTO> getProfile(Long id) {
+    public ResponseEntity<AdminDTO> getProfile() {
         Long adminId = SecurityUtils.getCurrentUserId();
         return ResponseEntity.ok(adminService.getAdminProfile(adminId));
     }
 
     // ----------------------------
-    // Dashboard / Analytics
+    // Dashboard & Analytics
     // ----------------------------
-    public AdminDashboardDTO getDashboard() {
-        return ResponseEntity.ok(adminService.getDashboardStats()).getBody();
+    @GetMapping("/dashboard")
+    public ResponseEntity<AdminDashboardDTO> getDashboardStats() {
+        return ResponseEntity.ok(adminService.getDashboardStats());
     }
 
-    @GetMapping("/dashboard")
+    @GetMapping("/dashboard/metrics")
     public ResponseEntity<AdminDashboardDTO> getDashboardMetrics() {
         return ResponseEntity.ok(adminService.getDashboardMetrics());
     }
@@ -147,5 +148,4 @@ public class AdminController {
     public ResponseEntity<RevenueReportDTO> getRevenueByPeriod(@PathVariable String period) {
         return ResponseEntity.ok(adminService.getRevenueByPeriod(period));
     }
-
 }

@@ -8,8 +8,6 @@ import ke.co.smartlaundry.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
-
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -47,7 +45,7 @@ public class UserController {
                                                  @RequestParam String oldPassword,
                                                  @RequestParam String newPassword) {
         User user = userService.getUserFromToken(token);
-        if (!userService.checkPassword(oldPassword, user.getPasswordHash())) {
+        if (userService.checkPassword(oldPassword, user.getPasswordHash())) {
             return ResponseEntity.badRequest().body("Old password is incorrect");
         }
         user.setPasswordHash(userService.encodePassword(newPassword));
