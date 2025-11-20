@@ -1,75 +1,85 @@
 package ke.co.smartlaundry.service;
 
+import com.sendinblue.ApiClient;
+import com.sendinblue.ApiException;
+import com.sendinblue.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import sibApi.TransactionalEmailsApi;
+import sibModel.*;
+
+import java.util.Collections;
 
 @Service
 public class EmailService {
 
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
-    private final JavaMailSender mailSender;
 
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+    private final TransactionalEmailsApi emailApi;
+
+    public EmailService(@Value("${BREVO_API_KEY}") String apiKey) {
+        ApiClient client = Configuration.getDefaultApiClient();
+        client.setApiKey(apiKey);
+        this.emailApi = new TransactionalEmailsApi(client);
     }
 
     /**
-     * Generic email sender
+     * Generic Email Sender
      */
-    public void sendEmail(String to, String subject, String body) {
+    public void sendEmail(String to, String subject, String htmlBody) {
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(to);
-            message.setSubject(subject);
-            message.setText(body);
-            message.setFrom("SmartLaundry <" + "nndungu7@gmail.com" + ">"); // safer for Gmail SMTP
-            mailSender.send(message);
+            SendSmtpEmail email = new SendSmtpEmail()
+                    .sender(new SendSmtpEmailSender()
+                            .name("SmartLaundry")
+                            .email("no-reply@smartlaundry.com"))
+                    .to(Collections.singletonList(new SendSmtpEmailTo().email(to)))
+                    .subject(subject)
+                    .htmlContent(htmlBody);
 
-            log.info("📧 Email sent to {} | subject={}", to, subject);
+            emailApi.sendTransacEmail(email);
 
-        } catch (MailException e) {
-            log.error("❌ Email send FAILED to {} | error={}", to, e.getMessage());
+            log.info("📧 Email sent to {} | {}", to, subject);
+
+        } catch (ApiException e) {
+            log.error("❌ Email FAILED to {} | {}", to, e.getResponseBody());
         }
     }
 
     /**
-     * Send OTP Verification Email
+     * OTP Verification Email
      */
     public void sendOtpEmail(String to, String otpCode) {
         String subject = "Your SmartLaundry Verification Code";
-        String body = String.format("""
-                Hello,
+        String htmlBody = """
+                <h2>Your SmartLaundry Verification Code</h2>
+                <p>Your OTP code is:</p>
+                <h1 style="font-size:28px; letter-spacing:3px;">""" + otpCode + """</h1>
+                <p>This code expires in 5 minutes. Do NOT share it with anyone.</p>
+                <br>
+                <p>— SmartLaundry Team</p>
+                """;
 
-                Your SmartLaundry one-time verification code is:
-
-                🔐 OTP: %s
-
-                This code expires in 5 minutes.
-                Please do NOT share this code with anyone.
-
-                — SmartLaundry Team
-                """, otpCode);
-
-        sendEmail(to, subject, body);
+        sendEmail(to, subject, htmlBody);
     }
 
     /**
-     * Payment Notification
+     * Payment Notification Email
      */
     public void sendPaymentNotification(String to, String orderId, double amount, String status) {
-        String subject = "Payment Confirmation - SmartLaundry";
-        String body = String.format("""
-                Hi,
+        String subject = "SmartLaundry Payment Receipt";
+        String htmlBody = """
+                <h2>Payment Update</h2>
+                <p>Your payment details are as follows:</p>
+                <ul>
+                    <li><b>Order:</b> """ + orderId + """</li>
+                    <li><b>Amount:</b> KES """ + String.format("%.2f", amount) + """</li>
+                    <li><b>Status:</b> """ + status + """</li>
+                </ul>
+                <p>Thank you for using SmartLaundry!</p>
+                """;
 
-                Your payment for order #%s of amount KES %.2f has been marked as %s.
-
-                Thank you for trusting SmartLaundry.
-                """, orderId, amount, status);
-
-        sendEmail(to, subject, body);
+        sendEmail(to, subject, htmlBody);
     }
 }
