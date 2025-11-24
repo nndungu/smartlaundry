@@ -5,13 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0311d6c-3642-4aea-86c7-8970c3eb78af" name="Changes" comment="Merge branch 'nelson'&#10;&#10;# Conflicts:&#10;#&#9;.idea/compiler.xml&#10;#&#9;.idea/dataSources.local.xml&#10;#&#9;.idea/dataSources/345a98c9-6a1a-489f-9195-81f6512a46c3.xml&#10;#&#9;.idea/dataSources/df986d0b-ffe5-40d6-aae0-11841fbfa085.xml&#10;#&#9;.idea/workspace.xml">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2025_12_21_PM_[Changes]1/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2025_12_21_PM__Changes_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]1/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_1.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/smartlaundry.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/smartlaundry.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +124,7 @@
       <recent name="C:\Users\ma1n\IdeaProjects\smartlaundry\smartlaundry-api\src\main\resources\db\migration\mysql" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.SmartlaundryApiApplicationTests">
+  <component name="RunManager" selected="Spring Boot.SmartlaundryApiApplication">
     <configuration name="AdminControllerUnitTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -286,6 +281,10 @@
       <workItem from="1763512630946" duration="45981000" />
       <workItem from="1763599711681" duration="641000" />
       <workItem from="1763606319774" duration="2074000" />
+      <workItem from="1763644458545" duration="1292000" />
+      <workItem from="1763651897527" duration="1332000" />
+      <workItem from="1763690435390" duration="382000" />
+      <workItem from="1763976770159" duration="946000" />
     </task>
     <servers />
   </component>
