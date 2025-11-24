@@ -1,16 +1,51 @@
+# =====================================
+# GENERAL
+# =====================================
 HELP.md
+
+# =====================================
+# GRADLE
+# =====================================
 .gradle/
-.env
-.env.local
-.env.properties
-src/main/resources/application*
-src/main/resources/*.local
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### STS ###
+# Local environment files (never commit)
+.env
+.env.*
+*.local
+*.secret
+*.env.properties
+src/main/resources/.env*
+src/main/resources/*.local.properties
+
+# ==== Allow Flyway migration files ====
+!src/main/resources/db/**
+!src/main/resources/db/migration/**
+
+
+# =====================================
+# SPRING RESOURCES (KEEP EVERYTHING ELSE)
+# DO NOT IGNORE: application.properties, db/migration, static/, templates/
+# =====================================
+# Only ignore personal/local variants
+src/main/resources/application-local.properties
+src/main/resources/application-test.properties
+
+# =====================================
+# IDE FILES
+# =====================================
+
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+### Eclipse / STS ###
 .apt_generated
 .classpath
 .factorypath
@@ -18,19 +53,9 @@ build/
 .springBeans
 .sts4-cache
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-.idea/
-out/
-logs/
-!**/src/main/**/out/
-!**/src/test/**/out/
+### VS Code ###
+.vscode/
 
 ### NetBeans ###
 /nbproject/private/
@@ -39,6 +64,43 @@ logs/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
+# =====================================
+# JAR/WAR PACKAGING
+# =====================================
+*.jar
+*.war
+*.zip
 
+# =====================================
+# LOGS
+# =====================================
+*.log
+*.log.*
+logs/
+spring.log
+smartlaundry.log
+
+# =====================================
+# OS / TEMP FILES
+# =====================================
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+
+# =====================================
+# NODE (if co-located)
+# =====================================
+node_modules/
+
+# =====================================
+# COVERAGE / REPORTS
+# =====================================
+coverage/
+reports/
+test-results/
+
+# =====================================
+# MAVEN (if ever used)
+# =====================================
+target/

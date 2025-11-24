@@ -1,7 +1,6 @@
 /*
 package ke.co.smartlaundry.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ke.co.smartlaundry.dto.*;
 import ke.co.smartlaundry.model.Role;
 import ke.co.smartlaundry.model.User;
@@ -9,41 +8,32 @@ import ke.co.smartlaundry.service.AdminService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
-@WithMockUser(username = "admin@smartlaundry.ke", roles = "ADMIN")
-class AdminControllerIntegrationTest {
+class AdminControllerUnitTest {
 
-    @Autowired private MockMvc mockMvc;
-    @Autowired private ObjectMapper objectMapper;
-
-    @MockitoBean
+    @Mock
     private AdminService adminService;
+
+    @InjectMocks
+    private AdminController adminController;
 
     private User adminUser;
     private Role adminRole;
 
     @BeforeEach
-    void init() {
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+
         adminRole = new Role();
         adminRole.setId(1L);
         adminRole.setName("ADMIN");
@@ -57,72 +47,74 @@ class AdminControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("Admin can view profile")
-    void adminCanGetProfile() throws Exception {
-        when(adminService.getAdminProfile(adminUser.getId()))
-                .thenReturn(new AdminDTO(
-                        adminUser.getId(),
-                        adminUser.getUsername(),
-                        adminUser.getEmail(),
-                        adminUser.getPhoneNumber(),
-                        adminRole.getName()
-                ));
+    @DisplayName("Admin can get profile")
+    void adminCanGetProfile() {
+        AdminDTO adminDTO = new AdminDTO(
+                adminUser.getId(),
+                adminUser.getUsername(),
+                adminUser.getEmail(),
+                adminUser.getPhoneNumber(),
+                adminRole.getName()
+        );
 
-        mockMvc.perform(get("/api/admin/me"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value(adminUser.getEmail()))
-                .andExpect(jsonPath("$.role").value("ADMIN"));
+        when(adminService.getAdminProfile(adminUser.getId())).thenReturn(adminDTO);
+
+        AdminDTO result = adminController.getProfile(adminUser.getId()).getBody();
+
+        assertNotNull(result);
+        assertEquals("admin@smartlaundry.ke", result.getEmail());
+        assertEquals("ADMIN", result.getRole());
     }
 
     @Test
     @DisplayName("Admin can view dashboard metrics")
-    void adminCanViewDashboard() throws Exception {
+    void adminCanViewDashboard() {
         AdminDashboardDTO dashboardDTO = new AdminDashboardDTO(3, 1, 1500.0);
         when(adminService.getDashboardMetrics()).thenReturn(dashboardDTO);
 
-        mockMvc.perform(get("/api/admin/dashboard"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.totalUsers").value(3))
-                .andExpect(jsonPath("$.totalOrders").value(1))
-                .andExpect(jsonPath("$.totalEarnings").value(1500.0));
+        AdminDashboardDTO result = adminController.getDashboard();
+
+        assertNotNull(result);
+        assertEquals(3, result.getTotalUsers());
+        assertEquals(1, result.getTotalOrders());
+        assertEquals(1500.0, result.getTotalEarnings());
     }
 
     @Test
     @DisplayName("Admin can list customers and drivers")
-    void adminCanListUsers() throws Exception {
+    void adminCanListUsers() {
         CustomerDTO customerDTO = new CustomerDTO(5L, "John Mwangi", "customer1@smartlaundry.ke", "0711000004", true);
         DriverDTO driverDTO = new DriverDTO(4L, "Driver One", "driver1@smartlaundry.ke", "0711000003");
 
         when(adminService.getAllCustomers()).thenReturn(List.of(customerDTO));
         when(adminService.getAllDrivers()).thenReturn(List.of(driverDTO));
 
-        mockMvc.perform(get("/api/admin/customers"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].email").value("customer1@smartlaundry.ke"));
+        List<CustomerDTO> customers = adminController.listCustomers().getBody();
+        List<DriverDTO> drivers = adminController.listDrivers().getBody();
 
-        mockMvc.perform(get("/api/admin/drivers"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].email").value("driver1@smartlaundry.ke"));
+        assertEquals(1, customers.size());
+        assertEquals("customer1@smartlaundry.ke", customers.get(0).getEmail());
+
+        assertEquals(1, drivers.size());
+        assertEquals("driver1@smartlaundry.ke", drivers.get(0).getEmail());
     }
 
     @Test
     @DisplayName("Admin can suspend and activate users")
-    void adminCanSuspendAndActivateUsers() throws Exception {
+    void adminCanSuspendAndActivateUsers() {
         doNothing().when(adminService).suspendUser(5L);
         doNothing().when(adminService).activateUser(5L);
 
-        mockMvc.perform(post("/api/admin/user/5/suspend"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("User suspended successfully"));
+        String suspendMsg = String.valueOf(adminController.suspendUser(5L));
+        String activateMsg = String.valueOf(adminController.activateUser(5L));
 
-        mockMvc.perform(post("/api/admin/user/5/activate"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("User activated successfully"));
+        assertEquals("User suspended successfully", suspendMsg);
+        assertEquals("User activated successfully", activateMsg);
     }
 
     @Test
     @DisplayName("Admin can manage services, categories, and pricing")
-    void adminCanManageServicesCategoriesPricing() throws Exception {
+    void adminCanManageServicesCategoriesPricing() {
         ServiceTypeDTO serviceDTO = new ServiceTypeDTO(1L, "WASH_FOLD", "Wash & Fold", "Basic wash", 150.0);
         CategoryDTO categoryDTO = new CategoryDTO(1L, "Shirt", "All shirts");
         PriceListDTO priceDTO = new PriceListDTO(1L, 1L, 1L, "Wash & Fold", "Shirt", 150.0);
@@ -137,58 +129,51 @@ class AdminControllerIntegrationTest {
         when(adminService.createPriceList(any())).thenReturn(priceDTO);
         doNothing().when(adminService).deletePriceList(1L);
 
-        mockMvc.perform(get("/api/admin/services"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("Wash & Fold"));
+        List<ServiceTypeDTO> services = adminController.listServices().getBody();
+        ServiceTypeDTO createdService = adminController.createService(serviceDTO).getBody();
 
-        mockMvc.perform(post("/api/admin/services")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(serviceDTO)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Wash & Fold"));
+        assertNotNull(services);
+        assertEquals("Wash & Fold", services.get(0).getName());
+        assertNotNull(createdService);
+        assertEquals("Wash & Fold", createdService.getName());
 
-        mockMvc.perform(get("/api/admin/categories"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("Shirt"));
+        List<CategoryDTO> categories = adminController.listCategories().getBody();
+        CategoryDTO createdCategory = adminController.createCategory(categoryDTO).getBody();
 
-        mockMvc.perform(post("/api/admin/categories")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(categoryDTO)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Shirt"));
+        assertNotNull(categories);
+        assertEquals("Shirt", categories.getFirst().getName());
+        assertNotNull(createdCategory);
+        assertEquals("Shirt", createdCategory.getName());
 
-        mockMvc.perform(get("/api/admin/prices"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].unitPrice").value(150.0));
+        List<PriceListDTO> prices = adminController.listPrices().getBody();
+        PriceListDTO createdPrice = adminController.createPrice(priceDTO).getBody();
 
-        mockMvc.perform(post("/api/admin/prices")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(priceDTO)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.unitPrice").value(150.0));
+        assertNotNull(prices);
+        assertEquals(150.0, prices.get(0).getUnitPrice());
+        assertNotNull(createdPrice);
+        assertEquals(150.0, createdPrice.getUnitPrice());
 
-        mockMvc.perform(delete("/api/admin/prices/1"))
-                .andExpect(status().isNoContent());
+        assertDoesNotThrow(() -> adminController.deletePrice(1L));
     }
 
     @Test
     @DisplayName("Admin can view driver earnings and performance")
-    void adminCanViewDriverStats() throws Exception {
+    void adminCanViewDriverStats() {
         EarningsDTO earningsDTO = new EarningsDTO(1L, 4L, 550.0, "DELIVERY", null);
         DriverPerformanceDTO perfDTO = new DriverPerformanceDTO(4L, "Driver One", 1, 1, 550.0, 550.0);
 
         when(adminService.getEarningsForDriver(4L)).thenReturn(List.of(earningsDTO));
         when(adminService.getDriverPerformance(4L)).thenReturn(perfDTO);
 
-        mockMvc.perform(get("/api/admin/driver/4/earnings"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].amount").value(550.0));
+        List<EarningsDTO> earnings = adminController.getDriverEarnings(4L).getBody();
+        DriverPerformanceDTO performance = adminController.getDriverPerformance(4L).getBody();
 
-        mockMvc.perform(get("/api/admin/driver/4/performance"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.driverId").value(4))
-                .andExpect(jsonPath("$.completedOrders").value(1))
-                .andExpect(jsonPath("$.totalEarnings").value(550.0));
+        assertNotNull(earnings);
+        assertEquals(550.0, earnings.get(0).getAmount());
+        assertNotNull(performance);
+        assertEquals(4, performance.getDriverId());
+        assertEquals(1, performance.getCompletedOrders());
+        assertEquals(550.0, performance.getTotalEarnings());
     }
 }
 */

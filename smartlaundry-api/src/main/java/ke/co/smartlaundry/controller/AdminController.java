@@ -28,9 +28,14 @@ public class AdminController {
     }
 
     // ----------------------------
-    // Dashboard / Analytics
+    // Dashboard & Analytics
     // ----------------------------
     @GetMapping("/dashboard")
+    public ResponseEntity<AdminDashboardDTO> getDashboardStats() {
+        return ResponseEntity.ok(adminService.getDashboardStats());
+    }
+
+    @GetMapping("/dashboard/metrics")
     public ResponseEntity<AdminDashboardDTO> getDashboardMetrics() {
         return ResponseEntity.ok(adminService.getDashboardMetrics());
     }

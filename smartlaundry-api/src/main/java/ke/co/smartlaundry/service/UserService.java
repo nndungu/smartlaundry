@@ -4,6 +4,7 @@ import ke.co.smartlaundry.dto.RegisterRequestDTO;
 import ke.co.smartlaundry.dto.UserDTO;
 import ke.co.smartlaundry.model.Role;
 import ke.co.smartlaundry.model.User;
+import ke.co.smartlaundry.repository.UserRepository;
 
 import java.util.List;
 
@@ -11,7 +12,9 @@ public interface UserService {
 
     // --- DTO conversions ---
     UserDTO toDTO(User user);
-    User fromRegisterDTO(RegisterRequestDTO dto, Role role);
+
+    // --- Registration helpers ---
+    User fromRegisterDTO(RegisterRequestDTO dto, Role role, String adminPasscode) throws IllegalArgumentException;
 
     // --- CRUD operations ---
     List<UserDTO> getAllUsers();
@@ -24,15 +27,15 @@ public interface UserService {
     // --- Verification ---
     void markUserAsVerified(String email);
 
-    // --- Password ---
-    boolean checkPassword(String raw, String encoded);
+    // --- Password handling ---
+    boolean checkPassword(String rawPassword, String encodedPassword);
     String encodePassword(String rawPassword);
 
-    // --- Password Reset ---
+    // --- Password reset ---
     String createPasswordResetToken(String email);
     boolean resetPassword(String token, String newPassword);
 
-    User findUserByEmail(String mail);
-
+    // --- Utility methods ---
     User getUserFromToken(String token);
+    UserRepository getUserRepository();
 }

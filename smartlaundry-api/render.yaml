@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: smartlaundry-api
+    env: docker
+    plan: starter
+    autoDeploy: true
+    buildCommand: ""
+    startCommand: ""
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod

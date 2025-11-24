@@ -39,7 +39,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
 
     // --- Hibernate Spatial / PostGIS ---
     implementation 'org.hibernate.orm:hibernate-spatial:6.6.1.Final'
@@ -84,15 +84,22 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+// --- Flyway using environment variables for Render ---
 flyway {
-    url = 'jdbc:postgresql://localhost:5432/smartlaundry_db'
-    user = 'laundry_admin'
-    password = '@Aw35omes'
+    url = System.getenv('SPRING_DATASOURCE_URL') ?: 'jdbc:postgresql://localhost:5432/smartlaundry_db'
+    user = System.getenv('SPRING_DATASOURCE_USERNAME') ?: 'laundry_admin'
+    password = System.getenv('SPRING_DATASOURCE_PASSWORD') ?: '@Aw35omes'
     schemas = ['public']
     locations = ['filesystem:src/main/resources/db/migration']
     cleanDisabled = false
 }
 
+// --- Ensure bootJar knows the main class ---
+tasks.named('bootJar') {
+    mainClass = 'ke.co.smartlaundry.SmartlaundryApiApplication'
+}
+
+// --- Configure test task ---
 tasks.named('test') {
     useJUnitPlatform()
 }

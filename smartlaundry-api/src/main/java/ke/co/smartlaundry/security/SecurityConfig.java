@@ -31,19 +31,27 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
 
+                        // Public endpoints (registration, login)
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/users/register").permitAll()
+
+                        // Swagger / API docs
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
+                        // WebSocket endpoints
                         .requestMatchers("/ws/**", "/app/**", "/topic/**").permitAll()
 
+                        // Role-based protected endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/driver/**").hasRole("DRIVER")
                         .requestMatchers("/api/customer/**").hasRole("CUSTOMER")
 
-
+                        // Authenticated endpoints
                         .requestMatchers("/api/users/me/**").authenticated()
 
+                        // Any other user management (except registration) requires ADMIN
                         .requestMatchers("/api/users/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

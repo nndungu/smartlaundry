@@ -6,39 +6,62 @@ import java.util.List;
 
 public interface CustomerService {
 
+    // ---------------------------
+    // Profile
+    // ---------------------------
     CustomerDTO getCustomerProfile(Long customerId);
     void updateProfile(Long customerId, CustomerDTO profileData);
     void deleteAccount(Long customerId);
 
+    // ---------------------------
+    // Orders
+    // ---------------------------
     List<OrderDTO> getOrdersByCustomer(Long customerId);
 
-    List<OrderDTO> getCustomerOrders(Long customerId);
-
-    LoyaltyStatusDTO getLoyaltyStatus(Long customerId);
-    LoyaltyLedgerDTO getLoyaltyLedger(Long customerId);
-
-    List<ServiceTypeDTO> listServiceTypes();
-
-    List<ServiceTypeDTO> getAvailableServices();
-
-    List<CategoryDTO> listCategories();
-    List<PriceListDTO> getPriceListForService(Long serviceTypeId);
-
-    DriverLocationDTO getDriverLocation(Long driverId);
-
-    List<ServiceTypeDTO> listServiceTypeName();
-
-    List<PriceListDTO> getAvailablePrices();
+    // Alias for getOrdersByCustomer
+    default List<OrderDTO> getCustomerOrders(Long customerId) {
+        return getOrdersByCustomer(customerId);
+    }
 
     OrderDTO placeOrder(OrderRequestDTO request);
-
-    RevenueReportDTO getCustomerSpending(Long customerId);
-
     void cancelOrder(Long id);
 
     PaymentDTO makePayment(PaymentRequestDTO request, String method);
 
+    // ---------------------------
+    // Loyalty
+    // ---------------------------
+    LoyaltyStatusDTO getLoyaltyStatus(Long customerId);
+    LoyaltyLedgerDTO getLoyaltyLedger(Long customerId);
+
+    // ---------------------------
+    // Services & Pricing
+    // ---------------------------
+    List<ServiceTypeDTO> listServiceTypes();
+    List<ServiceTypeDTO> getAvailableServices();
+    List<ServiceTypeDTO> listServiceTypeName();
+
+    List<CategoryDTO> listCategories();
+    List<PriceListDTO> getPriceListForService(Long serviceTypeId);
+    List<PriceListDTO> getAvailablePrices();
+
+    // ---------------------------
+    // Driver tracking
+    // ---------------------------
+    DriverLocationDTO getDriverLocation(Long driverId);
+
+    // ---------------------------
+    // Notifications
+    // ---------------------------
     List<NotificationDTO> getCustomerNotifications(Long customerId);
 
-    CustomerPerformanceDTO getPerformance(Long userId);
+    // ---------------------------
+    // Revenue / Spending
+    // ---------------------------
+    RevenueReportDTO getCustomerSpending(Long customerId);
+
+    // ---------------------------
+    // Performance
+    // ---------------------------
+    CustomerPerformanceDTO getPerformance(Long customerId);
 }

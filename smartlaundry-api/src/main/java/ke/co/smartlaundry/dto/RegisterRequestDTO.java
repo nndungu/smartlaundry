@@ -26,9 +26,11 @@ public class RegisterRequestDTO {
     @NotNull(message = "Confirm password is required")
     private String confirmPassword;
 
-
     @NotBlank
     private String role; // ADMIN, CUSTOMER, DRIVER
+
+    @NotBlank(message = "Passcode required for ADMIN")
+    private String passcode;
 
     // Getters & Setters
     public String getFirstName() { return firstName; }
@@ -52,4 +54,6 @@ public class RegisterRequestDTO {
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
 
+    public String getPasscode() { return passcode; }
+    public void setPasscode(String passcode) { this.passcode = passcode; }
 }
