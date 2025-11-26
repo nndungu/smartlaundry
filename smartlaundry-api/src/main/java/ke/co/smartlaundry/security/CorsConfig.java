@@ -18,6 +18,7 @@ public class CorsConfig {
         // Allowed origins
         config.setAllowedOrigins(List.of(
                 "https://smartlaundryclient.onrender.com",
+                "https://yvette-diminished-draconially.ngrok-free.dev",
                 "http://localhost:5173",
                 "35.160.120.126",
                 "44.233.151.27",
