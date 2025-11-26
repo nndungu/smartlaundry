@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0311d6c-3642-4aea-86c7-8970c3eb78af" name="Changes" comment="Merge branch 'nelson'&#10;&#10;# Conflicts:&#10;#&#9;.idea/compiler.xml&#10;#&#9;.idea/dataSources.local.xml&#10;#&#9;.idea/dataSources/345a98c9-6a1a-489f-9195-81f6512a46c3.xml&#10;#&#9;.idea/dataSources/df986d0b-ffe5-40d6-aae0-11841fbfa085.xml&#10;#&#9;.idea/workspace.xml">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/ke.co.smartlaundry.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/ke.co.smartlaundry.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartLaundry-client/src/app/app.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/smartLaundry-client/src/app/app.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -286,7 +285,7 @@
       <workItem from="1763651897527" duration="1332000" />
       <workItem from="1763690435390" duration="382000" />
       <workItem from="1763976770159" duration="946000" />
-      <workItem from="1764122727744" duration="1331000" />
+      <workItem from="1764122727744" duration="6972000" />
     </task>
     <servers />
   </component>

@@ -15,26 +15,18 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Allowed origins
         config.setAllowedOrigins(List.of(
                 "https://smartlaundryclient.onrender.com",
                 "https://yvette-diminished-draconially.ngrok-free.dev",
-                "http://localhost:5173",
-                "35.160.120.126",
-                "44.233.151.27",
-                "34.211.200.85"
+                "http://localhost:4200",
+                "http://localhost:5173"
         ));
 
-        // Allowed HTTP methods
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("*"));   // allow all HTTP methods
+        config.setAllowedHeaders(List.of("*"));   // allow all headers
+        config.setExposedHeaders(List.of("*"));   // allow reading all response headers
+        config.setAllowCredentials(true);         // allow cookies / tokens
 
-        // Allowed headers
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-API-KEY"));
-
-        // Allow credentials (cookies, authorization headers)
-        config.setAllowCredentials(true);
-
-        // Apply CORS configuration to all endpoints
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
 
