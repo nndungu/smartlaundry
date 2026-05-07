@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, BehaviorSubject, map, of } from 'rxjs';
+import { Observable, BehaviorSubject, map } from 'rxjs';
 import { User } from '../../models/auth/user.model';
 import { AuthResponse } from '../../models/auth/auth-response.model';
 import { HttpClient } from '@angular/common/http';
@@ -19,7 +19,6 @@ export class AuthService {
   private http = inject(HttpClient);
 
   constructor() {
-    // Load tokens from localStorage on init
     this.loadTokens();
   }
 
@@ -34,11 +33,10 @@ export class AuthService {
   }
 
   register(userData: { fullName: string; email: string; phone: string; passwordHash: string; role: { id: number }; isActive: boolean }): Observable<any> {
-    return this.http.post(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.USERS.BY_ID(0).replace('/0', '')}`, userData);
+    return this.http.post(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.AUTH.REGISTER}`, userData);
   }
 
   logout(): Observable<void> {
-    // Call logout API if available, then clear tokens
     return this.http.post<void>(`${API_ENDPOINTS.BASE_URL}${API_ENDPOINTS.AUTH.LOGOUT}`, {}).pipe(
       map(() => {
         this.clearTokens();

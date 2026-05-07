@@ -30,11 +30,12 @@ export class AppComponent implements OnInit {
   private updateNavbarVisibility(url: string): void {
     // Extract the path from the URL, removing query params and fragments
     const path = url.split('?')[0].split('#')[0];
-    if (path.startsWith('/client-dashboard') || path.startsWith('/vendor-dashboard')) {
+    if (path.startsWith('/client-dashboard')) {
       this.showNavbar.set(false);
     } else {
       this.showNavbar.set(true);
     }
+
   }
 }
 

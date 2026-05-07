@@ -2,10 +2,9 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-manage-orders',
-  imports: [],
+  standalone: true,
   templateUrl: './manage-orders.html',
-  styleUrl: './manage-orders.scss'
+  styleUrls: ['./manage-orders.scss']
 })
-export class ManageOrders {
+export class ManageOrders {}
 
-}
