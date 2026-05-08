@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { CartService, CartItem } from '../../../../services/cart.service';
+import { OrderService } from '../../../../services/order.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'payment-checkout',
@@ -9,88 +13,97 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule]
 })
-export class CheckoutPaymentComponent implements OnInit {
+export class CheckoutPaymentComponent implements OnInit, OnDestroy {
   paymentForm: FormGroup;
   selectedMethod: string | null = null;
   isProcessing = false;
   paymentSuccess = false;
 
-  constructor(private fb: FormBuilder) {
+  cartItems: CartItem[] = [];
+  cartTotal = 0;
+  orderReference = '';
+
+  private cartSubscription = new Subscription();
+
+  constructor(
+    private fb: FormBuilder,
+    private cartService: CartService,
+    private orderService: OrderService,
+    private router: Router
+  ) {
     this.paymentForm = this.fb.group({
-      phoneNumber: ['', [Validators.required, Validators.pattern(/^\+254\d{9}$/)]],
-      cardNumber: ['', [Validators.required, Validators.pattern(/^\d{16}$/)]],
-      expiryDate: ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
-      cvv: ['', [Validators.required, Validators.pattern(/^\d{3,4}$/)]]
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^\+254\d{9}$/)]]
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.cartSubscription.add(
+      this.cartService.cartItems$.subscribe(items => {
+        this.cartItems = items;
+      })
+    );
+    this.cartSubscription.add(
+      this.cartService.cartTotal$.subscribe(total => {
+        this.cartTotal = total;
+      })
+    );
+
+    if (this.cartService.getCartItems().length === 0) {
+      this.router.navigate(['/client-dashboard/cart']);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.cartSubscription.unsubscribe();
+  }
 
   selectPaymentMethod(method: string): void {
     this.selectedMethod = method;
     this.paymentSuccess = false;
-    
-    // Reset all form controls
-    Object.keys(this.paymentForm.controls).forEach(key => {
-      this.paymentForm.get(key)?.setValue('');
-      this.paymentForm.get(key)?.markAsUntouched();
-    });
+    this.paymentForm.reset();
   }
 
   getPaymentMethodClass(method: string): string {
-    const baseClasses = 'flex items-center justify-center px-4 py-3 text-sm font-medium rounded-md border transition-colors duration-200';
-    
-    if (this.selectedMethod === method) {
-      return `${baseClasses} border-blue-500 bg-blue-50 text-blue-700`;
-    } else {
-      return `${baseClasses} border-gray-300 bg-white text-gray-700 hover:bg-gray-50`;
-    }
+    const base = 'flex items-center justify-center px-4 py-3 text-sm font-medium rounded-md border transition-colors duration-200';
+    return this.selectedMethod === method
+      ? `${base} border-blue-500 bg-blue-50 text-blue-700`
+      : `${base} border-gray-300 bg-white text-gray-700 hover:bg-gray-50`;
   }
 
-  get phoneNumber() {
-    return this.paymentForm.get('phoneNumber');
-  }
+  get phoneNumber() { return this.paymentForm.get('phoneNumber'); }
 
-  get cardNumber() {
-    return this.paymentForm.get('cardNumber');
-  }
-
-  get expiryDate() {
-    return this.paymentForm.get('expiryDate');
-  }
-
-  get cvv() {
-    return this.paymentForm.get('cvv');
+  isCurrentMethodValid(): boolean {
+    if (!this.selectedMethod) return false;
+    if (this.selectedMethod === 'mpesa') return this.phoneNumber?.valid || false;
+    if (this.selectedMethod === 'cash') return true;
+    return false;
   }
 
   onSubmit(): void {
-    if (!this.isCurrentMethodValid() || this.isProcessing) {
-      return;
-    }
+    if (!this.isCurrentMethodValid() || this.isProcessing) return;
 
     this.isProcessing = true;
 
-    // Simulate API call
-    setTimeout(() => {
+    this.orderService.createOrder({
+      items: this.cartItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        serviceType: item.service
+      })),
+      paymentMethod: this.selectedMethod!,
+      serviceTypes: [...new Set(this.cartItems.map(i => i.service))]
+    }).subscribe(order => {
       this.isProcessing = false;
       this.paymentSuccess = true;
-      
-      // Reset form after successful submission
-      this.paymentForm.reset();
-      this.selectedMethod = null;
-    }, 2000);
-  }
+      this.orderReference = order.referenceNumber;
 
-  // Helper method to check if current payment method form is valid
-  isCurrentMethodValid(): boolean {
-    if (!this.selectedMethod) return false;
+      this.cartService.clearCart();
 
-    if (this.selectedMethod === 'mpesa') {
-      return this.phoneNumber?.valid || false;
-    } else if (this.selectedMethod === 'card') {
-      return this.cardNumber?.valid && this.expiryDate?.valid && this.cvv?.valid || false;
-    }
-
-    return false;
+      setTimeout(() => {
+        this.router.navigate(['/client-dashboard/order-tracking']);
+      }, 2000);
+    });
   }
 }

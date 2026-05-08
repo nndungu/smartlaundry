@@ -4,6 +4,8 @@ import { User } from '../../models/auth/user.model';
 import { AuthResponse } from '../../models/auth/auth-response.model';
 import { HttpClient } from '@angular/common/http';
 import { API_ENDPOINTS } from '../../core/constants/api-endpoints';
+import { APP_CONSTANTS } from '../../core/constants/app-constants';
+
 
 @Injectable({
   providedIn: 'root'
@@ -75,25 +77,44 @@ export class AuthService {
 
   setCurrentUser(user: User | null): void {
     this.currentUserSubject.next(user);
+    if (user) {
+      localStorage.setItem(APP_CONSTANTS.USER_KEY, JSON.stringify(user));
+    } else {
+      localStorage.removeItem(APP_CONSTANTS.USER_KEY);
+    }
   }
 
   private setTokens(accessToken: string, refreshToken: string, expiresIn: number): void {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
     this.tokenExpiry = Date.now() + (expiresIn * 1000);
-    localStorage.setItem('refreshToken', refreshToken);
+    localStorage.setItem(APP_CONSTANTS.TOKEN_KEY, accessToken);
+    localStorage.setItem(APP_CONSTANTS.REFRESH_TOKEN_KEY, refreshToken);
   }
 
   private loadTokens(): void {
-    this.refreshToken = localStorage.getItem('refreshToken');
+    this.refreshToken = localStorage.getItem(APP_CONSTANTS.REFRESH_TOKEN_KEY);
+    this.accessToken = localStorage.getItem(APP_CONSTANTS.TOKEN_KEY);
+
+    // Restore user from localStorage
+    const savedUser = localStorage.getItem(APP_CONSTANTS.USER_KEY);
+    if (savedUser) {
+      try {
+        this.currentUserSubject.next(JSON.parse(savedUser));
+      } catch {
+        localStorage.removeItem(APP_CONSTANTS.USER_KEY);
+      }
+    }
   }
 
   private clearTokens(): void {
     this.accessToken = null;
     this.refreshToken = null;
     this.tokenExpiry = null;
-    localStorage.removeItem('refreshToken');
-    this.setCurrentUser(null);
+    localStorage.removeItem(APP_CONSTANTS.TOKEN_KEY);
+    localStorage.removeItem(APP_CONSTANTS.REFRESH_TOKEN_KEY);
+    localStorage.removeItem(APP_CONSTANTS.USER_KEY);
+    this.currentUserSubject.next(null);
   }
 
   private isTokenExpired(): boolean {
